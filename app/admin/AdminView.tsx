@@ -840,7 +840,7 @@ export default function AdminView() {
               </div>
  
               {/* Projects List Table */}
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -947,7 +947,7 @@ export default function AdminView() {
               </div>
  
               {/* Articles table */}
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -1036,7 +1036,7 @@ export default function AdminView() {
               </div>
  
               {/* Certs table */}
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -1118,7 +1118,7 @@ export default function AdminView() {
                 </button>
               </div>
 
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -1214,7 +1214,7 @@ export default function AdminView() {
             <div className="space-y-6">
               <h2 className="text-lg font-bold text-white font-sans">Messages Inbox</h2>
  
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -1304,7 +1304,7 @@ export default function AdminView() {
                 </button>
               </div>
 
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -1396,7 +1396,7 @@ export default function AdminView() {
                 </button>
               </div>
 
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">
@@ -2971,7 +2971,7 @@ export default function AdminView() {
               </div>
 
               {/* Resumes Table */}
-              <div className="rounded-xl border border-zinc-900 overflow-hidden bg-zinc-950/30 font-sans">
+              <div className="overflow-x-auto rounded-xl border border-zinc-900 bg-zinc-950/30 font-sans">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-900 bg-zinc-900/30 text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">

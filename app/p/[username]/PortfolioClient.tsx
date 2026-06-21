@@ -786,7 +786,7 @@ export default function PortfolioClient({
                 <p className="text-zinc-500 text-xs mt-1">Numerical overview of credentials, contributions, and engagement.</p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                 <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
                   <span className="block text-2xl font-bold text-white font-mono">{projects.length}</span>
                   <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
@@ -1379,7 +1379,7 @@ export default function PortfolioClient({
 
         {theme === 'developer' && (
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 font-mono">
-            <div className="rounded-xl border border-[#2d2d30] bg-[#1e1e24] shadow-2xl overflow-hidden flex flex-col md:flex-row h-[750px]">
+            <div className="rounded-xl border border-[#2d2d30] bg-[#1e1e24] shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[750px]">
               
               {/* IDE Left File Navigator Sidebar */}
               <div className="w-full md:w-60 border-r border-[#2d2d30] bg-[#1a1a1f] flex-shrink-0 flex flex-col">
@@ -1494,7 +1494,7 @@ export default function PortfolioClient({
 
                   {activeFileTab === 'Experience.csv' && (
                     <div className="space-y-6">
-                      <div className="border border-[#2d2d30] rounded-lg overflow-hidden bg-[#16161a]">
+                      <div className="overflow-x-auto rounded-lg border border-[#2d2d30] bg-[#16161a]">
                         <table className="w-full text-left border-collapse">
                           <thead>
                             <tr className="bg-[#1f1f24] text-zinc-400 border-b border-[#2d2d30] text-xs">

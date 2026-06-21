@@ -1,11 +1,24 @@
 'use client';
 
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch, setAuthToken, getAuthToken } from '../lib/api-client';
 import { User } from '@/types';
-import { useEffect, useState } from 'react';
 
-export function useAuth() {
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  isCheckingSession: boolean;
+  login: (credentials: { email: string; password?: string; isGuest?: boolean }) => Promise<{ token: string; user: User }>;
+  register: (userData: { name: string; email: string; password?: string }) => Promise<{ token: string; user: User }>;
+  isLoggingIn: boolean;
+  isRegistering: boolean;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const [isInitialized, setIsInitialized] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
@@ -30,7 +43,7 @@ export function useAuth() {
     initAuth();
   }, [queryClient]);
 
-  const { data: user, isLoading, refetch } = useQuery<User | null>({
+  const { data: user, isLoading } = useQuery<User | null>({
     queryKey: ['me'],
     queryFn: async () => {
       const token = getAuthToken();
@@ -103,9 +116,9 @@ export function useAuth() {
     logoutMutation.mutate();
   };
 
-  return {
+  const value = {
     user: user || null,
-    isLoading: (isLoading || isCheckingSession) && !!getAuthToken(),
+    isLoading: isCheckingSession || (isLoading && !!getAuthToken()),
     isCheckingSession,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
@@ -113,4 +126,14 @@ export function useAuth() {
     isRegistering: registerMutation.isPending,
     logout,
   };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 }

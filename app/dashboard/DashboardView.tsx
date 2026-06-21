@@ -748,7 +748,7 @@ export default function DashboardView() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             
             {/* Sidebar Navigation */}
-            <div className="space-y-1.5">
+            <div className="flex flex-row overflow-x-auto lg:flex-col lg:overflow-x-visible space-x-1.5 lg:space-x-0 lg:space-y-1.5 pb-3 lg:pb-0 scrollbar-none">
               {[
                 { tab: 'overview', label: 'Console Overview', icon: <Layers className="h-4 w-4" /> },
                 { tab: 'profile', label: 'Theme & Profile', icon: <UserIcon className="h-4 w-4" /> },
@@ -770,7 +770,7 @@ export default function DashboardView() {
                     setEditingCert(null); setIsAddingCert(false);
                     setIsAddingResume(false);
                   }}
-                  className={`w-full flex items-center space-x-3 rounded-lg px-4 py-3 text-xs font-mono font-semibold transition-all border ${
+                  className={`whitespace-nowrap shrink-0 flex items-center space-x-3 rounded-lg px-4 py-3 text-xs font-mono font-semibold transition-all border lg:w-full ${
                     activeTab === item.tab
                       ? 'bg-zinc-900 text-teal-400 border-teal-500/20 font-bold border-l-2 border-l-teal-500'
                       : 'text-zinc-400 bg-transparent border-transparent hover:bg-zinc-900/40 hover:text-zinc-200'
