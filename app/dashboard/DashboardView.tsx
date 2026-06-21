@@ -72,7 +72,7 @@ export default function DashboardView() {
   const [editingExp, setEditingExp] = useState<Experience | null>(null);
   const [expOrg, setExpOrg] = useState('');
   const [expRole, setExpRole] = useState('');
-  const [expType, setExpType] = useState<'full-time' | 'part-time' | 'contract' | 'internship' | 'job' | 'education' | 'achievement'>('full-time');
+  const [expType, setExpType] = useState<'full-time' | 'part-time' | 'contract' | 'internship' | 'job' | 'education' | 'achievement'>('job');
   const [expStartDate, setExpStartDate] = useState('');
   const [expEndDate, setExpEndDate] = useState('');
   const [expDesc, setExpDesc] = useState('');
@@ -627,7 +627,7 @@ export default function DashboardView() {
   const resetExpForm = () => {
     setExpOrg('');
     setExpRole('');
-    setExpType('full-time');
+    setExpType('job');
     setExpStartDate('');
     setExpEndDate('');
     setExpDesc('');
@@ -670,7 +670,7 @@ export default function DashboardView() {
     setEditingExp(e);
     setExpOrg(e.organization);
     setExpRole(e.role);
-    setExpType(e.type || 'full-time');
+    setExpType(e.type || 'job');
     setExpStartDate(e.startDate ? new Date(e.startDate).toISOString().split('T')[0] : '');
     setExpEndDate(e.endDate ? new Date(e.endDate).toISOString().split('T')[0] : '');
     setExpDesc(e.description || '');
@@ -1109,12 +1109,12 @@ export default function DashboardView() {
                           <input type="text" required value={expRole} onChange={e => setExpRole(e.target.value)} className="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs outline-none focus:border-teal-500" />
                         </div>
                         <div>
-                          <label className="block text-xs text-zinc-400 mb-1">Employment Type *</label>
+                          <label className="block text-xs text-zinc-400 mb-1">Experience Type *</label>
                           <select value={expType} onChange={e => setExpType(e.target.value as any)} className="w-full bg-zinc-950 border border-zinc-800 rounded p-2.5 text-xs outline-none focus:border-teal-500 font-mono">
-                            <option value="full-time">Full Time</option>
-                            <option value="part-time">Part Time</option>
-                            <option value="contract">Contractor</option>
+                            <option value="job">Job</option>
                             <option value="internship">Internship</option>
+                            <option value="education">Education</option>
+                            <option value="achievement">Achievement</option>
                           </select>
                         </div>
                         <div>

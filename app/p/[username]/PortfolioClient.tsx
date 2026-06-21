@@ -382,11 +382,58 @@ export default function PortfolioClient({
 
   const scores = calculateScores();
 
+  // Sort projects: Featured projects first, then by order
+  const sortedProjects = React.useMemo(() => {
+    return [...projects].sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return (a.order || 0) - (b.order || 0);
+    });
+  }, [projects]);
+
   // Project categories and filtering
-  const projectCategories = ['all', ...Array.from(new Set(projects.map(p => p.category).filter(Boolean)))];
+  const projectCategories = React.useMemo(() => {
+    return ['all', ...Array.from(new Set(sortedProjects.map(p => p.category).filter(Boolean)))];
+  }, [sortedProjects]);
+
   const filteredProjects = activeFilterCategory === 'all'
-    ? projects
-    : projects.filter(p => p.category?.toLowerCase() === activeFilterCategory.toLowerCase());
+    ? sortedProjects
+    : sortedProjects.filter(p => p.category?.toLowerCase() === activeFilterCategory.toLowerCase());
+
+  const handleQuickAction = (actionType: 'interview' | 'resume' | 'opportunity') => {
+    if (actionType === 'interview') {
+      setContactSubject('Interview Request — ' + ownerName);
+      setContactBody(`Hi ${ownerName},\n\nWe came across your portfolio and are highly impressed with your background. We would love to schedule a brief introductory call / interview to discuss potential opportunities at [Company Name].\n\nPlease let us know your availability.\n\nBest regards,\n[Your Name]`);
+    } else if (actionType === 'resume') {
+      if (activeResume) {
+        const downloadUrl = `${API_BASE_URL}/resume/${activeResume._id}/download`;
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = activeResume.fileName || 'resume.pdf';
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      setContactSubject('Resume Inquiry — ' + ownerName);
+      setContactBody(`Hi ${ownerName},\n\nI have requested and downloaded your resume. I would love to connect and discuss how your skills align with our upcoming engineering needs.\n\nBest regards,\n[Your Name]`);
+    } else if (actionType === 'opportunity') {
+      setContactSubject('Job Opportunity — [Role Name]');
+      setContactBody(`Hi ${ownerName},\n\nWe are currently hiring for a [Role Name] at [Company Name] and think your profile would be a fantastic fit.\n\nHere are some brief details about the role:\n- Team: \n- Stack: \n- Location: \n\nLet us know if you are open to discussing this.\n\nBest regards,\n[Your Name]`);
+    }
+    
+    // Scroll to form
+    const formElement = document.getElementById('contact-form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        const nameInput = document.getElementById('contact-name');
+        if (nameInput) {
+          nameInput.focus();
+        }
+      }, 500);
+    }
+  };
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-500 ${
@@ -566,6 +613,87 @@ export default function PortfolioClient({
               </div>
             </section>
 
+            {/* Candidate Snapshot Section */}
+            <section className="border-t border-zinc-900 pt-16">
+              <div className="mb-8">
+                <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl flex items-center gap-2">
+                  <UserIcon className="h-5 w-5 text-teal-400" />
+                  <span>Candidate Snapshot</span>
+                </h2>
+                <p className="text-zinc-500 text-xs mt-1">5-second overview indexing core professional credentials and availability.</p>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-3">
+                {/* Core Stats Grid */}
+                <div className="md:col-span-2 rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
+                      <span className="block text-2xl font-extrabold text-white font-mono">{displayYearsOfExp}</span>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Years Exp</span>
+                    </div>
+                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
+                      <span className="block text-2xl font-extrabold text-teal-400 font-mono">{projects.length}</span>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
+                    </div>
+                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
+                      <span className="block text-2xl font-extrabold text-white font-mono">{skills.length}</span>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Skills</span>
+                    </div>
+                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
+                      <span className="block text-2xl font-extrabold text-white font-mono">{certifications.length}</span>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Certs</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-zinc-900/80 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                      <span className="text-zinc-500">GitHub Status:</span>
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
+                        githubUser 
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                          : 'bg-zinc-800 text-zinc-550 border border-zinc-700'
+                      }`}>
+                        {githubUser ? 'Connected' : 'Not Connected'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-zinc-500">Availability:</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 truncate max-w-full">
+                        {availabilityStatus}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Technologies Card */}
+                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden flex flex-col justify-between">
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold block mb-3">// Top Stack</span>
+                    <div className="flex flex-wrap gap-2">
+                      {skills
+                        .slice()
+                        .sort((a, b) => b.proficiency - a.proficiency)
+                        .slice(0, 4)
+                        .map((s) => (
+                          <span
+                            key={s.name}
+                            className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350"
+                          >
+                            {s.name}
+                          </span>
+                        ))}
+                      {skills.length === 0 && (
+                        <span className="text-xs text-zinc-500 italic">No technologies indexed</span>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono mt-4">Top technologies sorted by verified proficiency level.</p>
+                </div>
+              </div>
+            </section>
+
             {/* Recruiter Intelligence Dashboard */}
             <section className="border-t border-zinc-900 pt-16">
               <div className="mb-8">
@@ -696,6 +824,13 @@ export default function PortfolioClient({
               </div>
             </section>
 
+            {/* GitHub Info Section */}
+            {githubUser && (
+              <section className="border-t border-zinc-900 pt-16">
+                <GitHubStats username={githubUser} />
+              </section>
+            )}
+
             {/* Top Skills Spotlight Widget */}
             <section className="border-t border-zinc-900 pt-16">
               <div className="mb-6">
@@ -762,8 +897,16 @@ export default function PortfolioClient({
                         <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2 py-0.5 text-[10px] font-mono text-teal-400 border border-teal-500/20">
                           {project.category}
                         </div>
-                        <div className="absolute top-3 left-3 rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20">
-                          {project.status ? project.status.toUpperCase() : 'ACTIVE'}
+                        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+                          <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20 w-fit">
+                            {project.status ? project.status.toUpperCase() : 'ACTIVE'}
+                          </div>
+                          {project.viewCount !== undefined && project.viewCount > 0 && (
+                            <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20 flex items-center gap-1 w-fit">
+                              <Eye className="h-3 w-3" />
+                              <span>{project.viewCount} views</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="flex flex-1 flex-col p-5">
@@ -874,43 +1017,58 @@ export default function PortfolioClient({
             </section>
 
             {/* Education Section */}
-            {educationExperiences.length > 0 && (
-              <section className="border-t border-zinc-900 pt-16">
-                <div className="mb-10">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Education</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Academic credentials and qualifications.</p>
-                </div>
+            <section className="border-t border-zinc-900 pt-16">
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Education</h2>
+                <p className="mt-2 text-zinc-400 text-sm">Academic credentials and qualifications.</p>
+              </div>
+              {educationExperiences.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2">
-                  {educationExperiences.map((edu, idx) => (
-                    <div key={idx} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-5 relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
-                      <div className="flex justify-between items-start gap-4 mb-3">
-                        <div>
-                          <h3 className="text-base font-bold text-white">{edu.role}</h3>
-                          <p className="text-xs text-teal-400 font-mono mt-0.5">{edu.organization}</p>
+                  {educationExperiences.map((edu, idx) => {
+                    const cgpaMatch = edu.description?.match(/(?:CGPA|GPA):\s*([0-9.]+)/i) || edu.description?.match(/([0-9.]+)\s*(?:CGPA|GPA)/i);
+                    const cgpa = cgpaMatch ? cgpaMatch[1] : null;
+                    return (
+                      <div key={idx} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-5 relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
+                        <div className="flex justify-between items-start gap-4 mb-3">
+                          <div>
+                            <h3 className="text-base font-bold text-white">{edu.role}</h3>
+                            <p className="text-xs text-teal-400 font-mono mt-0.5">{edu.organization}</p>
+                          </div>
+                          <span className="text-xs text-zinc-550 font-mono flex items-center gap-1 shrink-0">
+                            <Calendar className="h-3.5 w-3.5 text-zinc-650" />
+                            {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
+                          </span>
                         </div>
-                        <span className="text-xs text-zinc-550 font-mono flex items-center gap-1">
-                          <Calendar className="h-3.5 w-3.5 text-zinc-650" />
-                          {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
-                        </span>
+                        <p className="text-xs text-zinc-400 leading-relaxed font-sans mt-2">{edu.description}</p>
+                        {cgpa && (
+                          <div className="mt-2.5">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 font-mono">
+                              CGPA: {cgpa}
+                            </span>
+                          </div>
+                        )}
+                        {edu.responsibilities && edu.responsibilities.length > 0 && (
+                          <p className="text-[11px] text-zinc-500 font-mono mt-2">{edu.responsibilities.join(' • ')}</p>
+                        )}
                       </div>
-                      <p className="text-xs text-zinc-400 leading-relaxed font-sans mt-2">{edu.description}</p>
-                      {edu.responsibilities && edu.responsibilities.length > 0 && (
-                        <p className="text-[11px] text-zinc-500 font-mono mt-2">{edu.responsibilities.join(' • ')}</p>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
-              </section>
-            )}
+              ) : (
+                <div className="text-center py-12 border border-zinc-900/60 rounded-xl bg-zinc-950/20">
+                  <p className="text-xs text-zinc-500 font-mono">No education records added yet.</p>
+                </div>
+              )}
+            </section>
 
             {/* Achievements Section */}
-            {achievementExperiences.length > 0 && (
-              <section className="border-t border-zinc-900 pt-16">
-                <div className="mb-10">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Achievements & Recognitions</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Honors, hackathons, and professional milestones.</p>
-                </div>
+            <section className="border-t border-zinc-900 pt-16">
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Achievements & Highlights</h2>
+                <p className="mt-2 text-zinc-400 text-sm">Honors, hackathons, and professional milestones.</p>
+              </div>
+              {achievementExperiences.length > 0 ? (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {achievementExperiences.map((ach, idx) => (
                     <div key={idx} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-5 relative overflow-hidden group">
@@ -927,8 +1085,12 @@ export default function PortfolioClient({
                     </div>
                   ))}
                 </div>
-              </section>
-            )}
+              ) : (
+                <div className="text-center py-12 border border-zinc-900/60 rounded-xl bg-zinc-950/20">
+                  <p className="text-xs text-zinc-500 font-mono">No achievements compiled yet.</p>
+                </div>
+              )}
+            </section>
 
             {/* Testimonials Section */}
             {testimonials.length > 0 && (
@@ -999,12 +1161,7 @@ export default function PortfolioClient({
               </section>
             )}
 
-            {/* GitHub Info Section */}
-            {githubUser && (
-              <section className="border-t border-zinc-900 pt-16">
-                <GitHubStats username={githubUser} />
-              </section>
-            )}
+
 
             {/* Resume CV Section */}
             {activeResume && (
@@ -1026,6 +1183,14 @@ export default function PortfolioClient({
                         <p className="text-xs text-zinc-500 font-mono mt-0.5">
                           Format: PDF/Document • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}
                         </p>
+                        <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400 font-mono">
+                            ATS Compatibility: {scores.atsScore}%
+                          </span>
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 font-mono">
+                            Status: Verified
+                          </span>
+                        </div>
                       </div>
                     </div>
                     <p className="text-xs text-zinc-400 leading-relaxed max-w-md">
@@ -1106,14 +1271,46 @@ export default function PortfolioClient({
                       </a>
                     )}
                   </div>
+
+                  {/* Recruiter Quick Actions */}
+                  <div className="rounded-xl border border-zinc-900 bg-zinc-950/30 p-5 space-y-4">
+                    <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-550 font-bold border-b border-zinc-900 pb-2">// Recruiter Quick Actions</p>
+                    <div className="grid gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAction('interview')}
+                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono"
+                      >
+                        <span>Schedule Interview</span>
+                        <Calendar className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAction('resume')}
+                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 px-3 py-2 text-left text-xs font-semibold text-indigo-400 transition-all font-mono"
+                      >
+                        <span>Request Resume</span>
+                        <FileText className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleQuickAction('opportunity')}
+                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/25 px-3 py-2 text-left text-xs font-semibold text-purple-400 transition-all font-mono"
+                      >
+                        <span>Send Opportunity</span>
+                        <Sparkles className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="lg:col-span-3 rounded-xl border border-zinc-800 bg-zinc-950/40 p-6">
-                  <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <form id="contact-form" onSubmit={handleContactSubmit} className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
                         <input
+                          id="contact-name"
                           type="text"
                           required
                           value={contactName}
