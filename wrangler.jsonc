@@ -13,6 +13,9 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "build": {
+    "command": "npm run build"
+  },
   "vars": {
     "NEXT_PUBLIC_API_URL": "https://portfolioos-backend-zdum.onrender.com"
   }
