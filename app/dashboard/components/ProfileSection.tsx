@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api-client';
-import { Portfolio, User } from '@/types';
+import { Portfolio, User, CloudinaryAsset } from '@/types';
 import { Save, Loader2, AlertCircle, Key, CheckCircle } from 'lucide-react';
+import CloudinaryUploadZone from '@/components/features/CloudinaryUploadZone';
 
 interface ProfileSectionProps {
   user: User;
@@ -27,6 +28,8 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [profileImageState, setProfileImageState] = useState<CloudinaryAsset | null>(null);
+  const [showProfilePhoto, setShowProfilePhoto] = useState(true);
 
   // Password States
   const [currentPassword, setCurrentPassword] = useState('');
@@ -44,6 +47,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       setProfileLinkedin(user.socialLinks?.linkedin || '');
       setProfileTwitter(user.socialLinks?.twitter || '');
       setProfileWebsite(user.socialLinks?.website || '');
+      setProfileImageState(user.profileImage || null);
     }
   }, [user]);
 
@@ -54,6 +58,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       setPortfolioHeadline(portfolioSettings.headline || '');
       setPortfolioVisibility(portfolioSettings.visibility || 'public');
       setPortfolioCustomDomain(portfolioSettings.customDomain || '');
+      setShowProfilePhoto(portfolioSettings.showProfilePhoto !== false);
     }
   }, [portfolioSettings]);
 
@@ -110,6 +115,8 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       profile: {
         name: profileName,
         bio: profileBio,
+        profileImage: profileImageState,
+        avatarUrl: profileImageState?.secureUrl || '',
         socialLinks: {
           github: profileGithub,
           linkedin: profileLinkedin,
@@ -123,7 +130,9 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
         theme: portfolioTheme,
         visibility: portfolioVisibility,
         customDomain: portfolioCustomDomain,
-        githubUsername: profileGithub
+        githubUsername: profileGithub,
+        profileImage: profileImageState,
+        showProfilePhoto: showProfilePhoto
       }
     });
   };
@@ -182,6 +191,18 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
             </select>
           </div>
 
+          <div className="flex items-center pt-5">
+            <label className="flex items-center gap-2 text-xs font-mono text-zinc-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showProfilePhoto}
+                onChange={e => setShowProfilePhoto(e.target.checked)}
+                className="rounded border-zinc-800 bg-zinc-950 text-teal-500 focus:ring-teal-500"
+              />
+              <span>Show Profile Photo on Public Portfolio</span>
+            </label>
+          </div>
+
           <div className="sm:col-span-2">
             <label className="block text-xs text-zinc-400 font-mono mb-1.5 uppercase font-bold">Personal Headline</label>
             <input
@@ -227,6 +248,18 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
                 value={profileName}
                 onChange={e => setProfileName(e.target.value)}
                 className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-xs text-zinc-200 outline-none focus:border-teal-500"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs text-zinc-400 font-mono mb-1.5 uppercase font-bold">Profile Photo</label>
+              <CloudinaryUploadZone
+                endpoint="profile"
+                acceptType="image"
+                label="Profile Picture"
+                value={profileImageState}
+                onUploadSuccess={asset => setProfileImageState(asset)}
+                onRemove={() => setProfileImageState(null)}
               />
             </div>
             

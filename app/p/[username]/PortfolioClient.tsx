@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api-client';
+import { API_BASE_URL } from '@/lib/config';
 import Footer from '@/components/layout/Footer';
 import TechGalaxy from '@/components/sections/TechGalaxy';
 import GitHubStats from '@/components/sections/GitHubStats';
@@ -272,11 +273,40 @@ export default function PortfolioClient({
   const bio = portfolio.bio || (portfolio.ownerId as any)?.bio || 'Building future-focused applications.';
   const githubUser = portfolio.githubUsername || (portfolio.ownerId as any)?.githubUsername || '';
   const avatarUrl = portfolio.profileImage?.secureUrl || (portfolio.ownerId as any)?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80';
-  const socialLinks = portfolio.socialLinks || (portfolio.ownerId as any)?.socialLinks || {};
-
   const coverImageUrl = portfolio.coverImage?.secureUrl || (portfolio.ownerId as any)?.coverImage?.secureUrl || '';
   const userLocation = (portfolio.ownerId as any)?.location || 'Remote / Worldwide';
   const availabilityStatus = (portfolio.ownerId as any)?.availabilityStatus || 'Available for Opportunities';
+
+  const renderAvatar = (className: string, initialsSizeClass: string = "text-xl") => {
+    const secureUrl = portfolio.profileImage?.secureUrl || (portfolio.ownerId as any)?.profileImage?.secureUrl || (portfolio.ownerId as any)?.avatarUrl;
+    const isUnsplash = secureUrl && secureUrl.includes('images.unsplash.com');
+
+    if (secureUrl && !isUnsplash) {
+      return (
+        <img
+          src={secureUrl}
+          alt={ownerName}
+          className={`${className} object-cover`}
+        />
+      );
+    }
+
+    // Initials fallback
+    const initials = ownerName
+      .split(' ')
+      .map((n: string) => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase() || 'U';
+
+    return (
+      <div className={`${className} flex items-center justify-center bg-zinc-800 text-zinc-355 font-mono font-bold select-none ${initialsSizeClass}`}>
+        {initials}
+      </div>
+    );
+  };
+
+  const socialLinks = portfolio.socialLinks || (portfolio.ownerId as any)?.socialLinks || {};
 
   const educationExperiences = experiences.filter(exp => exp.type === 'education');
   const achievementExperiences = experiences.filter(exp => exp.type === 'achievement');
@@ -452,9 +482,11 @@ export default function PortfolioClient({
               </div>
               <div className="px-6 pb-6 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
                 <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left z-10">
-                  <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-zinc-950 bg-zinc-900 shadow-2xl flex-shrink-0">
-                    <img src={avatarUrl} alt={ownerName} className="w-full h-full object-cover" />
-                  </div>
+                  {portfolio.showProfilePhoto !== false && (
+                    <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-zinc-950 bg-zinc-900 shadow-2xl flex-shrink-0">
+                      {renderAvatar("w-full h-full", "text-2xl")}
+                    </div>
+                  )}
                   <div className="md:pb-2">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
                       <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl font-sans">{ownerName}</h1>
@@ -473,7 +505,8 @@ export default function PortfolioClient({
                 <div className="flex flex-wrap justify-center gap-3 md:pb-2 z-10">
                   {activeResume && (
                     <a
-                      href={activeResume.resumeFile?.secureUrl || '#'}
+                      href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
+                      download
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
@@ -1000,7 +1033,8 @@ export default function PortfolioClient({
                     </p>
                     <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
                       <a
-                        href={activeResume.resumeFile?.secureUrl || '#'}
+                        href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
+                        download
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-4 py-2.5 text-xs transition-all duration-300 shadow-md shadow-teal-500/5"
@@ -1022,10 +1056,11 @@ export default function PortfolioClient({
                       <p className="text-[10px] text-zinc-550 font-mono mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
                     </div>
                     <a
-                      href={activeResume.resumeFile?.secureUrl || '#'}
+                      href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
+                      download
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full py-2 bg-zinc-950 hover:bg-zinc-900 text-zinc-350 hover:text-white font-mono text-[10px] uppercase font-bold tracking-widest text-center border border-zinc-800 rounded-lg transition-all"
+                      className="w-full py-2 bg-zinc-950 hover:bg-zinc-900 text-zinc-355 hover:text-white font-mono text-[10px] uppercase font-bold tracking-widest text-center border border-zinc-800 rounded-lg transition-all"
                     >
                       Open Full Document
                     </a>
@@ -1203,7 +1238,7 @@ export default function PortfolioClient({
                   {activeFileTab === 'Profile.md' && (
                     <div className="space-y-6">
                       <div className="flex items-center gap-4 border-b border-[#2d2d30] pb-6">
-                        <img src={avatarUrl} alt={ownerName} className="h-16 w-16 rounded-full border border-zinc-700 bg-zinc-800 object-cover" />
+                        {portfolio.showProfilePhoto !== false && renderAvatar("h-16 w-16 rounded-full border border-zinc-700 bg-zinc-800", "text-lg")}
                         <div>
                           <p className="text-zinc-500 text-xs">// Portfolio OS Metadata</p>
                           <h1 className="text-2xl font-bold text-white"># {ownerName}</h1>
@@ -1502,10 +1537,12 @@ export default function PortfolioClient({
             <section className="rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden">
               <div className="absolute top-[-20%] right-[-10%] w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
               <div className="grid gap-8 md:grid-cols-3 items-center">
-                <div className="md:col-span-1 flex justify-center">
-                  <img src={avatarUrl} alt={ownerName} className="h-44 w-44 rounded-full border-4 border-indigo-500/30 shadow-xl object-cover bg-slate-800" />
-                </div>
-                <div className="md:col-span-2 text-center md:text-left space-y-4">
+                {portfolio.showProfilePhoto !== false && (
+                  <div className="md:col-span-1 flex justify-center">
+                    {renderAvatar("h-44 w-44 rounded-full border-4 border-indigo-500/30 shadow-xl bg-slate-800", "text-4xl")}
+                  </div>
+                )}
+                <div className={`${portfolio.showProfilePhoto !== false ? 'md:col-span-2' : 'md:col-span-3'} text-center md:text-left space-y-4`}>
                   <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">{ownerName}</h1>
                   <p className="text-indigo-400 font-semibold text-base sm:text-lg">{headline}</p>
                   <p className="text-slate-400 text-sm leading-relaxed max-w-xl">{bio}</p>
@@ -1646,7 +1683,7 @@ export default function PortfolioClient({
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-purple-100 font-sans">
             <section className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row items-center gap-8">
               <div className="absolute top-[-10%] left-[-10%] w-[150px] h-[150px] bg-pink-500/30 rounded-full blur-[50px] pointer-events-none" />
-              <img src={avatarUrl} alt={ownerName} className="h-32 w-32 rounded-3xl border-2 border-pink-400 shadow-xl object-cover hover:rotate-3 transition-transform" />
+              {portfolio.showProfilePhoto !== false && renderAvatar("h-32 w-32 rounded-3xl border-2 border-pink-400 shadow-xl hover:rotate-3 transition-transform", "text-3xl")}
               <div className="space-y-4 flex-1">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-pink-500 to-yellow-500 text-white shadow-lg animate-pulse">
                   <Sparkles className="h-3.5 w-3.5" />

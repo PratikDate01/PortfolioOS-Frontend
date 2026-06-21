@@ -709,8 +709,14 @@ export default function DashboardView() {
           {/* Header Banner */}
           <div className="mb-8 rounded-2xl border border-zinc-900 bg-zinc-950/40 p-6 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center space-x-4">
-              <div className="h-16 w-16 rounded-full border-2 border-teal-500/30 overflow-hidden bg-zinc-800">
-                <img src={user?.avatarUrl || user?.profileImage?.secureUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&h=120&q=80'} alt={user?.name} className="h-full w-full object-cover" />
+              <div className="h-16 w-16 rounded-full border-2 border-teal-500/30 overflow-hidden bg-zinc-800 flex items-center justify-center">
+                {user?.profileImage?.secureUrl || (user?.avatarUrl && !user.avatarUrl.includes('images.unsplash.com')) ? (
+                  <img src={user.profileImage?.secureUrl || user.avatarUrl} alt={user?.name} className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-white font-mono font-bold text-lg select-none">
+                    {user?.name?.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'U'}
+                  </span>
+                )}
               </div>
               <div>
                 <h1 className="text-2xl font-extrabold text-white tracking-tight">{user?.name}</h1>
@@ -827,7 +833,7 @@ export default function DashboardView() {
               )}
 
               {/* PROFILE & THEME SETTINGS TAB */}
-              {activeTab === 'profile' && (
+              {activeTab === 'profile' && user && (
                 <ProfileSection
                   user={user}
                   portfolioSettings={portfolioSettings}

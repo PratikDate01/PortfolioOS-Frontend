@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api-client';
+import { API_BASE_URL } from '@/lib/config';
 import { Resume, CloudinaryAsset } from '@/types';
 import { FileText, Plus, Brain, Sparkles, Loader2, Save, ExternalLink, Trash2 } from 'lucide-react';
 import CloudinaryUploadZone from '@/components/features/CloudinaryUploadZone';
@@ -268,7 +269,7 @@ export default function ResumeSection({ resumes, refetchResumes }: ResumeSection
                 {!res.isActive && (
                   <button onClick={() => toggleResumeActiveMutation.mutate({ id: res._id!, isActive: true })} className="text-[10px] text-teal-400 font-mono border border-teal-500/20 px-2 py-1 rounded hover:bg-teal-950/20">Set Active</button>
                 )}
-                <a href={res.resumeFile.secureUrl} target="_blank" rel="noreferrer" className="p-2 border border-zinc-850 hover:bg-zinc-900 rounded text-zinc-400">
+                <a href={`${API_BASE_URL}/resume/${res._id}/download`} download target="_blank" rel="noreferrer" className="p-2 border border-zinc-850 hover:bg-zinc-900 rounded text-zinc-400">
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
                 <button onClick={() => { if(confirm('Delete resume?')) deleteResumeMutation.mutate(res._id!); }} className="p-2 border border-zinc-850 hover:bg-red-950/10 rounded text-red-500">

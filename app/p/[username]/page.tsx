@@ -83,7 +83,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ownerName = (portfolio.ownerId as any)?.name || username;
   const headline = portfolio.headline || 'Software Engineer & Designer';
   const bio = portfolio.bio || (portfolio.ownerId as any)?.bio || 'Building future-focused applications.';
-  const avatarUrl = portfolio.profileImage?.secureUrl || (portfolio.ownerId as any)?.avatarUrl || '';
+  const showPhoto = portfolio.showProfilePhoto !== false;
+  const rawAvatarUrl = showPhoto ? (portfolio.profileImage?.secureUrl || (portfolio.ownerId as any)?.profileImage?.secureUrl || (portfolio.ownerId as any)?.avatarUrl || '') : '';
+  const avatarUrl = rawAvatarUrl.includes('images.unsplash.com') ? '' : rawAvatarUrl;
 
   const title = `${ownerName} — ${headline}`;
   const description = bio;
@@ -111,6 +113,10 @@ export default async function Page({ params }: Props) {
   const username = params.username;
   const data = await getPortfolioData(username);
 
+  const showPhoto = data?.portfolio?.showProfilePhoto !== false;
+  const rawAvatarUrl = showPhoto ? (data?.portfolio?.profileImage?.secureUrl || (data?.portfolio?.ownerId as any)?.profileImage?.secureUrl || (data?.portfolio?.ownerId as any)?.avatarUrl || '') : '';
+  const seoAvatarUrl = rawAvatarUrl.includes('images.unsplash.com') ? '' : rawAvatarUrl;
+
   const jsonLd = data ? {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
@@ -120,7 +126,7 @@ export default async function Page({ params }: Props) {
       'name': (data.portfolio?.ownerId as any)?.name || username,
       'jobTitle': data.portfolio?.headline || 'Software Engineer',
       'description': data.portfolio?.bio || '',
-      'image': data.portfolio?.profileImage?.secureUrl || (data.portfolio?.ownerId as any)?.avatarUrl || '',
+      'image': seoAvatarUrl,
       'sameAs': [
         data.portfolio?.socialLinks?.github,
         data.portfolio?.socialLinks?.linkedin,
