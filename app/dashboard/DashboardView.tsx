@@ -30,8 +30,6 @@ interface PopulatedBookmark {
 }
 
 interface UserProgressData {
-  xp: number;
-  level: number;
   badges: Badge[];
   recentActivity: UserProgressEvent[];
 }
@@ -235,7 +233,7 @@ export default function DashboardView() {
     queryKey: ['progress'],
     queryFn: async () => {
       const res = await apiFetch<UserProgressData>('/users/me/progress');
-      return res.data || { xp: 0, level: 1, badges: [], recentActivity: [] };
+      return res.data || { badges: [], recentActivity: [] };
     },
     enabled: !!user
   });
@@ -699,11 +697,7 @@ export default function DashboardView() {
     );
   }
 
-  // Calculate XP percentage
-  const currentXp = progress?.xp || 0;
-  const currentLvl = progress?.level || 1;
-  const xpNeeded = currentLvl * 500;
-  const xpPercentage = Math.min((currentXp / xpNeeded) * 100, 100);
+  // XP calculations removed
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-950 text-zinc-100 selection:bg-teal-500/20">
@@ -728,22 +722,8 @@ export default function DashboardView() {
               </div>
             </div>
 
-            {/* Quick stats / Gamification bar */}
+            {/* Quick stats / Analytics bar */}
             <div className="flex flex-col sm:flex-row gap-6 items-stretch sm:items-center">
-              <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 px-5 py-3 min-w-[160px] flex flex-col justify-center">
-                <div className="flex items-center justify-between text-xs font-mono mb-1">
-                  <span className="text-zinc-500">GAMIFIED LEVEL</span>
-                  <span className="text-teal-400 font-bold">Lvl {currentLvl}</span>
-                </div>
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-xl font-bold text-white">{currentXp}</span>
-                  <span className="text-zinc-500 text-xs font-mono">/ {xpNeeded} XP</span>
-                </div>
-                <div className="h-1 w-full bg-zinc-950 rounded-full mt-2 overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-teal-500 to-indigo-400 transition-all" style={{ width: `${xpPercentage}%` }} />
-                </div>
-              </div>
-
               {/* Analytics Summary */}
               {analyticsStats && (
                 <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 px-5 py-3 min-w-[165px] flex flex-col justify-center text-xs">
@@ -1347,7 +1327,7 @@ export default function DashboardView() {
                   {/* Badges Catalog */}
                   <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-6 backdrop-blur-md">
                     <h2 className="text-xl font-bold text-white mb-2">Achievement Badges</h2>
-                    <p className="text-xs text-zinc-400 mb-6">Complete milestones to unlock achievements and earn bonus XP.</p>
+                    <p className="text-xs text-zinc-400 mb-6">Complete milestones to unlock achievements.</p>
 
                     {isProgressLoading ? (
                       <div className="flex items-center justify-center py-8">
@@ -1378,58 +1358,12 @@ export default function DashboardView() {
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center justify-between gap-2">
                                   <h3 className="text-sm font-bold truncate">{badge.title}</h3>
-                                  <span className="text-[10px] font-mono font-bold text-teal-400 tracking-wide shrink-0">
-                                    +{badge.xpReward} XP
-                                  </span>
                                 </div>
                                 <p className="text-xs text-zinc-400 leading-relaxed mt-1">{badge.description}</p>
                                 <div className="mt-2 flex items-center space-x-1.5 text-[10px] font-mono text-zinc-500">
                                   <span>Task:</span>
                                   <span className="text-zinc-400">{badge.criteria}</span>
                                 </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Recent XP Activity Ledger */}
-                  <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-6 backdrop-blur-md">
-                    <h2 className="text-sm font-bold font-mono uppercase tracking-wider text-zinc-400 mb-4 flex items-center space-x-2">
-                      <Clock className="h-4 w-4 text-teal-400" />
-                      <span>Recent XP Activity</span>
-                    </h2>
-
-                    {isProgressLoading ? (
-                      <div className="flex justify-center py-6">
-                        <Loader2 className="h-5 w-5 text-teal-400 animate-spin" />
-                      </div>
-                    ) : !progress || progress.recentActivity.length === 0 ? (
-                      <div className="text-center py-8 text-xs font-mono text-zinc-650 border border-dashed border-zinc-900 rounded-lg">
-                        No activity logged yet. Action rewards will show up here.
-                      </div>
-                    ) : (
-                      <div className="divide-y divide-zinc-900/60">
-                        {progress.recentActivity.map((log) => {
-                          const date = log.createdAt 
-                            ? new Date(log.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-                            : '';
-
-                          return (
-                            <div key={log._id} className="flex items-center justify-between py-3">
-                              <div className="min-w-0 pr-4">
-                                <p className="text-sm text-zinc-300 font-sans font-medium capitalize">
-                                  {log.type.replace('_', ' ')}
-                                </p>
-                                <span className="text-[10px] font-mono text-zinc-550 block mt-0.5">
-                                  {date}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-1 rounded bg-teal-950/15 border border-teal-500/10 px-2 py-0.5 text-xs text-teal-400 font-bold font-mono">
-                                <Zap className="h-3 w-3 fill-current" />
-                                <span>+{log.xpAwarded} XP</span>
                               </div>
                             </div>
                           );

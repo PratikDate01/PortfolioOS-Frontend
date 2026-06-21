@@ -43,7 +43,7 @@ export default function RegisterView() {
               <Terminal className="h-6 w-6" />
             </div>
             <h1 className="text-2xl font-bold text-white font-sans">Create an Account</h1>
-            <p className="text-sm text-zinc-400 mt-2">Create an account to track your progress, earn XP, and add recommendations.</p>
+            <p className="text-sm text-zinc-400 mt-2">Create an account to track your progress and add recommendations.</p>
           </div>
 
           {errorMsg && (

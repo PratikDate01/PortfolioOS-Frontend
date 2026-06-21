@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { Terminal, Menu, X, LogOut, Trophy, Sparkles } from 'lucide-react';
+import { Terminal, Menu, X, LogOut, Sparkles } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -68,12 +68,6 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-4">
           {user ? (
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 rounded-full border border-teal-500/30 bg-teal-950/20 px-3 py-1 text-xs text-teal-400">
-                <Trophy className="h-3.5 w-3.5 fill-teal-500/10" />
-                <span>Level {user.level}</span>
-                <span className="text-zinc-600">|</span>
-                <span>{user.xp} XP</span>
-              </div>
               <Link href="/dashboard" className="text-sm text-zinc-300 font-mono hover:text-teal-400 transition-colors">
                 {user.name}
               </Link>
@@ -106,11 +100,6 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center space-x-2">
-          {user && (
-            <div className="flex items-center space-x-1 rounded-full border border-teal-500/30 bg-teal-950/20 px-2 py-0.5 text-[10px] text-teal-400">
-              <span>Lvl {user.level}</span>
-            </div>
-          )}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="rounded-lg border border-zinc-800 p-1.5 text-zinc-400 hover:bg-zinc-900"
@@ -152,7 +141,6 @@ export default function Navbar() {
                   <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-teal-400 font-medium">
                     {user.name} (Dashboard)
                   </Link>
-                  <span className="text-teal-400 font-mono">Lvl {user.level} ({user.xp} XP)</span>
                 </div>
                 <button
                   onClick={() => {

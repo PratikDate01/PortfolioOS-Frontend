@@ -502,27 +502,12 @@ export default function PortfolioClient({
                     <span className="font-mono">Profile Summary</span>
                   </div>
                   
-                  {(portfolio.ownerId as any)?.xp !== undefined && (
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/60 text-xs font-mono text-zinc-350">
-                      <span className="text-teal-400 font-bold">Lvl {(portfolio.ownerId as any).level || 1}</span>
-                      <span className="text-zinc-550">•</span>
-                      <span>{(portfolio.ownerId as any).xp} XP</span>
-                    </div>
-                  )}
+
                 </div>
                 <p className="text-base text-zinc-400 leading-relaxed font-sans">
                   {bio}
                 </p>
-                {(portfolio.ownerId as any)?.xp !== undefined && (
-                  <div className="mt-4 max-w-xs">
-                    <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/30">
-                      <div 
-                        className="h-full bg-gradient-to-r from-teal-500 to-emerald-400 rounded-full" 
-                        style={{ width: `${Math.min((((portfolio.ownerId as any).xp % 1000) / 1000) * 100 || 15, 100)}%` }} 
-                      />
-                    </div>
-                  </div>
-                )}
+
                 <div className="mt-6 flex gap-3">
                   {socialLinks.github && (
                     <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">

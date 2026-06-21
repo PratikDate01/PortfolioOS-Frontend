@@ -124,8 +124,8 @@ export default function MarketingLandingPage() {
                 },
                 {
                   icon: <Award className="h-6 w-6 text-emerald-400" />,
-                  title: 'Gamified Progress & Badges',
-                  desc: 'Earn XP and level up as you flesh out your portfolio. Unlock professional accomplishments and display them as verified badges.'
+                  title: 'Professional Achievements & Badges',
+                  desc: 'Unlock professional accomplishments and display them as verified badges.'
                 },
                 {
                   icon: <Globe className="h-6 w-6 text-amber-400" />,

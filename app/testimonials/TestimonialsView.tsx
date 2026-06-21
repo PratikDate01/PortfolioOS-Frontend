@@ -35,7 +35,7 @@ export default function TestimonialsView() {
   const queryClient = useQueryClient();
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-  const [xpReward, setXpReward] = useState(false);
+
 
   // Form states
   const [authorName, setAuthorName] = useState('');
@@ -99,9 +99,7 @@ export default function TestimonialsView() {
       // Close modal & show success alerts
       setShowSubmitModal(false);
       setSuccessMessage(true);
-      setXpReward(true);
       setTimeout(() => setSuccessMessage(false), 5000);
-      setTimeout(() => setXpReward(false), 3000);
       
       queryClient.invalidateQueries({ queryKey: ['testimonials'] });
     },
@@ -125,12 +123,7 @@ export default function TestimonialsView() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      {/* Floating XP Reward Badge */}
-      {xpReward && (
-        <div className="fixed bottom-10 right-10 z-50 flex items-center space-x-2 rounded-xl border border-teal-500 bg-teal-950/80 px-4 py-3 text-teal-300 shadow-lg shadow-teal-500/20 animate-bounce font-mono text-sm">
-          <span>+100 XP Earned! (Action: Submit Testimonial)</span>
-        </div>
-      )}
+
 
       <main className="flex-1 bg-zinc-950 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -335,7 +328,7 @@ export default function TestimonialsView() {
                   disabled={submitMutation.isPending}
                   className="rounded-lg bg-teal-500 px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-teal-400 transition-colors disabled:opacity-50"
                 >
-                  {submitMutation.isPending ? 'Submitting...' : 'Submit Testimonial (+100 XP)'}
+                  {submitMutation.isPending ? 'Submitting...' : 'Submit Testimonial'}
                 </button>
               </div>
             </form>

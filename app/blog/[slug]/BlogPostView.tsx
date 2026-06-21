@@ -109,7 +109,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
   const { user } = useAuth();
   const [commentBody, setCommentBody] = useState('');
   const [replyingTo, setReplyingTo] = useState<{ id: string; name: string } | null>(null);
-  const [xpReward, setXpReward] = useState(false);
+
 
   // Retrieve post details
   const { data: serverPost } = useQuery({
@@ -153,10 +153,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
       setCommentBody('');
       setReplyingTo(null);
       queryClient.invalidateQueries({ queryKey: ['comments', post._id] });
-      
-      // Trigger XP floating reward animation
-      setXpReward(true);
-      setTimeout(() => setXpReward(false), 3000);
+
     },
   });
 
@@ -244,12 +241,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      {/* Floating XP Reward Badge */}
-      {xpReward && (
-        <div className="fixed bottom-10 right-10 z-50 flex items-center space-x-2 rounded-xl border border-teal-500 bg-teal-950/80 px-4 py-3 text-teal-300 shadow-lg shadow-teal-500/20 animate-bounce font-mono text-sm">
-          <span>+100 XP Earned! (Action: Post Comment)</span>
-        </div>
-      )}
+
 
       <main className="flex-1 bg-zinc-950 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
@@ -423,7 +415,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
                       disabled={commentMutation.isPending}
                       className="rounded-lg bg-teal-500 px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-teal-400 transition-colors disabled:opacity-50"
                     >
-                      {commentMutation.isPending ? 'Sending...' : 'Post Comment (+100 XP)'}
+                      {commentMutation.isPending ? 'Sending...' : 'Post Comment'}
                     </button>
                   </div>
                 </form>
