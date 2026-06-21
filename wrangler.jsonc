@@ -1,6 +1,6 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "portfolio-os",
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "app",
   "compatibility_date": "2026-06-21",
   "observability": {
     "enabled": true
