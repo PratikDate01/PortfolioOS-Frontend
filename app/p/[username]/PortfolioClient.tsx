@@ -1361,7 +1361,7 @@ export default function PortfolioClient({
               </div>
             </AnimatedSection>
 
-          </div>
+          </motion.div>
         )}
 
         {theme === 'developer' && (
