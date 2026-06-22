@@ -777,53 +777,6 @@ export default function PortfolioClient({
               </div>
             </section>
 
-            {/* Quick Analytics Stats Section */}
-            <section className="border-t border-zinc-900 pt-16">
-              <div className="mb-8">
-                <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl">
-                  Quick Analytics Stats
-                </h2>
-                <p className="text-zinc-500 text-xs mt-1">Numerical overview of credentials, contributions, and engagement.</p>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-white font-mono">{projects.length}</span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-teal-400 font-mono">{skills.length}</span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Skills</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-white font-mono">{certifications.length}</span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Certificates</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-white font-mono">
-                    {experiences.filter(e => e.type === 'job' || e.type === 'internship').length}
-                  </span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Roles Held</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-white font-mono">
-                    {githubUser ? 'Connected' : 'N/A'}
-                  </span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">GitHub Repos</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-teal-400 font-mono">
-                    {visitorCount !== null ? visitorCount.toLocaleString() : '100+'}
-                  </span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Views</span>
-                </div>
-                <div className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-4 text-center">
-                  <span className="block text-2xl font-bold text-white font-mono">{displayYearsOfExp}</span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Years Exp</span>
-                </div>
-              </div>
-            </section>
-
             {/* GitHub Info Section */}
             {githubUser && (
               <section className="border-t border-zinc-900 pt-16">
