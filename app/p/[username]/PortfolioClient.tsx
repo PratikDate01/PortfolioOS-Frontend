@@ -7,6 +7,9 @@ import { apiFetch } from '@/lib/api-client';
 import { API_BASE_URL } from '@/lib/config';
 import Footer from '@/components/layout/Footer';
 import TechGalaxy from '@/components/sections/TechGalaxy';
+import Tilt3DCard from '@/components/sections/Tilt3DCard';
+import Globe3DCanvas from '@/components/sections/Globe3DCanvas';
+import { motion } from 'framer-motion';
 import GitHubStats from '@/components/sections/GitHubStats';
 import AIChatWidget from '@/components/features/AIChatWidget';
 import { Project, Experience, Skill, Certification, Portfolio, BlogPost, Resume, Testimonial } from '@/types';
@@ -435,6 +438,35 @@ export default function PortfolioClient({
     }
   };
 
+  // Animation config
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const AnimatedSection = ({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) => (
+    <motion.section
+      id={id}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-100px' }}
+      variants={fadeInVariants}
+      className={className}
+    >
+      {children}
+    </motion.section>
+  );
+
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-500 ${
       theme === 'minimal' ? 'bg-[#fafafa] text-zinc-900 selection:bg-zinc-200' :
@@ -515,10 +547,10 @@ export default function PortfolioClient({
 
       <main className="flex-grow z-10">
         {theme === 'portfolio-os' && (
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24">
             
             {/* Widescreen Banner Cover & Profile Header */}
-            <div className="relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950/40">
+            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950/40">
               <div className="h-48 md:h-64 w-full relative bg-gradient-to-r from-teal-950 via-zinc-900 to-indigo-950">
                 {coverImageUrl ? (
                   <img src={coverImageUrl} alt="Profile Cover" className="w-full h-full object-cover opacity-70" />
@@ -571,50 +603,51 @@ export default function PortfolioClient({
                   </a>
                 </div>
               </div>
-            </div>
-
+            </motion.div>
+ 
             {/* Profile Bio Section */}
-            <section className="relative pt-4">
-              <div className="max-w-4xl">
-                <div className="flex flex-wrap items-center gap-3 mb-4">
-                  <div className="inline-flex items-center space-x-2 rounded-full border border-teal-500/30 bg-teal-950/10 px-3 py-1 text-xs font-semibold text-teal-400">
-                    <Terminal className="h-3.5 w-3.5" />
-                    <span className="font-mono">Profile Summary</span>
+            <motion.section variants={fadeInVariants} className="relative pt-4">
+              <div className="grid gap-8 md:grid-cols-3 items-center">
+                <div className="md:col-span-2 max-w-4xl">
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <div className="inline-flex items-center space-x-2 rounded-full border border-teal-500/30 bg-teal-950/10 px-3 py-1 text-xs font-semibold text-teal-400">
+                      <Terminal className="h-3.5 w-3.5" />
+                      <span className="font-mono">Profile Summary</span>
+                    </div>
                   </div>
-                  
-
+                  <p className="text-base text-zinc-400 leading-relaxed font-sans">
+                    {bio}
+                  </p>
+ 
+                  <div className="mt-6 flex gap-3">
+                    {socialLinks.github && (
+                      <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
+                        <Github className="h-4.5 w-4.5" />
+                      </a>
+                    )}
+                    {socialLinks.linkedin && (
+                      <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
+                        <Linkedin className="h-4.5 w-4.5" />
+                      </a>
+                    )}
+                    {socialLinks.twitter && (
+                      <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
+                        <Twitter className="h-4.5 w-4.5" />
+                      </a>
+                    )}
+                    {socialLinks.website && (
+                      <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
+                        <Globe className="h-4.5 w-4.5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-                <p className="text-base text-zinc-400 leading-relaxed font-sans">
-                  {bio}
-                </p>
-
-                <div className="mt-6 flex gap-3">
-                  {socialLinks.github && (
-                    <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                      <Github className="h-4.5 w-4.5" />
-                    </a>
-                  )}
-                  {socialLinks.linkedin && (
-                    <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                      <Linkedin className="h-4.5 w-4.5" />
-                    </a>
-                  )}
-                  {socialLinks.twitter && (
-                    <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                      <Twitter className="h-4.5 w-4.5" />
-                    </a>
-                  )}
-                  {socialLinks.website && (
-                    <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                      <Globe className="h-4.5 w-4.5" />
-                    </a>
-                  )}
+                <div className="md:col-span-1 hidden md:block h-64">
+                  <Globe3DCanvas color="#14b8a6" glowColor="rgba(20, 184, 166, 0.08)" />
                 </div>
               </div>
-            </section>
-
-            {/* Candidate Snapshot Section */}
-            <section className="border-t border-zinc-900 pt-16">
+            </motion.section>
+            <motion.section variants={fadeInVariants} className="border-t border-zinc-900 pt-16">
               <div className="mb-8">
                 <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl flex items-center gap-2">
                   <UserIcon className="h-5 w-5 text-teal-400" />
@@ -625,7 +658,7 @@ export default function PortfolioClient({
 
               <div className="grid gap-6 md:grid-cols-3">
                 {/* Core Stats Grid */}
-                <div className="md:col-span-2 rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden flex flex-col justify-between">
+                <Tilt3DCard glowColor="teal" className="md:col-span-2 rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 flex flex-col justify-between">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
@@ -664,10 +697,10 @@ export default function PortfolioClient({
                       </span>
                     </div>
                   </div>
-                </div>
+                </Tilt3DCard>
 
                 {/* Top Technologies Card */}
-                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden flex flex-col justify-between">
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 flex flex-col justify-between">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
                   <div>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold block mb-3">// Top Stack</span>
@@ -690,12 +723,12 @@ export default function PortfolioClient({
                     </div>
                   </div>
                   <p className="text-[10px] text-zinc-500 leading-relaxed font-mono mt-4">Top technologies sorted by verified proficiency level.</p>
-                </div>
+                </Tilt3DCard>
               </div>
-            </section>
+            </motion.section>
 
             {/* Recruiter Intelligence Dashboard */}
-            <section className="border-t border-zinc-900 pt-16">
+            <AnimatedSection className="border-t border-zinc-900 pt-16">
               <div className="mb-8">
                 <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-teal-400" />
@@ -706,7 +739,7 @@ export default function PortfolioClient({
 
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Score Card 1: Portfolio Completeness */}
-                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group">
+                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/30 to-transparent" />
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">Portfolio Score</span>
@@ -720,10 +753,10 @@ export default function PortfolioClient({
                     <div className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" style={{ width: `${scores.portfolioScore}%` }} />
                   </div>
                   <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Based on profile content depth and media completeness.</p>
-                </div>
+                </Tilt3DCard>
 
                 {/* Score Card 2: Recruiter Readiness */}
-                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group">
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">Recruiter Readiness</span>
@@ -739,26 +772,26 @@ export default function PortfolioClient({
                     </span>
                   </div>
                   <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Profile formatting, contact access points, and case studies depth status.</p>
-                </div>
+                </Tilt3DCard>
 
                 {/* Score Card 3: ATS Score */}
-                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500/30 to-transparent" />
+                <Tilt3DCard glowColor="pink" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-pink-500/30 to-transparent" />
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">ATS Match Capability</span>
-                    <FileText className="h-4 w-4 text-amber-400" />
+                    <FileText className="h-4 w-4 text-pink-400" />
                   </div>
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-3xl font-extrabold text-white">{scores.atsScore}%</span>
                   </div>
                   <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-amber-500 to-yellow-400" style={{ width: `${scores.atsScore}%` }} />
+                    <div className="h-full bg-gradient-to-r from-pink-500 to-yellow-400" style={{ width: `${scores.atsScore}%` }} />
                   </div>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Applicant tracking compatibility based on structural resume keywords.</p>
-                </div>
+                  <p className="text-[10px] text-zinc-550 leading-relaxed font-mono">Applicant tracking compatibility based on structural resume keywords.</p>
+                </Tilt3DCard>
 
                 {/* Score Card 4: GitHub Health */}
-                <div className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group">
+                <Tilt3DCard glowColor="indigo" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">GitHub Sync Health</span>
@@ -773,19 +806,19 @@ export default function PortfolioClient({
                     </span>
                   </div>
                   <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Live repository contributions, documentation, and language distribution.</p>
-                </div>
+                </Tilt3DCard>
               </div>
-            </section>
+            </AnimatedSection>
 
             {/* GitHub Info Section */}
             {githubUser && (
-              <section className="border-t border-zinc-900 pt-16">
+              <AnimatedSection className="border-t border-zinc-900 pt-16">
                 <GitHubStats username={githubUser} />
-              </section>
+              </AnimatedSection>
             )}
 
             {/* Top Skills Spotlight Widget */}
-            <section className="border-t border-zinc-900 pt-16">
+            <AnimatedSection className="border-t border-zinc-900 pt-16">
               <div className="mb-6">
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-teal-500/20 bg-teal-500/5 text-[9px] font-mono font-bold text-teal-400 uppercase">
                   Top Skills Spotlight
@@ -809,10 +842,10 @@ export default function PortfolioClient({
                   </div>
                 ))}
               </div>
-            </section>
+            </AnimatedSection>
 
             {/* Featured Projects Showcase */}
-            <section id="projects" className="border-t border-zinc-900 pt-16">
+            <AnimatedSection id="projects" className="border-t border-zinc-900 pt-16">
               <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Projects Showcase</h2>
@@ -844,58 +877,60 @@ export default function PortfolioClient({
               ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {filteredProjects.map((project) => (
-                    <article key={project._id} className="flex flex-col overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700/80 transition-all hover:-translate-y-1 duration-300 group relative">
-                      <div className="aspect-video w-full overflow-hidden bg-zinc-900 relative">
-                        <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2 py-0.5 text-[10px] font-mono text-teal-400 border border-teal-500/20">
-                          {project.category}
-                        </div>
-                        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-                          <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20 w-fit">
-                            {project.status ? project.status.toUpperCase() : 'ACTIVE'}
+                    <Tilt3DCard key={project._id} glowColor="teal" className="rounded-xl overflow-hidden h-full flex">
+                      <article className="flex-1 flex flex-col overflow-hidden border border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700/80 transition-all duration-300 group relative">
+                        <div className="aspect-video w-full overflow-hidden bg-zinc-900 relative">
+                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2 py-0.5 text-[10px] font-mono text-teal-400 border border-teal-500/20">
+                            {project.category}
                           </div>
-                          {project.viewCount !== undefined && project.viewCount > 0 && (
-                            <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20 flex items-center gap-1 w-fit">
-                              <Eye className="h-3 w-3" />
-                              <span>{project.viewCount} views</span>
+                          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+                            <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20 w-fit">
+                              {project.status ? project.status.toUpperCase() : 'ACTIVE'}
                             </div>
-                          )}
+                            {project.viewCount !== undefined && project.viewCount > 0 && (
+                              <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20 flex items-center gap-1 w-fit">
+                                <Eye className="h-3 w-3" />
+                                <span>{project.viewCount} views</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex flex-1 flex-col p-5">
-                        <h3 className="text-lg font-bold text-white group-hover:text-teal-400 transition-colors">{project.title}</h3>
-                        <p className="mt-2 text-xs text-zinc-400 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
-                        <div className="mt-4 flex flex-wrap gap-1.5">
-                          {project.techStack.slice(0, 4).map((tech) => (
-                            <span key={tech} className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-mono text-zinc-300 border border-zinc-800">{tech}</span>
-                          ))}
+                        <div className="flex flex-1 flex-col p-5">
+                          <h3 className="text-lg font-bold text-white group-hover:text-teal-400 transition-colors">{project.title}</h3>
+                          <p className="mt-2 text-xs text-zinc-400 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
+                          <div className="mt-4 flex flex-wrap gap-1.5">
+                            {project.techStack.slice(0, 4).map((tech) => (
+                              <span key={tech} className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-mono text-zinc-300 border border-zinc-800">{tech}</span>
+                            ))}
+                          </div>
+                          
+                          <div className="mt-4 flex gap-2">
+                            <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-zinc-800 bg-zinc-950/50 py-2 text-xs font-semibold text-teal-400 hover:bg-zinc-900 transition-all">
+                              <span>Case study</span>
+                              <ChevronRight className="h-3 w-3" />
+                            </button>
+                            {project.links?.github && (
+                              <a href={project.links.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
+                                <Github className="h-4 w-4" />
+                              </a>
+                            )}
+                            {project.links?.liveDemo && (
+                              <a href={project.links.liveDemo} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
+                                <ExternalLink className="h-4 w-4" />
+                              </a>
+                            )}
+                          </div>
                         </div>
-                        
-                        <div className="mt-4 flex gap-2">
-                          <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-zinc-800 bg-zinc-950/50 py-2 text-xs font-semibold text-teal-400 hover:bg-zinc-900 transition-all">
-                            <span>Case study</span>
-                            <ChevronRight className="h-3 w-3" />
-                          </button>
-                          {project.links?.github && (
-                            <a href={project.links.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
-                              <Github className="h-4 w-4" />
-                            </a>
-                          )}
-                          {project.links?.liveDemo && (
-                            <a href={project.links.liveDemo} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
-                              <ExternalLink className="h-4 w-4" />
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    </article>
+                      </article>
+                    </Tilt3DCard>
                   ))}
                 </div>
               )}
-            </section>
+            </AnimatedSection>
 
             {/* Technical Skills Grouped Grid & Interactive Orbit */}
-            <section className="border-t border-zinc-900 pt-16 bg-zinc-950/10">
+            <AnimatedSection className="border-t border-zinc-900 pt-16 bg-zinc-950/10">
               <div className="grid gap-12 lg:grid-cols-5 items-start">
                 <div className="lg:col-span-2">
                   <h2 className="text-2xl font-bold tracking-tight text-white font-sans mb-3">Technical Skills</h2>
@@ -926,10 +961,10 @@ export default function PortfolioClient({
                   ))}
                 </div>
               </div>
-            </section>
+            </AnimatedSection>
 
             {/* Experience Timeline */}
-            <section className="border-t border-zinc-900 pt-16">
+            <AnimatedSection className="border-t border-zinc-900 pt-16">
               <h2 className="text-2xl font-bold tracking-tight text-white font-sans mb-12">Professional Timeline</h2>
               <div className="relative border-l border-zinc-800 ml-4 space-y-12">
                 {experiences
@@ -967,10 +1002,10 @@ export default function PortfolioClient({
                     </div>
                   ))}
               </div>
-            </section>
+            </AnimatedSection>
 
             {/* Education Section */}
-            <section className="border-t border-zinc-900 pt-16">
+            <AnimatedSection className="border-t border-zinc-900 pt-16">
               <div className="mb-10">
                 <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Education</h2>
                 <p className="mt-2 text-zinc-400 text-sm">Academic credentials and qualifications.</p>
@@ -1013,10 +1048,10 @@ export default function PortfolioClient({
                   <p className="text-xs text-zinc-500 font-mono">No education records added yet.</p>
                 </div>
               )}
-            </section>
+            </AnimatedSection>
 
             {/* Achievements Section */}
-            <section className="border-t border-zinc-900 pt-16">
+            <AnimatedSection className="border-t border-zinc-900 pt-16">
               <div className="mb-10">
                 <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Achievements & Highlights</h2>
                 <p className="mt-2 text-zinc-400 text-sm">Honors, hackathons, and professional milestones.</p>
@@ -1043,11 +1078,10 @@ export default function PortfolioClient({
                   <p className="text-xs text-zinc-500 font-mono">No achievements compiled yet.</p>
                 </div>
               )}
-            </section>
-
+            </AnimatedSection>
             {/* Testimonials Section */}
             {testimonials.length > 0 && (
-              <section className="border-t border-zinc-900 pt-16">
+              <AnimatedSection className="border-t border-zinc-900 pt-16">
                 <div className="mb-10">
                   <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Recommendations & Endorsements</h2>
                   <p className="mt-2 text-zinc-400 text-sm">Feedback from collaborators, clients, and team members.</p>
@@ -1072,12 +1106,12 @@ export default function PortfolioClient({
                     </div>
                   ))}
                 </div>
-              </section>
+              </AnimatedSection>
             )}
 
             {/* Certifications Section */}
             {certifications && certifications.length > 0 && (
-              <section className="border-t border-zinc-900 pt-16">
+              <AnimatedSection className="border-t border-zinc-900 pt-16">
                 <div className="mb-10">
                   <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Certifications &amp; Awards</h2>
                   <p className="mt-2 text-zinc-400 text-sm">Professional credentials, courses, and honors.</p>
@@ -1111,14 +1145,14 @@ export default function PortfolioClient({
                     </div>
                   ))}
                 </div>
-              </section>
+              </AnimatedSection>
             )}
 
 
 
             {/* Resume CV Section */}
             {activeResume && (
-              <section className="border-t border-zinc-900 pt-16">
+              <AnimatedSection className="border-t border-zinc-900 pt-16">
                 <div className="mb-10">
                   <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Curriculum Vitae</h2>
                   <p className="mt-2 text-zinc-400 text-sm">Verified professional resume credentials.</p>
@@ -1162,10 +1196,10 @@ export default function PortfolioClient({
                       </a>
                     </div>
                   </div>
-
+ 
                   <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 flex flex-col justify-between hover:border-zinc-700 transition-colors">
                     <div className="border-b border-zinc-800 pb-3 flex items-center justify-between">
-                      <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider font-bold">Document Preview</span>
+                      <span className="text-[10px] text-zinc-550 font-mono uppercase tracking-wider font-bold">Document Preview</span>
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
@@ -1184,11 +1218,11 @@ export default function PortfolioClient({
                     </a>
                   </div>
                 </div>
-              </section>
+              </AnimatedSection>
             )}
 
             {/* Contact Coordinates & Form */}
-            <section id="contact" className="border-t border-zinc-900 pt-16">
+            <AnimatedSection id="contact" className="border-t border-zinc-900 pt-16">
               <div className="mb-10">
                 <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Get In Touch</h2>
                 <p className="mt-2 text-zinc-400 text-sm">Coordinate project discovery calls, interview pipelines, or send messages.</p>
@@ -1325,7 +1359,7 @@ export default function PortfolioClient({
                   </form>
                 </div>
               </div>
-            </section>
+            </AnimatedSection>
 
           </div>
         )}
@@ -1425,20 +1459,22 @@ export default function PortfolioClient({
                       ) : (
                         <div className="grid gap-4 md:grid-cols-2">
                           {projects.map((project) => (
-                            <div key={project._id} className="border border-[#2d2d30] bg-[#16161a] rounded-lg p-4 hover:border-emerald-500/40 transition-colors">
-                              <p className="text-[#4ec9b0] font-bold text-xs">{project.category}</p>
-                              <h4 className="text-white font-bold text-sm mt-1">{project.title}</h4>
-                              <p className="text-xs text-zinc-400 mt-2 line-clamp-3 leading-relaxed font-sans">{project.summary}</p>
-                              <div className="mt-3 flex flex-wrap gap-1">
-                                {project.techStack.map(t => (
-                                  <span key={t} className="rounded bg-[#25252b] px-1.5 py-0.5 text-[10px] text-zinc-400 border border-[#303036]">{t}</span>
-                                ))}
+                            <Tilt3DCard key={project._id} glowColor="emerald" className="rounded-lg overflow-hidden h-full flex">
+                              <div className="flex-grow border border-[#2d2d30] bg-[#16161a] p-4 hover:border-emerald-500/40 transition-colors duration-300">
+                                <p className="text-[#4ec9b0] font-bold text-xs">{project.category}</p>
+                                <h4 className="text-white font-bold text-sm mt-1">{project.title}</h4>
+                                <p className="text-xs text-zinc-400 mt-2 line-clamp-3 leading-relaxed font-sans">{project.summary}</p>
+                                <div className="mt-3 flex flex-wrap gap-1">
+                                  {project.techStack.map(t => (
+                                    <span key={t} className="rounded bg-[#25252b] px-1.5 py-0.5 text-[10px] text-zinc-400 border border-[#303036]">{t}</span>
+                                  ))}
+                                </div>
+                                <button onClick={() => setSelectedProject(project)} className="mt-4 flex items-center justify-center gap-1.5 w-full bg-[#202025] hover:bg-[#282830] text-emerald-400 text-xs py-1.5 rounded border border-[#2d2d30] transition-colors">
+                                  <span>inspect()</span>
+                                  <ChevronRight className="h-3.5 w-3.5" />
+                                </button>
                               </div>
-                              <button onClick={() => setSelectedProject(project)} className="mt-4 flex items-center justify-center gap-1.5 w-full bg-[#202025] hover:bg-[#282830] text-emerald-400 text-xs py-1.5 rounded border border-[#2d2d30] transition-colors">
-                                <span>inspect()</span>
-                                <ChevronRight className="h-3.5 w-3.5" />
-                              </button>
-                            </div>
+                            </Tilt3DCard>
                           ))}
                         </div>
                       )}
@@ -1492,25 +1528,35 @@ export default function PortfolioClient({
                   {activeFileTab === 'Skills.ts' && (
                     <div className="space-y-6">
                       <p className="text-zinc-550 text-xs">// TypeScript typings representing skillset</p>
-                      <div className="grid gap-4 md:grid-cols-2">
-                        {Object.entries(skillsByCategory).map(([category, items]) => (
-                          <div key={category} className="border border-[#2d2d30] bg-[#16161a] p-4 rounded-lg">
-                            <h4 className="text-[#ce9178] font-bold text-xs uppercase mb-3">// {category}</h4>
-                            <div className="space-y-3">
-                              {items.map(skill => (
-                                <div key={skill.name} className="flex flex-col gap-1">
-                                  <div className="flex justify-between text-xs">
-                                    <span className="text-[#9cdcfe]">{skill.name}</span>
-                                    <span className="text-emerald-400">{skill.proficiency}%</span>
-                                  </div>
-                                  <div className="h-1 w-full bg-[#1e1e24] rounded-full overflow-hidden">
-                                    <div className="h-full bg-emerald-500" style={{ width: `${skill.proficiency}%` }} />
-                                  </div>
-                                </div>
-                              ))}
+                      <div className="grid gap-8 lg:grid-cols-5 items-start">
+                        <div className="lg:col-span-2 hidden lg:block">
+                          <div className="p-4 border border-[#2d2d30] bg-[#16161a] rounded-lg h-[400px] flex flex-col justify-between">
+                            <h4 className="text-[#ce9178] font-bold text-xs uppercase mb-3">// Interactive Skills Orbit</h4>
+                            <div className="flex-1 w-full h-full relative min-h-[300px]">
+                              <TechGalaxy />
                             </div>
                           </div>
-                        ))}
+                        </div>
+                        <div className="lg:col-span-3 grid gap-4 md:grid-cols-2">
+                          {Object.entries(skillsByCategory).map(([category, items]) => (
+                            <div key={category} className="border border-[#2d2d30] bg-[#16161a] p-4 rounded-lg">
+                              <h4 className="text-[#ce9178] font-bold text-xs uppercase mb-3">// {category}</h4>
+                              <div className="space-y-3">
+                                {items.map(skill => (
+                                  <div key={skill.name} className="flex flex-col gap-1">
+                                    <div className="flex justify-between text-xs">
+                                      <span className="text-[#9cdcfe]">{skill.name}</span>
+                                      <span className="text-emerald-400">{skill.proficiency}%</span>
+                                    </div>
+                                    <div className="h-1 w-full bg-[#1e1e24] rounded-full overflow-hidden">
+                                      <div className="h-full bg-emerald-500" style={{ width: `${skill.proficiency}%` }} />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1686,10 +1732,10 @@ export default function PortfolioClient({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-slate-100 font-sans">
             <section className="rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden">
               <div className="absolute top-[-20%] right-[-10%] w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
-              <div className="grid gap-8 md:grid-cols-3 items-center">
+              <div className="grid gap-8 md:grid-cols-4 items-center">
                 {portfolio.showProfilePhoto !== false && (
                   <div className="md:col-span-1 flex justify-center">
-                    {renderAvatar("h-44 w-44 rounded-full border-4 border-indigo-500/30 shadow-xl bg-slate-800", "text-4xl")}
+                    {renderAvatar("h-40 w-40 rounded-full border-4 border-indigo-500/30 shadow-xl bg-slate-800", "text-4xl")}
                   </div>
                 )}
                 <div className={`${portfolio.showProfilePhoto !== false ? 'md:col-span-2' : 'md:col-span-3'} text-center md:text-left space-y-4`}>
@@ -1712,10 +1758,13 @@ export default function PortfolioClient({
                     )}
                   </div>
                 </div>
+                <div className="md:col-span-1 hidden md:block h-48 w-48 mx-auto">
+                  <Globe3DCanvas color="#6366f1" glowColor="rgba(99, 102, 241, 0.08)" />
+                </div>
               </div>
             </section>
 
-            <section id="projects" className="space-y-10">
+            <AnimatedSection id="projects" className="space-y-10">
               <div className="border-b border-slate-800 pb-4">
                 <h2 className="text-2xl font-extrabold text-white">Case Studies & Portfolios</h2>
                 <p className="text-slate-400 text-sm mt-1">Enterprise projects engineered for production deployment.</p>
@@ -1726,25 +1775,28 @@ export default function PortfolioClient({
               ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {projects.map((project) => (
-                    <div key={project._id} className="border border-slate-800 bg-slate-900/50 rounded-xl overflow-hidden shadow-lg flex flex-col hover:border-indigo-500/40 transition-colors">
-                      <div className="aspect-video bg-slate-800 overflow-hidden relative">
-                        <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover" />
+                    <Tilt3DCard key={project._id} glowColor="indigo" className="rounded-xl overflow-hidden h-full flex">
+                      <div className="flex-grow border border-slate-800 bg-slate-900/50 flex flex-col hover:border-indigo-500/40 transition-colors duration-300">
+                        <div className="aspect-video bg-slate-800 overflow-hidden relative">
+                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover" />
+                        </div>
+                        <div className="p-6 flex-grow flex flex-col justify-between">
+                          <div>
+                            <span className="text-indigo-400 font-bold text-xs uppercase tracking-wider">{project.category}</span>
+                            <h4 className="text-white text-lg font-bold mt-1.5">{project.title}</h4>
+                            <p className="text-slate-400 text-xs mt-2 line-clamp-3 leading-relaxed">{project.summary}</p>
+                          </div>
+                          <button onClick={() => setSelectedProject(project)} className="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-300 font-semibold py-2 rounded-lg text-xs transition-colors border border-slate-700">
+                            Review Case Study
+                          </button>
+                        </div>
                       </div>
-                      <div className="p-6 flex-1 flex flex-col">
-                        <span className="text-indigo-400 font-bold text-xs uppercase tracking-wider">{project.category}</span>
-                        <h4 className="text-white text-lg font-bold mt-1.5">{project.title}</h4>
-                        <p className="text-slate-400 text-xs mt-2 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
-                        <button onClick={() => setSelectedProject(project)} className="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-300 font-semibold py-2 rounded-lg text-xs transition-colors border border-slate-700">
-                          Review Case Study
-                        </button>
-                      </div>
-                    </div>
+                    </Tilt3DCard>
                   ))}
                 </div>
               )}
-            </section>
-
-            <section className="space-y-10">
+            </AnimatedSection>
+            <AnimatedSection className="space-y-10">
               <div className="border-b border-slate-800 pb-4">
                 <h2 className="text-2xl font-extrabold text-white">Professional History</h2>
                 <p className="text-slate-400 text-sm mt-1">Selected career milestones and leadership roles.</p>
@@ -1772,9 +1824,9 @@ export default function PortfolioClient({
                   </div>
                 ))}
               </div>
-            </section>
+            </AnimatedSection>
 
-            <section className="grid gap-12 lg:grid-cols-2">
+            <AnimatedSection className="grid gap-12 lg:grid-cols-2">
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-white">Technical Core</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -1810,9 +1862,9 @@ export default function PortfolioClient({
                   ))}
                 </div>
               </div>
-            </section>
+            </AnimatedSection>
 
-            <section className="border-t border-slate-800 pt-16 max-w-xl mx-auto space-y-6">
+            <AnimatedSection className="border-t border-slate-800 pt-16 max-w-xl mx-auto space-y-6">
               <div className="text-center">
                 <h3 className="text-2xl font-bold text-white">Initiate Consultation</h3>
                 <p className="text-slate-400 text-xs mt-1">Submit your details to coordinate project discovery calls.</p>
@@ -1825,7 +1877,7 @@ export default function PortfolioClient({
                   Submit Request
                 </button>
               </form>
-            </section>
+            </AnimatedSection>
           </div>
         )}
 
@@ -1843,30 +1895,35 @@ export default function PortfolioClient({
                 <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-extrabold text-base sm:text-lg">{headline}</p>
                 <p className="text-purple-200 text-sm leading-relaxed max-w-xl">{bio}</p>
               </div>
-            </section>
-
-            <section id="projects" className="space-y-10">
-              <h2 className="text-3xl font-extrabold text-white text-center">Selected Artworks & Code</h2>
-              <div className="grid gap-8 md:grid-cols-2">
-                {projects.map((project) => (
-                  <div key={project._id} className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:scale-[1.01] hover:border-pink-500/40 transition-all flex flex-col shadow-xl">
-                    <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="aspect-video object-cover" />
-                    <div className="p-6 flex-1 flex flex-col justify-between">
-                      <div>
-                        <span className="text-pink-400 text-xs font-bold">{project.category}</span>
-                        <h4 className="text-white text-xl font-bold mt-1">{project.title}</h4>
-                        <p className="text-purple-200 text-xs mt-2 leading-relaxed">{project.summary}</p>
-                      </div>
-                      <button onClick={() => setSelectedProject(project)} className="mt-6 w-full py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-450 hover:to-purple-550 transition-all shadow-md">
-                        Explore Case Study
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              <div className="hidden md:block h-48 w-48 flex-shrink-0 mx-auto">
+                <Globe3DCanvas color="#ec4899" glowColor="rgba(236, 72, 153, 0.08)" />
               </div>
             </section>
 
-            <section className="space-y-10">
+            <AnimatedSection id="projects" className="space-y-10">
+              <h2 className="text-3xl font-extrabold text-white text-center">Selected Artworks & Code</h2>
+              <div className="grid gap-8 md:grid-cols-2">
+                {projects.map((project) => (
+                  <Tilt3DCard key={project._id} glowColor="pink" className="rounded-2xl overflow-hidden h-full flex">
+                    <div className="flex-1 backdrop-blur-lg bg-white/5 border border-white/10 flex flex-col hover:border-pink-500/40 transition-colors duration-300">
+                      <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="aspect-video object-cover" />
+                      <div className="p-6 flex-grow flex flex-col justify-between">
+                        <div>
+                          <span className="text-pink-400 text-xs font-bold">{project.category}</span>
+                          <h4 className="text-white text-xl font-bold mt-1">{project.title}</h4>
+                          <p className="text-purple-200 text-xs mt-2 leading-relaxed">{project.summary}</p>
+                        </div>
+                        <button onClick={() => setSelectedProject(project)} className="mt-6 w-full py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-450 hover:to-purple-550 transition-all shadow-md">
+                          Explore Case Study
+                        </button>
+                      </div>
+                    </div>
+                  </Tilt3DCard>
+                ))}
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection className="space-y-10">
               <h2 className="text-3xl font-extrabold text-white text-center">Journey & History</h2>
               <div className="space-y-6">
                 {experiences.map((exp, i) => (
@@ -1883,9 +1940,9 @@ export default function PortfolioClient({
                   </div>
                 ))}
               </div>
-            </section>
+            </AnimatedSection>
 
-            <section className="space-y-8">
+            <AnimatedSection className="space-y-8">
               <h2 className="text-3xl font-extrabold text-white text-center">Skill Spheres</h2>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {skills.map(s => (
@@ -1895,9 +1952,9 @@ export default function PortfolioClient({
                   </div>
                 ))}
               </div>
-            </section>
+            </AnimatedSection>
 
-            <section className="backdrop-blur-xl bg-white/5 border border-white/10 p-8 rounded-3xl max-w-xl mx-auto space-y-6">
+            <AnimatedSection className="backdrop-blur-xl bg-white/5 border border-white/10 p-8 rounded-3xl max-w-xl mx-auto space-y-6">
               <h3 className="text-2xl font-extrabold text-white text-center">Spark a Conversation</h3>
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Your Name" className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white outline-none focus:border-pink-500" />
@@ -1907,7 +1964,7 @@ export default function PortfolioClient({
                   Submit Request
                 </button>
               </form>
-            </section>
+            </AnimatedSection>
           </div>
         )}
       </main>
