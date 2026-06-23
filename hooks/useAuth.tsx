@@ -9,7 +9,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isCheckingSession: boolean;
-  login: (credentials: { email: string; password?: string; isGuest?: boolean }) => Promise<{ token: string; user: User }>;
+  login: (credentials: { email: string; password?: string }) => Promise<{ token: string; user: User }>;
   register: (userData: { name: string; email: string; password?: string }) => Promise<{ token: string; user: User }>;
   isLoggingIn: boolean;
   isRegistering: boolean;
@@ -59,13 +59,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: { email: string; password?: string; isGuest?: boolean }) => {
-      const endpoint = credentials.isGuest ? '/auth/guest' : '/auth/login';
-      const body = credentials.isGuest ? undefined : { email: credentials.email, password: credentials.password };
+    mutationFn: async (credentials: { email: string; password?: string }) => {
+      const endpoint = '/auth/login';
+      const body = { email: credentials.email, password: credentials.password };
       
       const res = await apiFetch<{ token: string; user: User }>(endpoint, {
         method: 'POST',
-        body: body ? JSON.stringify(body) : undefined,
+        body: JSON.stringify(body),
       });
 
       if (res.error) {

@@ -45,15 +45,6 @@ export default function LoginView() {
     }
   };
 
-  const handleGuestLogin = async () => {
-    setErrorMsg('');
-    try {
-      await login({ email: '', isGuest: true });
-      router.push('/');
-    } catch {
-      setErrorMsg('Guest login failed');
-    }
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -160,13 +151,6 @@ export default function LoginView() {
               <span>Sign In with GitHub</span>
             </a>
 
-            <button
-              onClick={handleGuestLogin}
-              className="w-full flex items-center justify-center space-x-2 rounded-lg border border-teal-500/20 bg-teal-950/15 py-3 text-sm font-sans text-teal-400 hover:bg-teal-950/35 transition-all"
-            >
-              <Sparkles className="h-4 w-4" />
-              <span>Enter Guest Mode</span>
-            </button>
 
             <div className="text-center pt-2">
               <span className="text-xs text-zinc-500 font-sans">

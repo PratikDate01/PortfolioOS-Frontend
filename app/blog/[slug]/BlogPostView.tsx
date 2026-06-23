@@ -81,7 +81,7 @@ interface CommentAuthor {
   _id: string;
   name: string;
   avatarUrl?: string;
-  role: 'owner' | 'admin' | 'member' | 'guest';
+  role: 'superadmin' | 'admin' | 'user';
 }
 
 const fallbackCommentsList: Comment[] = [
@@ -91,7 +91,7 @@ const fallbackCommentsList: Comment[] = [
     body: 'This monorepo breakdown is super helpful! How do you handle environment-specific configurations in workspaces?',
     status: 'visible',
     createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    authorId: { _id: 'guest-user-1', name: 'Jane Doe', avatarUrl: '', role: 'member' } as unknown as string
+    authorId: { _id: 'guest-user-1', name: 'Jane Doe', avatarUrl: '', role: 'user' } as unknown as string
   },
   {
     _id: 'c2',
@@ -100,7 +100,7 @@ const fallbackCommentsList: Comment[] = [
     parentCommentId: 'c1',
     status: 'visible',
     createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    authorId: { _id: 'owner-user', name: 'Pratik', avatarUrl: '', role: 'owner' } as unknown as string
+    authorId: { _id: 'owner-user', name: 'Pratik', avatarUrl: '', role: 'superadmin' } as unknown as string
   }
 ];
 
@@ -202,7 +202,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
             </div>
             <div>
               <span className="text-xs font-semibold text-zinc-100">{author.name}</span>
-              {(author.role === 'owner' || author.role === 'admin') && (
+              {(author.role === 'superadmin' || author.role === 'admin') && (
                 <span className="ml-1.5 inline-flex items-center space-x-0.5 rounded bg-teal-500/10 px-1 py-0.2 text-[8px] font-mono text-teal-400 border border-teal-500/20">
                   <ShieldCheck className="h-2 w-2" />
                   <span>Author</span>

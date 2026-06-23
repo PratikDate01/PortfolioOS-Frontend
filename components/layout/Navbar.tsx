@@ -8,24 +8,21 @@ import { Terminal, Menu, X, LogOut, Sparkles } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { user, logout, login } = useAuth();
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { label: 'Showcase', path: '/projects' },
-    { label: 'Blog', path: '/blog' },
-    { label: 'Certifications', path: '/certifications' },
-    { label: 'Testimonials', path: '/testimonials' },
-    { label: 'Resume', path: '/resume' },
-  ];
-
-  const handleGuestLogin = async () => {
-    try {
-      await login({ email: '', isGuest: true });
-    } catch (err) {
-      console.error('Guest login failed:', err);
-    }
-  };
+  const navLinks = user
+    ? [
+        { label: 'Dashboard', path: '/dashboard' },
+        { label: 'Portfolio', path: `/p/${user.username}` },
+        { label: 'Projects', path: '/dashboard?tab=projects' },
+        { label: 'Resume', path: '/dashboard?tab=resumes' },
+        { label: 'Analytics', path: '/dashboard?tab=analytics' },
+        { label: 'Settings', path: '/dashboard?tab=settings' },
+      ]
+    : [
+        { label: 'Explore', path: '/projects' },
+      ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-800/60 bg-zinc-950/70 backdrop-blur-md">
@@ -81,18 +78,17 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-3">
-              <button
-                onClick={handleGuestLogin}
-                className="flex items-center space-x-1 rounded-lg border border-teal-500/20 bg-teal-950/10 px-3 py-1.5 text-xs font-semibold text-teal-400 hover:bg-teal-950/30 transition-all"
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Enter Guest Mode</span>
-              </button>
               <Link
                 href="/login"
-                className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 transition-all"
+                className="text-sm font-medium text-zinc-400 hover:text-teal-400 transition-colors"
               >
-                Sign In
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="rounded-lg bg-teal-500 hover:bg-teal-400 text-zinc-950 px-3.5 py-1.5 text-xs font-semibold shadow-md shadow-teal-500/10 transition-all"
+              >
+                Register
               </Link>
             </div>
           )}
@@ -155,22 +151,19 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex flex-col space-y-2">
-                <button
-                  onClick={() => {
-                    handleGuestLogin();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full flex items-center justify-center space-x-2 rounded-lg border border-teal-500/20 bg-teal-950/20 py-2 text-sm text-teal-400"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  <span>Enter Guest Mode</span>
-                </button>
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex items-center justify-center rounded-lg bg-zinc-100 py-2 text-sm font-semibold text-zinc-950"
+                  className="w-full flex items-center justify-center rounded-lg border border-zinc-800 py-2 text-sm text-zinc-300"
                 >
-                  Sign In
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center rounded-lg bg-teal-500 py-2 text-sm font-semibold text-zinc-950"
+                >
+                  Register
                 </Link>
               </div>
             )}

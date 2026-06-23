@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Navbar from '@/components/layout/Navbar';
@@ -38,11 +38,30 @@ type TabType = 'overview' | 'profile' | 'projects' | 'skills' | 'experience' | '
 
 export default function DashboardView() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { user, isLoading: isAuthLoading, logout } = useAuth();
   
   // Dashboard Navigation State
   const [activeTab, setActiveTab] = useState<TabType>('overview');
+
+  const tab = searchParams?.get('tab');
+
+  useEffect(() => {
+    if (tab) {
+      if (tab === 'settings') {
+        setActiveTab('profile');
+      } else if (tab === 'projects') {
+        setActiveTab('projects');
+      } else if (tab === 'resumes') {
+        setActiveTab('resumes');
+      } else if (tab === 'analytics') {
+        setActiveTab('overview');
+      } else if (tab === 'dashboard') {
+        setActiveTab('overview');
+      }
+    }
+  }, [tab]);
 
   // --- CRUD STATES ---
   // Projects
