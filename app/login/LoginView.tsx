@@ -8,7 +8,7 @@ import { Terminal, Key, Mail, Sparkles, ArrowRight, AlertTriangle, Eye, EyeOff }
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-import { setAuthToken } from '@/lib/api-client';
+import { setAuthToken, setRefreshToken } from '@/lib/api-client';
 import { API_BASE_URL } from '@/lib/config';
 
 export default function LoginView() {
@@ -23,10 +23,14 @@ export default function LoginView() {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const token = params.get('token');
+      const refreshToken = params.get('refreshToken');
       const error = params.get('error');
       
       if (token) {
         setAuthToken(token);
+        if (refreshToken) {
+          setRefreshToken(refreshToken);
+        }
         window.location.href = '/';
       } else if (error) {
         setErrorMsg('Social login failed. Please try again.');

@@ -1,12 +1,49 @@
 import { API_BASE_URL } from './config';
 
 let authToken: string | null = null;
+let refreshToken: string | null = null;
+
+// Helper to safely access localStorage in Next.js (SSR safe)
+const getStorageItem = (key: string): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem(key);
+  }
+  return null;
+};
+
+const setStorageItem = (key: string, value: string | null) => {
+  if (typeof window !== 'undefined') {
+    if (value) {
+      localStorage.setItem(key, value);
+    } else {
+      localStorage.removeItem(key);
+    }
+  }
+};
 
 export const setAuthToken = (token: string | null) => {
   authToken = token;
+  setStorageItem('authToken', token);
 };
 
-export const getAuthToken = () => authToken;
+export const getAuthToken = () => {
+  if (!authToken) {
+    authToken = getStorageItem('authToken');
+  }
+  return authToken;
+};
+
+export const setRefreshToken = (token: string | null) => {
+  refreshToken = token;
+  setStorageItem('refreshToken', token);
+};
+
+export const getRefreshToken = () => {
+  if (!refreshToken) {
+    refreshToken = getStorageItem('refreshToken');
+  }
+  return refreshToken;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const apiFetch = async <T = any>(

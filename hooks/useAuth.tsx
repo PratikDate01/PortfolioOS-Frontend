@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiFetch, setAuthToken, getAuthToken } from '../lib/api-client';
+import { apiFetch, setAuthToken, getAuthToken, setRefreshToken, getRefreshToken } from '../lib/api-client';
 import { User } from '@/types';
 
 interface AuthContextType {
@@ -26,15 +26,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const res = await apiFetch<{ token: string; user: User }>('/auth/refresh', {
+        const localRefreshToken = getRefreshToken();
+        
+        const res = await apiFetch<{ token: string; refreshToken?: string; user: User }>('/auth/refresh', {
           method: 'POST',
+          body: localRefreshToken ? JSON.stringify({ refreshToken: localRefreshToken }) : undefined,
         });
         if (res.data) {
           setAuthToken(res.data.token);
+          if (res.data.refreshToken) {
+            setRefreshToken(res.data.refreshToken);
+          }
           queryClient.setQueryData(['me'], res.data.user);
+        } else {
+          setAuthToken(null);
+          setRefreshToken(null);
         }
       } catch (err) {
         console.error('Session initialization failed:', err);
+        setAuthToken(null);
+        setRefreshToken(null);
       } finally {
         setIsCheckingSession(false);
         setIsInitialized(true);
@@ -63,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const endpoint = '/auth/login';
       const body = { email: credentials.email, password: credentials.password };
       
-      const res = await apiFetch<{ token: string; user: User }>(endpoint, {
+      const res = await apiFetch<{ token: string; refreshToken?: string; user: User }>(endpoint, {
         method: 'POST',
         body: JSON.stringify(body),
       });
@@ -76,6 +87,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: (data) => {
       setAuthToken(data.token);
+      if (data.refreshToken) {
+        setRefreshToken(data.refreshToken);
+      }
       queryClient.setQueryData(['me'], data.user);
       queryClient.invalidateQueries({ queryKey: ['me'] });
     },
@@ -83,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const registerMutation = useMutation({
     mutationFn: async (userData: { name: string; email: string; password?: string }) => {
-      const res = await apiFetch<{ token: string; user: User }>('/auth/register', {
+      const res = await apiFetch<{ token: string; refreshToken?: string; user: User }>('/auth/register', {
         method: 'POST',
         body: JSON.stringify(userData),
       });
@@ -96,6 +110,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: (data) => {
       setAuthToken(data.token);
+      if (data.refreshToken) {
+        setRefreshToken(data.refreshToken);
+      }
       queryClient.setQueryData(['me'], data.user);
       queryClient.invalidateQueries({ queryKey: ['me'] });
     },
@@ -107,6 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     onSuccess: () => {
       setAuthToken(null);
+      setRefreshToken(null);
       queryClient.setQueryData(['me'], null);
       queryClient.invalidateQueries({ queryKey: ['me'] });
     }
