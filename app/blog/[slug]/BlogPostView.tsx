@@ -104,7 +104,7 @@ const fallbackCommentsList: Comment[] = [
   }
 ];
 
-export default function BlogPostView({ slug }: BlogPostViewProps) {
+export default function BlogPostView({ slug, username }: BlogPostViewProps & { username?: string }) {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [commentBody, setCommentBody] = useState('');
@@ -113,9 +113,10 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
 
   // Retrieve post details
   const { data: serverPost } = useQuery({
-    queryKey: ['blog-post', slug],
+    queryKey: ['blog-post', slug, username],
     queryFn: async () => {
-      const res = await apiFetch<BlogPost>(`/blog/${slug}`);
+      const url = username ? `/blog/${slug}?username=${encodeURIComponent(username)}` : `/blog/${slug}`;
+      const res = await apiFetch<BlogPost>(url);
       if (res.error) throw new Error(res.error);
       return res.data;
     },
@@ -246,7 +247,7 @@ export default function BlogPostView({ slug }: BlogPostViewProps) {
       <main className="flex-1 bg-zinc-950 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <Link
-            href="/blog"
+            href={username ? `/p/${username}/blog` : "/blog"}
             className="inline-flex items-center space-x-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-300 mb-8 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />

@@ -11,18 +11,18 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = user
-    ? [
-        { label: 'Dashboard', path: '/dashboard' },
-        { label: 'Portfolio', path: `/p/${user.username}` },
-        { label: 'Projects', path: '/dashboard?tab=projects' },
-        { label: 'Resume', path: '/dashboard?tab=resumes' },
-        { label: 'Analytics', path: '/dashboard?tab=analytics' },
-        { label: 'Settings', path: '/dashboard?tab=settings' },
-      ]
-    : [
-        { label: 'Explore', path: '/projects' },
-      ];
+  const navLinks = [
+    { label: 'Features', path: '/#features' },
+    { label: 'Templates', path: '/#templates' },
+    { label: 'Examples', path: '/#examples' },
+  ];
+
+  if (user) {
+    navLinks.push(
+      { label: 'Dashboard', path: '/dashboard' },
+      { label: 'My Portfolio', path: `/p/${user.username}` }
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-800/60 bg-zinc-950/70 backdrop-blur-md">
@@ -86,9 +86,9 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/register"
-                className="rounded-lg bg-teal-500 hover:bg-teal-400 text-zinc-950 px-3.5 py-1.5 text-xs font-semibold shadow-md shadow-teal-500/10 transition-all"
+                className="rounded-lg bg-teal-500 hover:bg-teal-400 text-zinc-950 px-3.5 py-1.5 text-xs font-semibold shadow-md shadow-teal-500/10 transition-all font-sans"
               >
-                Register
+                Get Started
               </Link>
             </div>
           )}

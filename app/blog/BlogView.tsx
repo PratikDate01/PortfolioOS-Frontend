@@ -44,14 +44,15 @@ const fallbackBlogPosts: BlogPost[] = [
   },
 ];
 
-export default function BlogView() {
+export default function BlogView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const { data: serverPosts } = useQuery({
-    queryKey: ['blog-posts'],
+    queryKey: ['blog-posts', username],
     queryFn: async () => {
-      const res = await apiFetch<BlogPost[]>('/blog');
+      const url = username ? `/blog?username=${encodeURIComponent(username)}` : '/blog';
+      const res = await apiFetch<BlogPost[]>(url);
       if (res.error) throw new Error(res.error);
       return res.data || [];
     },
@@ -97,7 +98,7 @@ export default function BlogView() {
           {/* Search & Filters */}
           <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between mb-10">
             <div className="relative flex-grow max-w-md">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-550 font-sans">
                 <Search className="h-4 w-4" />
               </span>
               <input
@@ -133,7 +134,7 @@ export default function BlogView() {
           {/* List Layout */}
           {filteredPosts.length === 0 ? (
             <div className="text-center py-20 border border-dashed border-zinc-900 rounded-xl">
-              <BookOpen className="h-8 w-8 text-zinc-600 mx-auto mb-4" />
+              <BookOpen className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
               <h3 className="text-sm font-bold text-zinc-400 font-sans">No articles found matching your search</h3>
               <p className="text-xs text-zinc-650 mt-1">Try resetting the filters or adjusting your search query</p>
             </div>
@@ -156,7 +157,7 @@ export default function BlogView() {
                   )}
                   <div className="flex-1 p-6 flex flex-col justify-between">
                     <div>
-                      <div className="flex items-center space-x-4 text-[11px] font-mono text-zinc-500 mb-3">
+                      <div className="flex items-center space-x-4 text-[11px] font-mono text-zinc-550 mb-3">
                         <span className="flex items-center space-x-1">
                           <Calendar className="h-3 w-3" />
                           <span>
@@ -195,7 +196,7 @@ export default function BlogView() {
                       </div>
 
                       <Link
-                        href={`/blog/${post.slug}`}
+                        href={username ? `/p/${username}/blog/${post.slug}` : `/blog/${post.slug}`}
                         className="inline-flex items-center space-x-1 text-xs font-semibold text-teal-400 hover:text-teal-300 font-mono"
                       >
                         <span>Read Article</span>

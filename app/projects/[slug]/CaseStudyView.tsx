@@ -9,8 +9,8 @@ import { Project } from '@/types';
 import { ArrowLeft, Github, Globe, Eye, Server, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
-// Fallback search map
-const fallbackProjects: Project[] = [
+// Dynamic fallback generator
+const getFallbackProjects = (username: string = 'developer'): Project[] => [
   {
     ownerId: 'fallback',
     title: 'SpeakWrite',
@@ -21,7 +21,7 @@ const fallbackProjects: Project[] = [
     techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
     category: 'Frontend Web',
     tags: ['Accessibility', 'Web Speech API', 'Audio'],
-    links: { github: 'https://github.com/PratikDate01/SpeakWrite', liveDemo: 'https://speakwrite.netlify.app/' },
+    links: { github: `https://github.com/${username}/SpeakWrite`, liveDemo: 'https://speakwrite.netlify.app/' },
     gallery: [],
     caseStudy: {
       problem: 'Digital content remains inaccessible to visually impaired users or users who prefer auditory learning.',
@@ -52,7 +52,7 @@ const fallbackProjects: Project[] = [
     techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
     category: 'Frontend Web',
     tags: ['Visualization', 'SVG', 'Interactive Canvas'],
-    links: { github: 'https://github.com/PratikDate01/Mind-Map-Generator', liveDemo: 'https://pratikdate.netlify.app/' },
+    links: { github: `https://github.com/${username}/Mind-Map-Generator`, liveDemo: 'https://pratikdate.netlify.app/' },
     gallery: [],
     caseStudy: {
       problem: 'Brainstorming flows are often slow when using standard diagramming utilities with complex layout configurations.',
@@ -83,7 +83,7 @@ const fallbackProjects: Project[] = [
     techStack: ['Node.js', 'Express.js', 'React.js', 'Gemini API'],
     category: 'Artificial Intelligence',
     tags: ['LLM', 'Static Analysis', 'GitHub Integration'],
-    links: { github: 'https://github.com/PratikDate01/ai-code-reviewer' },
+    links: { github: `https://github.com/${username}/ai-code-reviewer` },
     gallery: [],
     caseStudy: {
       problem: 'Manual code verification consumes critical development cycles, and simple lint checkers fail to find logical flow flaws.',
@@ -114,7 +114,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
     category: 'Full Stack Web',
     tags: ['E-Commerce', 'User Profiles', 'JWT'],
-    links: { github: 'https://github.com/PratikDate01/freelancermarketplace' },
+    links: { github: `https://github.com/${username}/freelancermarketplace` },
     gallery: [],
     caseStudy: {
       problem: 'Clients struggle to verify freelancer details and connect securely on early-stage web boards.',
@@ -145,7 +145,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloud Storage'],
     category: 'Cloud Storage',
     tags: ['Cloud', 'Multer', 'File Uploads'],
-    links: { github: 'https://github.com/PratikDate01/cloud-drive' },
+    links: { github: `https://github.com/${username}/cloud-drive` },
     gallery: [],
     caseStudy: {
       problem: 'Sharing files privately is hard without relying on third-party tracking portals.',
@@ -176,7 +176,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
     category: 'Full Stack Web',
     tags: ['Community', 'Location Services', 'Geospatial Query'],
-    links: { github: 'https://github.com/PratikDate01/lost-found-portal' },
+    links: { github: `https://github.com/${username}/lost-found-portal` },
     gallery: [],
     caseStudy: {
       problem: 'No structured local system exists for community members to search for lost belongings.',
@@ -199,21 +199,22 @@ const fallbackProjects: Project[] = [
   }
 ];
 
-export default function CaseStudyView({ params }: { params: { slug: string } }) {
+export default function CaseStudyView({ params, username }: { params: { slug: string }; username?: string }) {
   const { slug } = params;
 
   // Query project from API
   const { data: serverProject } = useQuery({
-    queryKey: ['project', slug],
+    queryKey: ['project', slug, username],
     queryFn: async () => {
-      const res = await apiFetch<Project>(`/projects/${slug}`);
+      const url = username ? `/projects/${slug}?username=${encodeURIComponent(username)}` : `/projects/${slug}`;
+      const res = await apiFetch<Project>(url);
       if (res.error) throw new Error(res.error);
       return res.data;
     },
     retry: false
   });
 
-  const project = serverProject || fallbackProjects.find((p) => p.slug === slug);
+  const project = serverProject || getFallbackProjects(username).find((p) => p.slug === slug);
 
   if (!project) {
     return (
@@ -222,7 +223,7 @@ export default function CaseStudyView({ params }: { params: { slug: string } }) 
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6">
           <Server className="h-12 w-12 text-zinc-700 mb-4 animate-pulse" />
           <h1 className="text-xl font-bold text-zinc-400 font-sans">Case Study Not Found</h1>
-          <Link href="/projects" className="text-teal-400 mt-4 hover:underline text-sm font-sans flex items-center space-x-1">
+          <Link href={username ? `/p/${username}/projects` : "/projects"} className="text-teal-400 mt-4 hover:underline text-sm font-sans flex items-center space-x-1">
             <ArrowLeft className="h-4 w-4" />
             <span>Back to Showcase</span>
           </Link>
@@ -252,7 +253,7 @@ export default function CaseStudyView({ params }: { params: { slug: string } }) 
           
           {/* Back button */}
           <Link
-            href="/projects"
+            href={username ? `/p/${username}/projects` : "/projects"}
             className="inline-flex items-center space-x-2 text-xs font-sans text-zinc-550 hover:text-teal-400 transition-colors mb-8"
           >
             <ArrowLeft className="h-4 w-4" />

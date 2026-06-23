@@ -76,7 +76,7 @@ export default function MarketingLandingPage() {
             </div>
 
             {/* Live Demos Check */}
-            <div className="pt-6 flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-xs font-mono text-zinc-500">
+            <div id="examples" className="pt-6 flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-xs font-mono text-zinc-500">
               <span>Try Live User Pages:</span>
               <Link href="/p/pratik-satish-date" className="text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1">
                 <span>@pratik-satish-date</span>
@@ -93,7 +93,7 @@ export default function MarketingLandingPage() {
         </section>
 
         {/* Core SaaS Capabilities Grid */}
-        <section className="py-24 border-b border-zinc-900 bg-zinc-950/20">
+        <section id="features" className="py-24 border-b border-zinc-900 bg-zinc-950/20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
               <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Engineered for Modern Professionals</h2>
@@ -146,7 +146,7 @@ export default function MarketingLandingPage() {
         </section>
 
         {/* Pricing Plan Grid */}
-        <section className="py-24 border-b border-zinc-900">
+        <section id="templates" className="py-24 border-b border-zinc-900">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
               <h2 className="text-3xl font-bold text-white sm:text-4xl">Transparent, Scale-Friendly Pricing</h2>

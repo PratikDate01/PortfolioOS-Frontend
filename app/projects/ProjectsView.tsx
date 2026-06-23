@@ -9,8 +9,8 @@ import { Project } from '@/types';
 import { ExternalLink, Search, Terminal, Filter } from 'lucide-react';
 import Link from 'next/link';
 
-// Static fallback data
-const fallbackProjects: Project[] = [
+// Dynamic fallback generator
+const getFallbackProjects = (username: string = 'developer'): Project[] => [
   {
     ownerId: 'fallback',
     title: 'SpeakWrite',
@@ -21,7 +21,7 @@ const fallbackProjects: Project[] = [
     techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
     category: 'Frontend Web',
     tags: ['Accessibility', 'Web Speech API', 'Audio'],
-    links: { github: 'https://github.com/PratikDate01/SpeakWrite', liveDemo: 'https://speakwrite.netlify.app/' },
+    links: { github: `https://github.com/${username}/SpeakWrite`, liveDemo: 'https://speakwrite.netlify.app/' },
     gallery: [],
     status: 'published',
     featured: true,
@@ -38,7 +38,7 @@ const fallbackProjects: Project[] = [
     techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
     category: 'Frontend Web',
     tags: ['Visualization', 'SVG', 'Interactive Canvas'],
-    links: { github: 'https://github.com/PratikDate01/Mind-Map-Generator', liveDemo: 'https://pratikdate.netlify.app/' },
+    links: { github: `https://github.com/${username}/Mind-Map-Generator`, liveDemo: 'https://pratikdate.netlify.app/' },
     gallery: [],
     status: 'published',
     featured: true,
@@ -55,7 +55,7 @@ const fallbackProjects: Project[] = [
     techStack: ['Node.js', 'Express.js', 'React.js', 'Gemini API'],
     category: 'Artificial Intelligence',
     tags: ['LLM', 'Static Analysis', 'GitHub Integration'],
-    links: { github: 'https://github.com/PratikDate01/ai-code-reviewer' },
+    links: { github: `https://github.com/${username}/ai-code-reviewer` },
     gallery: [],
     status: 'published',
     featured: true,
@@ -72,7 +72,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
     category: 'Full Stack Web',
     tags: ['E-Commerce', 'User Profiles', 'JWT'],
-    links: { github: 'https://github.com/PratikDate01/freelancermarketplace' },
+    links: { github: `https://github.com/${username}/freelancermarketplace` },
     gallery: [],
     status: 'published',
     featured: false,
@@ -89,7 +89,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloud Storage'],
     category: 'Cloud Storage',
     tags: ['Cloud', 'Multer', 'File Uploads'],
-    links: { github: 'https://github.com/PratikDate01/cloud-drive' },
+    links: { github: `https://github.com/${username}/cloud-drive` },
     gallery: [],
     status: 'published',
     featured: false,
@@ -106,7 +106,7 @@ const fallbackProjects: Project[] = [
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
     category: 'Full Stack Web',
     tags: ['Community', 'Location Services', 'Geospatial Query'],
-    links: { github: 'https://github.com/PratikDate01/lost-found-portal' },
+    links: { github: `https://github.com/${username}/lost-found-portal` },
     gallery: [],
     status: 'published',
     featured: false,
@@ -115,22 +115,23 @@ const fallbackProjects: Project[] = [
   }
 ];
 
-export default function ProjectsView() {
+export default function ProjectsView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Query projects
   const { data: serverProjects } = useQuery({
-    queryKey: ['projects'],
+    queryKey: ['projects', username],
     queryFn: async () => {
-      const res = await apiFetch<Project[]>('/projects');
+      const url = username ? `/projects?username=${encodeURIComponent(username)}` : '/projects';
+      const res = await apiFetch<Project[]>(url);
       if (res.error) throw new Error(res.error);
       return res.data || [];
     },
     retry: false
   });
 
-  const projects = serverProjects && serverProjects.length > 0 ? serverProjects : fallbackProjects;
+  const projects = serverProjects && serverProjects.length > 0 ? serverProjects : getFallbackProjects(username);
 
   // Extract unique categories
   const categories = ['all', ...Array.from(new Set(projects.map((p) => p.category)))];
@@ -163,7 +164,7 @@ export default function ProjectsView() {
           <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between mb-10">
             {/* Search Input */}
             <div className="relative flex-grow max-w-md">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-550">
                 <Search className="h-4 w-4" />
               </span>
               <input
@@ -200,7 +201,7 @@ export default function ProjectsView() {
           {/* Grid Layout */}
           {filteredProjects.length === 0 ? (
             <div className="text-center py-20 border border-dashed border-zinc-900 rounded-xl">
-              <Terminal className="h-8 w-8 text-zinc-600 mx-auto mb-4" />
+              <Terminal className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
               <h3 className="text-sm font-bold text-zinc-400 font-sans">No projects found</h3>
               <p className="text-xs text-zinc-650 mt-1">Try adjusting your search terms or filters</p>
             </div>
@@ -239,7 +240,7 @@ export default function ProjectsView() {
                     {project.slug && (
                       <div className="mt-5 pt-4 border-t border-zinc-900 flex justify-end">
                         <Link
-                          href={`/projects/${project.slug}`}
+                          href={username ? `/p/${username}/projects/${project.slug}` : `/projects/${project.slug}`}
                           className="inline-flex items-center space-x-1 text-xs font-semibold text-teal-400 hover:text-teal-300 font-sans"
                         >
                           <span>Read Case Study</span>

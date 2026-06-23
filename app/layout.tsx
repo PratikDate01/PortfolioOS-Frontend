@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Pratik Date — Full Stack Developer Portfolio",
-  description: "Portfolio of Pratik Date — Full Stack Developer specializing in React, Node.js, and AI/ML. View projects, skills, and experience.",
+  title: "Portfolio OS — The Ultimate Developer Portfolio As A Service",
+  description: "Transform your software projects, experiences, and accomplishments into isolated, multi-tenant interactive web spaces complete with AI assistance and analytics.",
 };
 
 export default function RootLayout({

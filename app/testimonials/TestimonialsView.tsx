@@ -31,7 +31,7 @@ const fallbackTestimonials: Testimonial[] = [
   },
 ];
 
-export default function TestimonialsView() {
+export default function TestimonialsView({ username }: { username?: string }) {
   const queryClient = useQueryClient();
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -49,9 +49,10 @@ export default function TestimonialsView() {
 
   // Fetch approved testimonials
   const { data: serverTestimonials } = useQuery<Testimonial[]>({
-    queryKey: ['testimonials'],
+    queryKey: ['testimonials', username],
     queryFn: async () => {
-      const res = await apiFetch<Testimonial[]>('/testimonials');
+      const url = username ? `/testimonials?username=${encodeURIComponent(username)}` : '/testimonials';
+      const res = await apiFetch<Testimonial[]>(url);
       if (res.error) throw new Error(res.error);
       return res.data || [];
     },
@@ -60,9 +61,10 @@ export default function TestimonialsView() {
 
   // Fetch projects list for form selector
   const { data: projects } = useQuery<Project[]>({
-    queryKey: ['projects-list'],
+    queryKey: ['projects-list', username],
     queryFn: async () => {
-      const res = await apiFetch<Project[]>('/projects');
+      const url = username ? `/projects?username=${encodeURIComponent(username)}` : '/projects';
+      const res = await apiFetch<Project[]>(url);
       if (res.error) throw new Error(res.error);
       return res.data || [];
     },
@@ -77,7 +79,7 @@ export default function TestimonialsView() {
   // Submit mutation
   const submitMutation = useMutation({
     mutationKey: ['create-testimonial'],
-    mutationFn: async (data: Partial<Testimonial>) => {
+    mutationFn: async (data: Partial<Testimonial> & { username?: string }) => {
       const res = await apiFetch<Testimonial>('/testimonials', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -101,7 +103,7 @@ export default function TestimonialsView() {
       setSuccessMessage(true);
       setTimeout(() => setSuccessMessage(false), 5000);
       
-      queryClient.invalidateQueries({ queryKey: ['testimonials'] });
+      queryClient.invalidateQueries({ queryKey: ['testimonials', username] });
     },
   });
 
@@ -116,6 +118,7 @@ export default function TestimonialsView() {
       body,
       videoUrl: videoUrl || undefined,
       relatedProjectId: relatedProjectId || undefined,
+      username: username || undefined,
     });
   };
 

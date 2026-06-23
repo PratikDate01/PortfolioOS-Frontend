@@ -66,14 +66,15 @@ const fallbackCertifications: Certification[] = [
   },
 ];
 
-export default function CertificationsView() {
+export default function CertificationsView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const { data: serverCertifications } = useQuery<Certification[]>({
-    queryKey: ['certifications'],
+    queryKey: ['certifications', username],
     queryFn: async () => {
-      const res = await apiFetch<Certification[]>('/certifications');
+      const url = username ? `/certifications?username=${encodeURIComponent(username)}` : '/certifications';
+      const res = await apiFetch<Certification[]>(url);
       if (res.error) throw new Error(res.error);
       return res.data || [];
     },
