@@ -468,59 +468,141 @@ export default function PortfolioClient({
   );
 
   return (
-    <div className={`min-h-screen flex flex-col transition-colors duration-500 ${
-      theme === 'minimal' ? 'bg-[#fafafa] text-zinc-900 selection:bg-zinc-200' :
-      theme === 'developer' ? 'bg-[#18181c] text-[#d4d4d8]' :
-      theme === 'creative' ? 'bg-[#0f0a20] text-purple-100' :
-      theme === 'corporate' ? 'bg-slate-900 text-slate-100' :
-      'bg-zinc-950 text-zinc-100' // portfolio-os
+    <div className={`min-h-screen flex flex-col transition-colors duration-500 relative overflow-x-hidden ${
+      theme === 'corporate' ? 'bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30' :
+      theme === 'aurora-glass' ? 'bg-[#080512] text-purple-100 font-sans selection:bg-purple-500/30' :
+      theme === 'nordic-frost' ? 'bg-[#0f172a] text-slate-200 font-sans selection:bg-sky-500/25' :
+      'bg-black text-teal-400 font-mono selection:bg-teal-500/30 crt-screen-active crt-overlay-active' // portfolio-os
     }`}>
       
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes aurora-1 {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(50px, -70px) scale(1.15); }
+          66% { transform: translate(-30px, 40px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        @keyframes aurora-2 {
+          0% { transform: translate(0px, 0px) scale(1); }
+          50% { transform: translate(-60px, 60px) scale(1.1); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        @keyframes crt-scanline-anim {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+        @keyframes crt-flicker-anim {
+          0% { opacity: 0.985; }
+          50% { opacity: 1; }
+          100% { opacity: 0.99; }
+        }
+        .crt-scanline {
+          position: absolute;
+          top: 0; left: 0; width: 100%; height: 120px;
+          background: linear-gradient(to bottom, rgba(20, 184, 166, 0) 0%, rgba(20, 184, 166, 0.08) 50%, rgba(20, 184, 166, 0) 100%);
+          animation: crt-scanline-anim 10s linear infinite;
+          pointer-events: none;
+          z-index: 10;
+        }
+        .crt-screen-active {
+          animation: crt-flicker-anim 0.2s infinite;
+        }
+        .crt-overlay-active::after {
+          content: " ";
+          display: block;
+          position: fixed;
+          top: 0; left: 0; bottom: 0; right: 0;
+          background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%), linear-gradient(90deg, rgba(20, 184, 166, 0.02), rgba(0, 0, 0, 0), rgba(99, 102, 241, 0.02));
+          z-index: 9999;
+          background-size: 100% 3px, 3px 100%;
+          pointer-events: none;
+        }
+        .aurora-blob-1 {
+          animation: aurora-1 25s infinite alternate;
+        }
+        .aurora-blob-2 {
+          animation: aurora-2 30s infinite alternate;
+        }
+        .cyber-grid-bg {
+          background-size: 32px 32px;
+          background-image: 
+            linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+        }
+        .frost-grid-bg {
+          background-size: 32px 32px;
+          background-image: 
+            linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+        }
+        .corporate-grid-bg {
+          background-size: 40px 40px;
+          background-image: 
+            linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+        }
+      `}} />
+      
       {/* Dynamic Theme Banner / Background Elements */}
-      {theme === 'creative' && (
+      {theme === 'aurora-glass' && (
+        <div className="absolute top-0 inset-x-0 h-[800px] overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] rounded-full bg-gradient-to-tr from-purple-600/10 to-indigo-900/15 blur-[120px] aurora-blob-1" />
+          <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-pink-500/10 to-blue-900/15 blur-[140px] aurora-blob-2" />
+          <div className="absolute inset-0 cyber-grid-bg opacity-30" />
+        </div>
+      )}
+
+      {theme === 'nordic-frost' && (
         <div className="absolute top-0 inset-x-0 h-[600px] overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-pink-500/20 to-purple-900/20 blur-[150px]" />
-          <div className="absolute top-[10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-gradient-to-tr from-cyan-500/20 to-blue-900/20 blur-[120px]" />
+          <div className="absolute top-[-20%] left-[10%] w-[45vw] h-[45vw] rounded-full bg-sky-500/5 blur-[100px]" />
+          <div className="absolute top-[10%] right-[10%] w-[40vw] h-[40vw] rounded-full bg-slate-500/5 blur-[100px]" />
+          <div className="absolute inset-0 frost-grid-bg opacity-40" />
         </div>
       )}
 
       {theme === 'portfolio-os' && (
-        <div className="absolute top-0 inset-x-0 h-[500px] overflow-hidden pointer-events-none z-0 opacity-40">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-500/10 rounded-full blur-[130px]" />
+        <div className="absolute top-0 inset-x-0 h-[600px] overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/5 rounded-full blur-[140px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:30px_30px]" />
+          <div className="crt-scanline" />
+        </div>
+      )}
+
+      {theme === 'corporate' && (
+        <div className="absolute top-0 inset-x-0 h-[600px] overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-20%] right-[-5%] w-[400px] h-[400px] bg-indigo-500/5 rounded-full blur-[120px]" />
+          <div className="absolute inset-0 corporate-grid-bg" />
         </div>
       )}
 
       {/* Header and Brand */}
       <nav className={`sticky top-0 z-40 backdrop-blur-md border-b transition-colors ${
-        theme === 'minimal' ? 'bg-white/80 border-zinc-200/80 text-zinc-900' :
-        theme === 'developer' ? 'bg-[#18181c]/80 border-zinc-800/80 text-zinc-300' :
-        theme === 'creative' ? 'bg-[#0f0a20]/80 border-purple-950/40 text-purple-200' :
-        theme === 'corporate' ? 'bg-slate-900/85 border-slate-800 text-slate-100' :
-        'bg-zinc-950/80 border-zinc-900 text-zinc-300' // portfolio-os
+        theme === 'nordic-frost' ? 'bg-slate-900/80 border-slate-800 text-slate-200' :
+        theme === 'aurora-glass' ? 'bg-[#080512]/80 border-purple-950/30 text-purple-200' :
+        theme === 'corporate' ? 'bg-slate-950/80 border-slate-900 text-slate-100' :
+        'bg-black/80 border-teal-950 text-teal-400 font-mono' // portfolio-os
       }`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-2">
               <span className={`font-mono text-sm font-bold rounded-lg px-2.5 py-1 ${
-                theme === 'minimal' ? 'bg-zinc-900 text-white' :
-                theme === 'developer' ? 'bg-[#2a2a30] text-emerald-400 border border-[#3e3e44]' :
-                theme === 'creative' ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md' :
-                theme === 'corporate' ? 'bg-indigo-600 text-white' :
-                'bg-teal-950 text-teal-400 border border-teal-500/30'
+                theme === 'nordic-frost' ? 'bg-slate-850 text-sky-400 border border-slate-700' :
+                theme === 'aurora-glass' ? 'bg-purple-950/50 text-purple-300 border border-purple-800/30' :
+                theme === 'corporate' ? 'bg-indigo-900/50 text-indigo-300 border border-indigo-700/30' :
+                'bg-teal-950/60 text-teal-400 border border-teal-500/30'
               }`}>
                 {username.toUpperCase()}
               </span>
-              <span className="hidden md:inline text-xs font-mono opacity-60">/ portfolio-os</span>
+              <span className="hidden md:inline text-xs font-mono opacity-60">/ {theme}</span>
             </div>
             
             <div className="flex items-center gap-4">
               {visitorCount !== null && (
                 <div className={`flex items-center space-x-1.5 rounded-full border px-3 py-1 text-xs font-mono ${
-                  theme === 'minimal' ? 'border-zinc-200 bg-zinc-50 text-zinc-650' :
-                  theme === 'developer' ? 'border-[#3e3e44] bg-[#222228] text-zinc-400' :
-                  theme === 'creative' ? 'border-purple-500/20 bg-purple-950/20 text-purple-300' :
-                  theme === 'corporate' ? 'border-indigo-500/20 bg-indigo-950/20 text-indigo-300' :
-                  'border-teal-500/20 bg-teal-950/10 text-teal-400'
+                  theme === 'nordic-frost' ? 'border-slate-850 bg-slate-900/50 text-slate-400' :
+                  theme === 'aurora-glass' ? 'border-purple-950 bg-purple-950/20 text-purple-350' :
+                  theme === 'corporate' ? 'border-slate-900 bg-slate-950/20 text-slate-400' :
+                  'border-teal-950/50 bg-teal-950/15 text-teal-400/80'
                 }`}>
                   <Eye className="h-3.5 w-3.5" />
                   <span>{visitorCount.toLocaleString()} views</span>
@@ -530,14 +612,13 @@ export default function PortfolioClient({
               <button
                 onClick={handleCopyLink}
                 className={`rounded-lg p-2 text-xs font-mono border transition-all flex items-center gap-1.5 ${
-                  theme === 'minimal' ? 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700' :
-                  theme === 'developer' ? 'border-[#3e3e44] bg-[#222228] hover:bg-[#2e2e36] text-zinc-300' :
-                  theme === 'creative' ? 'border-purple-500/30 bg-purple-900/10 hover:bg-purple-900/20 text-purple-200' :
-                  theme === 'corporate' ? 'border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-200' :
-                  'border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 text-zinc-300'
+                  theme === 'nordic-frost' ? 'border-slate-850 bg-slate-900/40 hover:bg-slate-800 text-slate-350 hover:text-white' :
+                  theme === 'aurora-glass' ? 'border-purple-950 bg-purple-950/30 hover:bg-purple-900/25 text-purple-300 hover:text-purple-100' :
+                  theme === 'corporate' ? 'border-slate-900 bg-slate-950/30 hover:bg-slate-900 text-slate-300 hover:text-white' :
+                  'border-teal-950 bg-black/60 hover:bg-teal-950/40 text-teal-400 hover:text-teal-300'
                 }`}
               >
-                {copiedSuccess ? <CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> : <Link2 className="h-3.5 w-3.5" />}
+                {copiedSuccess ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Link2 className="h-3.5 w-3.5" />}
                 <span>{copiedSuccess ? 'Copied' : 'Share'}</span>
               </button>
             </div>
@@ -546,36 +627,52 @@ export default function PortfolioClient({
       </nav>
 
       <main className="flex-grow z-10">
+        {/* ========================================================================= */}
+        {/* 1. PORTFOLIO OS (PREMIUM RETRO TERMINAL STYLE)                            */}
+        {/* ========================================================================= */}
         {theme === 'portfolio-os' && (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-            
-            {/* Widescreen Banner Cover & Profile Header */}
-            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950/40">
-              <div className="h-48 md:h-64 w-full relative bg-gradient-to-r from-teal-950 via-zinc-900 to-indigo-950">
-                {coverImageUrl ? (
-                  <img src={coverImageUrl} alt="Profile Cover" className="w-full h-full object-cover opacity-70" />
-                ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,184,166,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,184,166,0.05)_1px,transparent_1px)] bg-[size:24px_24px]" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-transparent" />
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 font-mono text-teal-400">
+            {/* Terminal Top Alert / System Status Bar */}
+            <motion.div variants={fadeInVariants} className="rounded-xl border border-teal-500/20 bg-black/80 p-4 text-xs space-y-1 shadow-lg shadow-teal-500/5">
+              <p className="text-teal-400"><span className="text-zinc-650">guest@portfolio-os:~$</span> systemctl status portfolio-service.service</p>
+              <p className="text-emerald-400">● portfolio-service.service - Portfolio OS Premium Core System</p>
+              <p className="text-zinc-500">   Loaded: loaded (/etc/systemd/system/portfolio-service.service; enabled; vendor preset: enabled)</p>
+              <p className="text-zinc-500">   Active: <span className="text-emerald-400 font-bold">active (running)</span> since Tue 2026-06-23; live session initialized</p>
+              <p className="text-teal-400/80">   Main PID: 31337 (core-engine)</p>
+              <div className="pt-2 flex items-center gap-1.5 text-zinc-600">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>All units operational. CLI ready for guest queries.</span>
               </div>
+            </motion.div>
+
+            {/* Widescreen Banner Cover & Profile Header */}
+            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-teal-950 bg-black/40 shadow-xl shadow-teal-955/10">
+              <div className="h-48 md:h-64 w-full relative bg-gradient-to-r from-teal-950/80 via-black to-zinc-950 border-b border-teal-950">
+                {coverImageUrl ? (
+                  <img src={coverImageUrl} alt="Profile Cover" className="w-full h-full object-cover opacity-50" />
+                ) : (
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              </div>
+              
               <div className="px-6 pb-6 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
                 <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left z-10">
                   {portfolio.showProfilePhoto !== false && (
-                    <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-zinc-950 bg-zinc-900 shadow-2xl flex-shrink-0">
-                      {renderAvatar("w-full h-full", "text-2xl")}
+                    <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-black bg-zinc-900 shadow-2xl flex-shrink-0">
+                      {renderAvatar("w-full h-full filter sepia brightness-90 contrast-125 border border-teal-500/30", "text-2xl")}
                     </div>
                   )}
                   <div className="md:pb-2">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
-                      <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl font-sans">{ownerName}</h1>
-                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-[9px] font-semibold text-teal-400 font-mono">
+                      <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl font-mono">{ownerName}</h1>
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-[9px] font-semibold text-teal-400">
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         <span>{availabilityStatus}</span>
                       </div>
                     </div>
-                    <p className="text-zinc-400 text-sm font-semibold">{headline}</p>
-                    <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-zinc-500 mt-2 font-mono">
+                    <p className="text-teal-450 text-sm font-semibold">&lt;{headline} /&gt;</p>
+                    <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-zinc-500 mt-2">
                       <MapPin className="h-3.5 w-3.5 text-teal-500" />
                       <span>{userLocation}</span>
                     </div>
@@ -588,7 +685,7 @@ export default function PortfolioClient({
                       download
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
+                      className="inline-flex items-center gap-2 rounded-xl bg-teal-950 text-teal-400 border border-teal-500/30 hover:bg-teal-900 hover:text-teal-300 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
                     >
                       <FileText className="h-4 w-4" />
                       <span>Download Resume</span>
@@ -596,102 +693,94 @@ export default function PortfolioClient({
                   )}
                   <a
                     href="#contact"
-                    className="inline-flex items-center gap-2 rounded-xl border border-zinc-850 bg-zinc-900/60 hover:bg-zinc-800 text-white font-semibold px-4 py-2.5 text-xs transition-all duration-300"
+                    className="inline-flex items-center gap-2 rounded-xl border border-zinc-800 bg-black/60 hover:bg-zinc-900 text-teal-500 hover:text-teal-400 font-semibold px-4 py-2.5 text-xs transition-all duration-300"
                   >
-                    <Mail className="h-4 w-4 text-teal-400" />
+                    <Mail className="h-4 w-4 text-teal-500" />
                     <span>Get in Touch</span>
                   </a>
                 </div>
               </div>
             </motion.div>
- 
+
             {/* Profile Bio Section */}
             <motion.section variants={fadeInVariants} className="relative pt-4">
-              <div className="grid gap-8 md:grid-cols-3 items-center">
-                <div className="md:col-span-2 max-w-4xl">
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <div className="inline-flex items-center space-x-2 rounded-full border border-teal-500/30 bg-teal-950/10 px-3 py-1 text-xs font-semibold text-teal-400">
-                      <Terminal className="h-3.5 w-3.5" />
-                      <span className="font-mono">Profile Summary</span>
+              <div className="border border-teal-950 bg-black/40 rounded-xl p-6">
+                <div className="flex items-center space-x-2 border-b border-teal-950 pb-3 mb-4 text-xs text-teal-500">
+                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                  <span>cat about_me.txt</span>
+                </div>
+                <div className="grid gap-8 md:grid-cols-3 items-center">
+                  <div className="md:col-span-2 max-w-4xl">
+                    <p className="text-sm text-zinc-300 leading-relaxed font-mono">
+                      {bio}
+                    </p>
+                    <div className="mt-6 flex gap-3">
+                      {socialLinks.github && (
+                        <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                          <Github className="h-4.5 w-4.5" />
+                        </a>
+                      )}
+                      {socialLinks.linkedin && (
+                        <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                          <Linkedin className="h-4.5 w-4.5" />
+                        </a>
+                      )}
+                      {socialLinks.twitter && (
+                        <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                          <Twitter className="h-4.5 w-4.5" />
+                        </a>
+                      )}
+                      {socialLinks.website && (
+                        <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                          <Globe className="h-4.5 w-4.5" />
+                        </a>
+                      )}
                     </div>
                   </div>
-                  <p className="text-base text-zinc-400 leading-relaxed font-sans">
-                    {bio}
-                  </p>
- 
-                  <div className="mt-6 flex gap-3">
-                    {socialLinks.github && (
-                      <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                        <Github className="h-4.5 w-4.5" />
-                      </a>
-                    )}
-                    {socialLinks.linkedin && (
-                      <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                        <Linkedin className="h-4.5 w-4.5" />
-                      </a>
-                    )}
-                    {socialLinks.twitter && (
-                      <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                        <Twitter className="h-4.5 w-4.5" />
-                      </a>
-                    )}
-                    {socialLinks.website && (
-                      <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-850 bg-zinc-950/30 p-2 text-zinc-450 hover:text-white transition-all">
-                        <Globe className="h-4.5 w-4.5" />
-                      </a>
-                    )}
+                  <div className="md:col-span-1 hidden md:block h-64 border border-teal-950 rounded-xl bg-black/60 relative overflow-hidden">
+                    <Globe3DCanvas color="#14b8a6" glowColor="rgba(20, 184, 166, 0.04)" />
                   </div>
-                </div>
-                <div className="md:col-span-1 hidden md:block h-64">
-                  <Globe3DCanvas color="#14b8a6" glowColor="rgba(20, 184, 166, 0.08)" />
                 </div>
               </div>
             </motion.section>
-            <motion.section variants={fadeInVariants} className="border-t border-zinc-900 pt-16">
-              <div className="mb-8">
-                <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl flex items-center gap-2">
-                  <UserIcon className="h-5 w-5 text-teal-400" />
-                  <span>Candidate Snapshot</span>
-                </h2>
-                <p className="text-zinc-500 text-xs mt-1">5-second overview indexing core professional credentials and availability.</p>
-              </div>
 
+            {/* Candidate Snapshot */}
+            <motion.section variants={fadeInVariants} className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>run candidate_metrics.sh</span>
+              </div>
               <div className="grid gap-6 md:grid-cols-3">
-                {/* Core Stats Grid */}
-                <Tilt3DCard glowColor="teal" className="md:col-span-2 rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 flex flex-col justify-between">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
+                <Tilt3DCard glowColor="teal" className="md:col-span-2 rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
-                      <span className="block text-2xl font-extrabold text-white font-mono">{displayYearsOfExp}</span>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Years Exp</span>
+                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                      <span className="block text-2xl font-extrabold text-white">{displayYearsOfExp}</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Years Exp</span>
                     </div>
-                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
-                      <span className="block text-2xl font-extrabold text-teal-400 font-mono">{projects.length}</span>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
+                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                      <span className="block text-2xl font-extrabold text-teal-400">{projects.length}</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
                     </div>
-                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
-                      <span className="block text-2xl font-extrabold text-white font-mono">{skills.length}</span>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Skills</span>
+                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                      <span className="block text-2xl font-extrabold text-white">{skills.length}</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Skills</span>
                     </div>
-                    <div className="p-3 bg-zinc-900/30 rounded-lg border border-zinc-900 text-center">
-                      <span className="block text-2xl font-extrabold text-white font-mono">{certifications.length}</span>
-                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-mono">Certs</span>
+                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                      <span className="block text-2xl font-extrabold text-white">{certifications.length}</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Certs</span>
                     </div>
                   </div>
-
-                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-zinc-900/80 text-xs font-mono">
+                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-teal-950/40 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-zinc-500">GitHub Status:</span>
+                      <span className="text-zinc-550">GitHub Status:</span>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
-                        githubUser 
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                          : 'bg-zinc-800 text-zinc-550 border border-zinc-700'
+                        githubUser ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'
                       }`}>
                         {githubUser ? 'Connected' : 'Not Connected'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-zinc-500">Availability:</span>
+                      <span className="text-zinc-550">Availability:</span>
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 truncate max-w-full">
                         {availabilityStatus}
                       </span>
@@ -699,227 +788,149 @@ export default function PortfolioClient({
                   </div>
                 </Tilt3DCard>
 
-                {/* Top Technologies Card */}
-                <Tilt3DCard glowColor="purple" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 flex flex-col justify-between">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold block mb-3">// Top Stack</span>
+                    <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold block mb-3">// Top Stack</span>
                     <div className="flex flex-wrap gap-2">
                       {skills
                         .slice()
                         .sort((a, b) => b.proficiency - a.proficiency)
                         .slice(0, 4)
                         .map((s) => (
-                          <span
-                            key={s.name}
-                            className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-350"
-                          >
+                          <span key={s.name} className="px-2 py-0.5 rounded bg-teal-950/20 border border-teal-950/40 text-xs text-teal-450">
                             {s.name}
                           </span>
                         ))}
-                      {skills.length === 0 && (
-                        <span className="text-xs text-zinc-500 italic">No technologies indexed</span>
-                      )}
                     </div>
                   </div>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono mt-4">Top technologies sorted by verified proficiency level.</p>
+                  <p className="text-[10px] text-zinc-550 leading-relaxed mt-4">Top technologies sorted by verified proficiency level.</p>
                 </Tilt3DCard>
               </div>
             </motion.section>
 
             {/* Recruiter Intelligence Dashboard */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16">
-              <div className="mb-8">
-                <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-teal-400" />
-                  <span>Recruiter Intelligence Dashboard</span>
-                </h2>
-                <p className="text-zinc-500 text-xs mt-1">Real-time candidate indexing, portfolio health, and profile verification metrics.</p>
+            <motion.section variants={fadeInVariants} className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>dashboard --recruiter-intelligence</span>
               </div>
-
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {/* Score Card 1: Portfolio Completeness */}
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/30 to-transparent" />
+                <Tilt3DCard glowColor="teal" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">Portfolio Score</span>
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Portfolio Score</span>
                     <CheckCircle2 className="h-4 w-4 text-teal-400" />
                   </div>
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-3xl font-extrabold text-white">{scores.portfolioScore}</span>
-                    <span className="text-xs text-zinc-500 font-mono">/ 100</span>
+                    <span className="text-xs text-zinc-550">/ 100</span>
                   </div>
-                  <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden mb-2">
+                  <div className="h-1.5 w-full bg-zinc-950 border border-teal-950/40 rounded-full overflow-hidden mb-2">
                     <div className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" style={{ width: `${scores.portfolioScore}%` }} />
                   </div>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Based on profile content depth and media completeness.</p>
+                  <p className="text-[9px] text-zinc-500">Profile completeness index score.</p>
                 </Tilt3DCard>
 
-                {/* Score Card 2: Recruiter Readiness */}
-                <Tilt3DCard glowColor="purple" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">Recruiter Readiness</span>
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Recruiter Readiness</span>
                     <Sparkles className="h-4 w-4 text-purple-400" />
                   </div>
                   <div className="mb-4">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                      scores.readinessScore === 'Excellent' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
-                      scores.readinessScore === 'Good' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                      'bg-zinc-500/10 text-zinc-400 border border-zinc-800'
-                    }`}>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-950/30 text-purple-400 border border-purple-500/20">
                       {scores.readinessScore}
                     </span>
                   </div>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Profile formatting, contact access points, and case studies depth status.</p>
+                  <p className="text-[9px] text-zinc-500">Formatting and navigation evaluation.</p>
                 </Tilt3DCard>
 
-                {/* Score Card 3: ATS Score */}
-                <Tilt3DCard glowColor="pink" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-pink-500/30 to-transparent" />
+                <Tilt3DCard glowColor="pink" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">ATS Match Capability</span>
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">ATS Match Capability</span>
                     <FileText className="h-4 w-4 text-pink-400" />
                   </div>
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-3xl font-extrabold text-white">{scores.atsScore}%</span>
                   </div>
-                  <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden mb-2">
+                  <div className="h-1.5 w-full bg-zinc-950 border border-teal-950/40 rounded-full overflow-hidden mb-2">
                     <div className="h-full bg-gradient-to-r from-pink-500 to-yellow-400" style={{ width: `${scores.atsScore}%` }} />
                   </div>
-                  <p className="text-[10px] text-zinc-550 leading-relaxed font-mono">Applicant tracking compatibility based on structural resume keywords.</p>
+                  <p className="text-[9px] text-zinc-500">Resume parsed match index capability.</p>
                 </Tilt3DCard>
 
-                {/* Score Card 4: GitHub Health */}
-                <Tilt3DCard glowColor="indigo" className="rounded-xl border border-zinc-850 bg-zinc-950/40 p-5 relative overflow-hidden group flex flex-col justify-between h-full">
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
+                <Tilt3DCard glowColor="indigo" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-bold">GitHub Sync Health</span>
+                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">GitHub Sync Health</span>
                     <Github className="h-4 w-4 text-indigo-400" />
                   </div>
                   <div className="mb-4">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                      scores.githubHealth === 'Excellent' ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' :
-                      'bg-zinc-500/10 text-zinc-400 border border-zinc-800'
-                    }`}>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-950/30 text-indigo-455 border border-indigo-500/20">
                       {scores.githubHealth}
                     </span>
                   </div>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed font-mono">Live repository contributions, documentation, and language distribution.</p>
+                  <p className="text-[9px] text-zinc-500">Live code distribution API health status.</p>
                 </Tilt3DCard>
               </div>
-            </AnimatedSection>
+            </motion.section>
 
-            {/* GitHub Info Section */}
             {githubUser && (
-              <AnimatedSection className="border-t border-zinc-900 pt-16">
+              <AnimatedSection className="space-y-6">
+                <div className="flex items-center space-x-2 text-xs text-teal-500">
+                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                  <span>run github_metrics.sh --user={githubUser}</span>
+                </div>
                 <GitHubStats username={githubUser} />
               </AnimatedSection>
             )}
 
-            {/* Top Skills Spotlight Widget */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16">
-              <div className="mb-6">
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-teal-500/20 bg-teal-500/5 text-[9px] font-mono font-bold text-teal-400 uppercase">
-                  Top Skills Spotlight
-                </span>
-                <h2 className="text-xl font-bold tracking-tight text-white font-sans sm:text-2xl mt-2">
-                  Primary Capabilities
-                </h2>
-                <p className="text-zinc-500 text-xs mt-1">Core technical skills verified by hands-on project implementations.</p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {skills.slice().sort((a, b) => b.proficiency - a.proficiency).slice(0, 6).map((skill) => (
-                  <div key={skill.name} className="flex items-center gap-3 rounded-xl border border-zinc-850 bg-zinc-950/40 px-4 py-3 min-w-[150px] flex-1">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-400 flex-shrink-0">
-                      {getCategoryIcon(skill.category)}
-                    </div>
-                    <div>
-                      <span className="block text-xs font-bold text-zinc-100 font-mono">{skill.name}</span>
-                      <span className="text-[10px] text-teal-400 font-mono font-semibold">{skill.proficiency}% Proficiency</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </AnimatedSection>
-
             {/* Featured Projects Showcase */}
-            <AnimatedSection id="projects" className="border-t border-zinc-900 pt-16">
-              <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Projects Showcase</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Highlighted projects and technical architectures.</p>
-                </div>
+            <AnimatedSection id="projects" className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>list_projects --featured</span>
               </div>
-
-              {/* Filtering tabs */}
-              <div className="flex flex-wrap items-center gap-2 mb-8">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 {projectCategories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveFilterCategory(cat)}
                     className={`rounded-lg px-3.5 py-1.5 text-xs font-mono border transition-all ${
                       activeFilterCategory === cat
-                        ? 'bg-teal-500 text-zinc-950 border-teal-500 font-bold'
-                        : 'bg-zinc-900/40 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                        ? 'bg-teal-950 text-teal-400 border-teal-500/50 font-bold'
+                        : 'bg-black/50 text-zinc-500 border-teal-950/40 hover:text-teal-400 hover:border-teal-950'
                     }`}
                   >
-                    {cat.toUpperCase()}
+                    [{cat.toUpperCase()}]
                   </button>
                 ))}
               </div>
 
               {filteredProjects.length === 0 ? (
-                <div className="text-center py-12 border border-zinc-800/80 rounded-xl bg-zinc-950/20">
-                  <p className="text-sm text-zinc-500 font-mono">No projects published under this filter.</p>
+                <div className="text-center py-12 border border-teal-950 rounded-xl bg-black/20">
+                  <p className="text-sm text-zinc-500">No matching projects found.</p>
                 </div>
               ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {filteredProjects.map((project) => (
                     <Tilt3DCard key={project._id} glowColor="teal" className="rounded-xl overflow-hidden h-full flex">
-                      <article className="flex-1 flex flex-col overflow-hidden border border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700/80 transition-all duration-300 group relative">
-                        <div className="aspect-video w-full overflow-hidden bg-zinc-900 relative">
-                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                          <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2 py-0.5 text-[10px] font-mono text-teal-400 border border-teal-500/20">
+                      <article className="flex-1 flex flex-col overflow-hidden border border-teal-950 bg-black/40 hover:border-teal-500/30 transition-all duration-300 group relative">
+                        <div className="aspect-video w-full overflow-hidden bg-zinc-950 relative">
+                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" />
+                          <div className="absolute top-3 right-3 rounded-md bg-black/85 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20">
                             {project.category}
-                          </div>
-                          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-                            <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-emerald-400 border border-emerald-500/20 w-fit">
-                              {project.status ? project.status.toUpperCase() : 'ACTIVE'}
-                            </div>
-                            {project.viewCount !== undefined && project.viewCount > 0 && (
-                              <div className="rounded-md bg-zinc-950/80 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20 flex items-center gap-1 w-fit">
-                                <Eye className="h-3 w-3" />
-                                <span>{project.viewCount} views</span>
-                              </div>
-                            )}
                           </div>
                         </div>
                         <div className="flex flex-1 flex-col p-5">
-                          <h3 className="text-lg font-bold text-white group-hover:text-teal-400 transition-colors">{project.title}</h3>
+                          <h3 className="text-base font-bold text-white group-hover:text-teal-400 transition-colors font-mono">{project.title}</h3>
                           <p className="mt-2 text-xs text-zinc-400 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
                           <div className="mt-4 flex flex-wrap gap-1.5">
                             {project.techStack.slice(0, 4).map((tech) => (
-                              <span key={tech} className="rounded bg-zinc-900 px-2 py-0.5 text-[10px] font-mono text-zinc-300 border border-zinc-800">{tech}</span>
+                              <span key={tech} className="rounded bg-teal-950/20 px-2 py-0.5 text-[10px] text-teal-450 border border-teal-950/40">{tech}</span>
                             ))}
                           </div>
-                          
                           <div className="mt-4 flex gap-2">
-                            <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-zinc-800 bg-zinc-950/50 py-2 text-xs font-semibold text-teal-400 hover:bg-zinc-900 transition-all">
-                              <span>Case study</span>
-                              <ChevronRight className="h-3 w-3" />
+                            <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-teal-950 bg-teal-950/10 py-2 text-xs font-semibold text-teal-450 hover:bg-teal-950/20 transition-all">
+                              <span>read_case_study()</span>
                             </button>
-                            {project.links?.github && (
-                              <a href={project.links.github} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
-                                <Github className="h-4 w-4" />
-                              </a>
-                            )}
-                            {project.links?.liveDemo && (
-                              <a href={project.links.liveDemo} target="_blank" rel="noreferrer" className="rounded-lg border border-zinc-800 bg-zinc-950/50 p-2.5 text-zinc-400 hover:text-white hover:border-zinc-700 transition-all flex items-center justify-center">
-                                <ExternalLink className="h-4 w-4" />
-                              </a>
-                            )}
                           </div>
                         </div>
                       </article>
@@ -929,30 +940,35 @@ export default function PortfolioClient({
               )}
             </AnimatedSection>
 
-            {/* Technical Skills Grouped Grid & Interactive Orbit */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16 bg-zinc-950/10">
+            {/* Technical Skills grouped and galaxy orbit */}
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>analyze_skills --category-breakdown</span>
+              </div>
               <div className="grid gap-12 lg:grid-cols-5 items-start">
                 <div className="lg:col-span-2">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans mb-3">Technical Skills</h2>
-                  <p className="text-zinc-400 text-sm mb-6">Capabilities structured by competency tiers.</p>
-                  <TechGalaxy />
+                  <div className="p-4 border border-teal-950 bg-black/40 rounded-xl">
+                    <p className="text-[10px] uppercase text-zinc-500 font-bold mb-3">// 3D Galaxy Visualization</p>
+                    <TechGalaxy />
+                  </div>
                 </div>
                 <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
                   {Object.entries(skillsByCategory).map(([category, items]) => (
-                    <div key={category} className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-5">
-                      <div className="flex items-center space-x-2 border-b border-zinc-900 pb-3 mb-4">
+                    <div key={category} className="rounded-xl border border-teal-950 bg-black/40 p-5">
+                      <div className="flex items-center space-x-2 border-b border-teal-950 pb-3 mb-4">
                         {getCategoryIcon(category)}
-                        <h3 className="font-mono text-xs font-bold text-zinc-300 capitalize">{category}</h3>
+                        <h3 className="font-mono text-xs font-bold text-teal-400 capitalize">{category}</h3>
                       </div>
                       <div className="space-y-4">
                         {items.map((skill) => (
                           <div key={skill.name}>
-                            <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 mb-1">
+                            <div className="flex items-center justify-between text-[11px] text-zinc-400 mb-1">
                               <span>{skill.name}</span>
                               <span className="text-teal-400">{skill.proficiency}%</span>
                             </div>
-                            <div className="h-1 w-full rounded-full bg-zinc-900 overflow-hidden">
-                              <div className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-400" style={{ width: `${skill.proficiency}%` }} />
+                            <div className="h-1 w-full rounded-full bg-zinc-950 border border-teal-950/30 overflow-hidden">
+                              <div className="h-full rounded-full bg-gradient-to-r from-teal-600 to-emerald-400" style={{ width: `${skill.proficiency}%` }} />
                             </div>
                           </div>
                         ))}
@@ -964,29 +980,32 @@ export default function PortfolioClient({
             </AnimatedSection>
 
             {/* Experience Timeline */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16">
-              <h2 className="text-2xl font-bold tracking-tight text-white font-sans mb-12">Professional Timeline</h2>
-              <div className="relative border-l border-zinc-800 ml-4 space-y-12">
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>journalctl -u work-experience.log --no-pager</span>
+              </div>
+              <div className="relative border-l border-teal-950/60 ml-4 space-y-12">
                 {experiences
                   .filter(exp => exp.type === 'job' || exp.type === 'internship')
                   .map((exp, idx) => (
                     <div key={idx} className="relative pl-8 group">
-                      <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-teal-500 bg-zinc-950 group-hover:scale-125 transition-transform duration-300">
+                      <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-teal-500 bg-black group-hover:scale-125 transition-transform duration-300">
                         <span className="h-1.5 w-1.5 rounded-full bg-teal-400 mx-auto" />
                       </div>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                        <h3 className="text-base font-bold text-white group-hover:text-teal-400 transition-colors">
-                          {exp.role} @ <span className="text-zinc-300 font-medium">{exp.organization}</span>
+                        <h3 className="text-sm font-bold text-white group-hover:text-teal-400 transition-colors">
+                          {exp.role} @ <span className="text-teal-500">{exp.organization}</span>
                         </h3>
-                        <span className="text-xs text-zinc-500 font-mono flex items-center gap-1.5">
+                        <span className="text-xs text-zinc-500 flex items-center gap-1.5">
                           <Calendar className="h-3.5 w-3.5" />
                           {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-400 mb-2 capitalize font-mono text-teal-500">{exp.type}</p>
-                      <p className="text-sm text-zinc-400 leading-relaxed mb-3">{exp.description}</p>
+                      <p className="text-[10px] text-teal-600 uppercase tracking-widest font-semibold">{exp.type}</p>
+                      <p className="text-xs text-zinc-400 leading-relaxed mb-3">{exp.description}</p>
                       {exp.responsibilities && exp.responsibilities.length > 0 && (
-                        <ul className="list-disc list-inside text-xs text-zinc-405 space-y-1 font-sans pl-2 mb-3">
+                        <ul className="list-disc list-inside text-xs text-zinc-500 space-y-1 pl-2 mb-3">
                           {exp.responsibilities.map((r, ri) => (
                             <li key={ri} className="leading-relaxed">{r}</li>
                           ))}
@@ -995,7 +1014,7 @@ export default function PortfolioClient({
                       {exp.technologiesUsed && (
                         <div className="flex flex-wrap gap-1.5">
                           {exp.technologiesUsed.map(t => (
-                            <span key={t} className="rounded bg-zinc-900 px-2 py-0.5 text-[9px] font-mono text-zinc-400 border border-zinc-800">{t}</span>
+                            <span key={t} className="rounded bg-teal-950/20 px-2 py-0.5 text-[9px] text-teal-400/80 border border-teal-950/30">{t}</span>
                           ))}
                         </div>
                       )}
@@ -1004,103 +1023,69 @@ export default function PortfolioClient({
               </div>
             </AnimatedSection>
 
-            {/* Education Section */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16">
-              <div className="mb-10">
-                <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Education</h2>
-                <p className="mt-2 text-zinc-400 text-sm">Academic credentials and qualifications.</p>
+            {/* Education and certifications/achievements */}
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>cat education_and_certs.md</span>
               </div>
-              {educationExperiences.length > 0 ? (
-                <div className="grid gap-6 md:grid-cols-2">
-                  {educationExperiences.map((edu, idx) => {
-                    const cgpaMatch = edu.description?.match(/(?:CGPA|GPA):\s*([0-9.]+)/i) || edu.description?.match(/([0-9.]+)\s*(?:CGPA|GPA)/i);
-                    const cgpa = cgpaMatch ? cgpaMatch[1] : null;
-                    return (
-                      <div key={idx} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-5 relative overflow-hidden group">
-                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-teal-500/20 to-transparent" />
-                        <div className="flex justify-between items-start gap-4 mb-3">
-                          <div>
-                            <h3 className="text-base font-bold text-white">{edu.role}</h3>
-                            <p className="text-xs text-teal-400 font-mono mt-0.5">{edu.organization}</p>
-                          </div>
-                          <span className="text-xs text-zinc-550 font-mono flex items-center gap-1 shrink-0">
-                            <Calendar className="h-3.5 w-3.5 text-zinc-650" />
-                            {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
-                          </span>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-6">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">// Education Credentials</h3>
+                  {educationExperiences.map((edu, idx) => (
+                    <div key={idx} className="rounded-xl border border-teal-950 bg-black/40 p-5 relative overflow-hidden">
+                      <div className="flex justify-between items-start gap-4 mb-3">
+                        <div>
+                          <h4 className="text-xs font-bold text-white">{edu.role}</h4>
+                          <p className="text-[10px] text-teal-400 font-mono mt-0.5">{edu.organization}</p>
                         </div>
-                        <p className="text-xs text-zinc-400 leading-relaxed font-sans mt-2">{edu.description}</p>
-                        {cgpa && (
-                          <div className="mt-2.5">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 font-mono">
-                              CGPA: {cgpa}
-                            </span>
-                          </div>
-                        )}
-                        {edu.responsibilities && edu.responsibilities.length > 0 && (
-                          <p className="text-[11px] text-zinc-500 font-mono mt-2">{edu.responsibilities.join(' • ')}</p>
-                        )}
+                        <span className="text-[10px] text-zinc-550 font-mono flex items-center gap-1 shrink-0">
+                          <Calendar className="h-3.5 w-3.5 text-zinc-650" />
+                          {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-12 border border-zinc-900/60 rounded-xl bg-zinc-950/20">
-                  <p className="text-xs text-zinc-500 font-mono">No education records added yet.</p>
-                </div>
-              )}
-            </AnimatedSection>
-
-            {/* Achievements Section */}
-            <AnimatedSection className="border-t border-zinc-900 pt-16">
-              <div className="mb-10">
-                <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Achievements & Highlights</h2>
-                <p className="mt-2 text-zinc-400 text-sm">Honors, hackathons, and professional milestones.</p>
-              </div>
-              {achievementExperiences.length > 0 ? (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {achievementExperiences.map((ach, idx) => (
-                    <div key={idx} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-5 relative overflow-hidden group">
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <Award className="h-5 w-5 text-amber-400 flex-shrink-0" />
-                        <h3 className="text-sm font-bold text-zinc-100">{ach.role}</h3>
-                      </div>
-                      <p className="text-xs text-zinc-400 leading-relaxed font-sans">{ach.description}</p>
-                      <div className="mt-4 pt-3 border-t border-zinc-900/60 flex items-center justify-between text-[10px] text-zinc-500 font-mono">
-                        <span>{ach.organization}</span>
-                        <span>{new Date(ach.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}</span>
-                      </div>
+                      <p className="text-[11px] text-zinc-405 leading-relaxed">{edu.description}</p>
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="text-center py-12 border border-zinc-900/60 rounded-xl bg-zinc-950/20">
-                  <p className="text-xs text-zinc-500 font-mono">No achievements compiled yet.</p>
+
+                <div className="space-y-6">
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">// Certifications</h3>
+                  <div className="space-y-4">
+                    {certifications.slice(0, 3).map((cert) => (
+                      <div key={cert._id} className="rounded-xl border border-teal-950 bg-black/40 p-4 flex justify-between items-center gap-3 hover:border-teal-500/20 transition-all duration-300">
+                        <div>
+                          <h4 className="text-xs font-bold text-white leading-snug">{cert.title}</h4>
+                          <p className="text-[10px] text-zinc-550 font-mono">{cert.issuer}</p>
+                        </div>
+                        {cert.credentialUrl && (
+                          <a href={cert.credentialUrl} target="_blank" rel="noreferrer" className="flex-shrink-0 text-[10px] bg-teal-950/40 text-teal-400 border border-teal-500/20 px-2 py-1 rounded">Verify</a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              )}
+              </div>
             </AnimatedSection>
-            {/* Testimonials Section */}
+
+            {/* Testimonials */}
             {testimonials.length > 0 && (
-              <AnimatedSection className="border-t border-zinc-900 pt-16">
-                <div className="mb-10">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Recommendations & Endorsements</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Feedback from collaborators, clients, and team members.</p>
+              <AnimatedSection className="space-y-6">
+                <div className="flex items-center space-x-2 text-xs text-teal-500">
+                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                  <span>read_recommendations.sh --approved</span>
                 </div>
                 <div className="grid gap-6 md:grid-cols-2">
                   {testimonials.map((testimonial) => (
-                    <div key={testimonial._id} className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-6 flex flex-col justify-between">
-                      <p className="text-sm text-zinc-300 italic leading-relaxed font-serif">&ldquo;{testimonial.body}&rdquo;</p>
+                    <div key={testimonial._id} className="rounded-xl border border-teal-950 bg-black/40 p-6 flex flex-col justify-between font-mono">
+                      <p className="text-xs text-zinc-305 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
                       <div className="mt-6 flex items-center gap-3">
-                        {testimonial.authorAvatarUrl ? (
-                          <img src={testimonial.authorAvatarUrl} alt={testimonial.authorName} className="h-10 w-10 rounded-full object-cover border border-zinc-700" />
-                        ) : (
-                          <div className="h-10 w-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-350">
-                            {testimonial.authorName.charAt(0)}
-                          </div>
-                        )}
+                        <div className="h-8 w-8 rounded bg-teal-950/50 border border-teal-900 flex items-center justify-center text-xs font-bold text-teal-400">
+                          {testimonial.authorName.charAt(0)}
+                        </div>
                         <div>
-                          <h4 className="text-xs font-bold text-white">{testimonial.authorName}</h4>
-                          <p className="text-[10px] text-zinc-550 font-mono">{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                          <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
+                          <p className="text-[9px] text-teal-400/80">{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
                         </div>
                       </div>
                     </div>
@@ -1109,649 +1094,145 @@ export default function PortfolioClient({
               </AnimatedSection>
             )}
 
-            {/* Certifications Section */}
-            {certifications && certifications.length > 0 && (
-              <AnimatedSection className="border-t border-zinc-900 pt-16">
-                <div className="mb-10">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Certifications &amp; Awards</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Professional credentials, courses, and honors.</p>
-                </div>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {certifications.map((cert) => (
-                    <div key={cert._id} className="rounded-xl border border-zinc-800/60 bg-zinc-950/30 p-5 hover:border-teal-500/30 transition-all duration-300 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <Award className="h-5 w-5 text-teal-400 flex-shrink-0" />
-                          <h3 className="text-sm font-bold text-zinc-100">{cert.title}</h3>
-                        </div>
-                        <p className="text-xs text-zinc-500 font-mono mb-2">{cert.issuer}</p>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-zinc-900/60 flex items-center justify-between">
-                        <span className="text-[10px] text-zinc-500 font-mono">
-                          {cert.issueDate ? new Date(cert.issueDate).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : ''}
-                        </span>
-                        {cert.credentialUrl && (
-                          <a
-                            href={cert.credentialUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[10px] font-semibold text-teal-500 hover:text-teal-400"
-                          >
-                            <span>Verify</span>
-                            <ChevronRight className="h-2.5 w-2.5" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </AnimatedSection>
-            )}
-
-
-
-            {/* Resume CV Section */}
+            {/* Resume Center */}
             {activeResume && (
-              <AnimatedSection className="border-t border-zinc-900 pt-16">
-                <div className="mb-10">
-                  <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Curriculum Vitae</h2>
-                  <p className="mt-2 text-zinc-400 text-sm">Verified professional resume credentials.</p>
+              <AnimatedSection className="space-y-6">
+                <div className="flex items-center space-x-2 text-xs text-teal-500">
+                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                  <span>render_cv_document --interactive</span>
                 </div>
-                <div className="rounded-2xl border border-zinc-850 bg-zinc-950/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-                  <div className="absolute top-[-20%] right-[-10%] w-[300px] h-[300px] bg-teal-500/5 rounded-full blur-[80px] pointer-events-none" />
-                  
+                <div className="rounded-2xl border border-teal-950 bg-black/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
                   <div className="space-y-4 text-center md:text-left">
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <div className="h-10 w-10 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center border border-teal-500/20">
+                      <div className="h-10 w-10 rounded-lg bg-teal-950/40 text-teal-400 flex items-center justify-center border border-teal-500/20">
                         <FileText className="h-5.5 w-5.5" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-white">{activeResume.label || 'Standard Professional Resume'}</h3>
-                        <p className="text-xs text-zinc-500 font-mono mt-0.5">
-                          Format: PDF/Document • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}
-                        </p>
-                        <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400 font-mono">
-                            ATS Compatibility: {scores.atsScore}%
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 font-mono">
-                            Status: Verified
-                          </span>
-                        </div>
+                        <h3 className="text-sm font-bold text-white">{activeResume.label || 'Standard Professional Resume'}</h3>
+                        <p className="text-[10px] text-zinc-550 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
                       </div>
                     </div>
-                    <p className="text-xs text-zinc-400 leading-relaxed max-w-md">
-                      Review the verified professional experience, skills taxonomy, and certifications compiled for recruiter assessment.
-                    </p>
                     <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
                       <a
                         href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
                         download
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-zinc-950 font-bold px-4 py-2.5 text-xs transition-all duration-300 shadow-md shadow-teal-500/5"
+                        className="inline-flex items-center gap-2 rounded-xl bg-teal-950 hover:bg-teal-900 border border-teal-500/30 text-teal-400 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
                       >
                         <FileText className="h-4 w-4" />
                         <span>Download Active Resume</span>
                       </a>
                     </div>
                   </div>
- 
-                  <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 flex flex-col justify-between hover:border-zinc-700 transition-colors">
-                    <div className="border-b border-zinc-800 pb-3 flex items-center justify-between">
-                      <span className="text-[10px] text-zinc-550 font-mono uppercase tracking-wider font-bold">Document Preview</span>
+                  
+                  <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-teal-950 bg-black/60 p-4 flex flex-col justify-between hover:border-teal-500/20 transition-colors">
+                    <div className="border-b border-teal-950/50 pb-3 flex items-center justify-between text-[9px] text-zinc-500 uppercase tracking-wider font-bold">
+                      <span>Document Preview</span>
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
-                      <FileText className="h-10 w-10 text-zinc-750 mb-2 animate-bounce" />
-                      <p className="text-xs text-zinc-350 font-mono font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
-                      <p className="text-[10px] text-zinc-550 font-mono mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
+                      <FileText className="h-10 w-10 text-teal-950 mb-2 animate-bounce" />
+                      <p className="text-xs text-teal-400 font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
+                      <p className="text-[9px] text-zinc-550 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
                     </div>
-                    <a
-                      href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
-                      download
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-2 bg-zinc-950 hover:bg-zinc-900 text-zinc-355 hover:text-white font-mono text-[10px] uppercase font-bold tracking-widest text-center border border-zinc-800 rounded-lg transition-all"
-                    >
-                      Open Full Document
-                    </a>
                   </div>
                 </div>
               </AnimatedSection>
             )}
 
             {/* Contact Coordinates & Form */}
-            <AnimatedSection id="contact" className="border-t border-zinc-900 pt-16">
-              <div className="mb-10">
-                <h2 className="text-2xl font-bold tracking-tight text-white font-sans sm:text-3xl">Get In Touch</h2>
-                <p className="mt-2 text-zinc-400 text-sm">Coordinate project discovery calls, interview pipelines, or send messages.</p>
+            <AnimatedSection id="contact" className="space-y-6">
+              <div className="flex items-center space-x-2 text-xs text-teal-500">
+                <span className="text-zinc-650">guest@portfolio-os:~$</span>
+                <span>telnet contact-session.port:23</span>
               </div>
-
               <div className="grid gap-12 lg:grid-cols-5 items-start">
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="rounded-xl border border-zinc-900 bg-zinc-950/30 p-5 space-y-4">
-                    <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-550 font-bold border-b border-zinc-900 pb-2">// Contact Coordinates</p>
-                    
-                    {socialLinks.github && (
-                      <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-white transition-colors">
-                        <Github className="h-4.5 w-4.5 text-teal-400 flex-shrink-0" />
-                        <span className="truncate">{socialLinks.github}</span>
-                      </a>
-                    )}
-                    {socialLinks.linkedin && (
-                      <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-white transition-colors">
-                        <Linkedin className="h-4.5 w-4.5 text-teal-400 flex-shrink-0" />
-                        <span className="truncate">{socialLinks.linkedin}</span>
-                      </a>
-                    )}
-                    {socialLinks.twitter && (
-                      <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-white transition-colors">
-                        <Twitter className="h-4.5 w-4.5 text-teal-400 flex-shrink-0" />
-                        <span className="truncate">{socialLinks.twitter}</span>
-                      </a>
-                    )}
-                    {socialLinks.website && (
-                      <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-white transition-colors">
-                        <Globe className="h-4.5 w-4.5 text-teal-400 flex-shrink-0" />
-                        <span className="truncate">{socialLinks.website}</span>
-                      </a>
-                    )}
+                  <div className="rounded-xl border border-teal-950 bg-black/40 p-5 space-y-4">
+                    <p className="text-[10px] uppercase tracking-wider text-zinc-550 font-bold border-b border-teal-950/50 pb-2">// Contact Coordinates</p>
+                    {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Github className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.github}</span></a>}
+                    {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Linkedin className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.linkedin}</span></a>}
+                    {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Twitter className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.twitter}</span></a>}
+                    {socialLinks.website && <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Globe className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.website}</span></a>}
                   </div>
 
-                  {/* Recruiter Quick Actions */}
-                  <div className="rounded-xl border border-zinc-900 bg-zinc-950/30 p-5 space-y-4">
-                    <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-550 font-bold border-b border-zinc-900 pb-2">// Recruiter Quick Actions</p>
+                  <div className="rounded-xl border border-teal-950 bg-black/40 p-5 space-y-4">
+                    <p className="text-[10px] uppercase tracking-wider text-zinc-550 font-bold border-b border-teal-950/50 pb-2">// Recruiter Actions</p>
                     <div className="grid gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleQuickAction('interview')}
-                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono"
-                      >
-                        <span>Schedule Interview</span>
-                        <Calendar className="h-3.5 w-3.5" />
+                      <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-950/30 hover:bg-teal-950/50 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono">
+                        <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => handleQuickAction('resume')}
-                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 px-3 py-2 text-left text-xs font-semibold text-indigo-400 transition-all font-mono"
-                      >
-                        <span>Request Resume</span>
-                        <FileText className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleQuickAction('opportunity')}
-                        className="w-full flex items-center justify-between gap-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/25 px-3 py-2 text-left text-xs font-semibold text-purple-400 transition-all font-mono"
-                      >
-                        <span>Send Opportunity</span>
-                        <Sparkles className="h-3.5 w-3.5" />
+                      <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-950/30 hover:bg-teal-950/50 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono">
+                        <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="lg:col-span-3 rounded-xl border border-zinc-800 bg-zinc-950/40 p-6">
+                <div className="lg:col-span-3 rounded-xl border border-teal-950 bg-black/40 p-6">
                   <form id="contact-form" onSubmit={handleContactSubmit} className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
-                        <input
-                          id="contact-name"
-                          type="text"
-                          required
-                          value={contactName}
-                          onChange={(e) => setContactName(e.target.value)}
-                          placeholder="e.g. Hiring Manager"
-                          className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors"
-                        />
+                        <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
+                        <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-550 mb-1">Your Email</label>
-                        <input
-                          type="email"
-                          required
-                          value={contactEmail}
-                          onChange={(e) => setContactEmail(e.target.value)}
-                          placeholder="name@company.com"
-                          className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors"
-                        />
+                        <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Email</label>
+                        <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-550 mb-1">Subject</label>
-                      <input
-                        type="text"
-                        value={contactSubject}
-                        onChange={(e) => setContactSubject(e.target.value)}
-                        placeholder="Inquiry or Job Opportunity"
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors"
-                      />
+                      <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Subject</label>
+                      <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-550 mb-1">Message</label>
-                      <textarea
-                        required
-                        rows={4}
-                        value={contactBody}
-                        onChange={(e) => setContactBody(e.target.value)}
-                        placeholder="Scope description or role requirements..."
-                        className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none"
-                      />
+                      <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Message</label>
+                      <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
                     </div>
-                    <button
-                      type="submit"
-                      disabled={contactMutation.isPending}
-                      className="w-full bg-teal-500 hover:bg-teal-400 disabled:bg-zinc-800 text-zinc-950 font-bold py-3 rounded-lg text-xs transition-all shadow-md shadow-teal-500/5 flex items-center justify-center gap-2"
-                    >
-                      {contactMutation.isPending ? (
-                        <>
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          <span>Sending Request...</span>
-                        </>
-                      ) : (
-                        <span>Submit Message Request</span>
-                      )}
+                    <button type="submit" disabled={contactMutation.isPending} className="w-full bg-teal-955 hover:bg-teal-900 border border-teal-500/40 text-teal-400 font-bold py-3 rounded-lg text-xs transition-all flex items-center justify-center gap-2">
+                      {contactMutation.isPending ? 'Sending...' : 'Submit Message Request'}
                     </button>
-                    {contactSuccess && (
-                      <p className="text-[11px] text-emerald-400 font-mono text-center mt-2">✓ Message submitted successfully. Check your console/inbox.</p>
-                    )}
+                    {contactSuccess && <p className="text-[10px] text-emerald-400 text-center mt-2">✓ Message submitted successfully.</p>}
                   </form>
                 </div>
               </div>
             </AnimatedSection>
-
           </motion.div>
         )}
 
-        {theme === 'developer' && (
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 font-mono">
-            <div className="rounded-xl border border-[#2d2d30] bg-[#1e1e24] shadow-2xl overflow-hidden flex flex-col md:flex-row h-auto md:h-[750px]">
-              
-              {/* IDE Left File Navigator Sidebar */}
-              <div className="w-full md:w-60 border-r border-[#2d2d30] bg-[#1a1a1f] flex-shrink-0 flex flex-col">
-                <div className="p-3 border-b border-[#2d2d30] flex items-center justify-between text-xs text-zinc-500 uppercase tracking-wider font-bold">
-                  <span>Project Explorer</span>
-                  <Code className="h-4 w-4" />
-                </div>
-                <div className="p-2 space-y-1 overflow-y-auto flex-grow text-sm">
-                  {[
-                    { name: 'Profile.md', icon: <UserIcon className="h-4 w-4 text-sky-400" /> },
-                    { name: 'Projects.json', icon: <Code className="h-4 w-4 text-amber-400" /> },
-                    { name: 'Experience.csv', icon: <Briefcase className="h-4 w-4 text-emerald-400" /> },
-                    { name: 'Skills.ts', icon: <Cpu className="h-4 w-4 text-purple-400" /> },
-                    { name: 'Certifications.yaml', icon: <Award className="h-4 w-4 text-teal-400" /> },
-                    { name: 'Contact.js', icon: <Mail className="h-4 w-4 text-rose-400" /> }
-                  ].map(tab => (
-                    <button
-                      key={tab.name}
-                      onClick={() => setActiveFileTab(tab.name)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-colors ${
-                        activeFileTab === tab.name
-                          ? 'bg-[#2a2a30] text-[#569cd6] font-bold border-l-2 border-emerald-400'
-                          : 'text-zinc-400 hover:bg-[#25252a] hover:text-zinc-200'
-                      }`}
-                    >
-                      {tab.icon}
-                      <span>{tab.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* IDE Editor Area */}
-              <div className="flex-1 flex flex-col min-w-0 bg-[#1e1e24]">
-                
-                {/* File Tabs Header */}
-                <div className="flex items-center bg-[#1a1a1f] border-b border-[#2d2d30] overflow-x-auto">
-                  <div className="flex px-2 py-1 gap-1">
-                    <span className="rounded-full bg-red-500/80 h-3 w-3 inline-block" />
-                    <span className="rounded-full bg-yellow-500/80 h-3 w-3 inline-block" />
-                    <span className="rounded-full bg-green-500/80 h-3 w-3 inline-block" />
-                  </div>
-                  <div className="flex-grow" />
-                  <div className="bg-[#1e1e24] px-4 py-2 border-r border-[#2d2d30] border-t-2 border-emerald-400 text-xs font-bold text-zinc-300 flex items-center gap-2">
-                    <span>{activeFileTab}</span>
-                  </div>
-                  <div className="px-4 text-zinc-500 text-xs">UTF-8</div>
-                </div>
-
-                {/* Editor Content Box */}
-                <div className="flex-1 p-6 overflow-y-auto font-mono text-sm leading-relaxed text-zinc-300 relative">
-                  
-                  {activeFileTab === 'Profile.md' && (
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-4 border-b border-[#2d2d30] pb-6">
-                        {portfolio.showProfilePhoto !== false && renderAvatar("h-16 w-16 rounded-full border border-zinc-700 bg-zinc-800", "text-lg")}
-                        <div>
-                          <p className="text-zinc-500 text-xs">// Portfolio OS Metadata</p>
-                          <h1 className="text-2xl font-bold text-white"># {ownerName}</h1>
-                          <p className="text-teal-400 text-sm">{headline}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-[#ce9178] font-bold">## Biography</h3>
-                        <p className="text-zinc-350 bg-[#151518] p-4 rounded-lg border border-[#2d2d30] font-sans leading-relaxed">
-                          {bio}
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <h3 className="text-[#ce9178] font-bold">## Core Coordinates</h3>
-                        <div className="grid gap-2 text-xs bg-[#151518] p-4 rounded-lg border border-[#2d2d30]">
-                          <p><span className="text-[#9cdcfe]">developer_slug:</span> <span className="text-[#ce9178]">&quot;{username}&quot;</span></p>
-                          <p><span className="text-[#9cdcfe]">host_theme:</span> <span className="text-[#ce9178]">&quot;{theme}&quot;</span></p>
-                          {(portfolio.ownerId as any)?.email && (
-                            <p><span className="text-[#9cdcfe]">email_channel:</span> <span className="text-[#ce9178]">&quot;{(portfolio.ownerId as any).email}&quot;</span></p>
-                          )}
-                          <p><span className="text-[#9cdcfe]">github_username:</span> <span className="text-[#ce9178]">&quot;{githubUser || 'N/A'}&quot;</span></p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeFileTab === 'Projects.json' && (
-                    <div className="space-y-6">
-                      <p className="text-zinc-500 text-xs">// {projects.length} compilations loaded</p>
-                      {projects.length === 0 ? (
-                        <p className="text-[#ce9178] italic">[Empty Array]</p>
-                      ) : (
-                        <div className="grid gap-4 md:grid-cols-2">
-                          {projects.map((project) => (
-                            <Tilt3DCard key={project._id} glowColor="emerald" className="rounded-lg overflow-hidden h-full flex">
-                              <div className="flex-grow border border-[#2d2d30] bg-[#16161a] p-4 hover:border-emerald-500/40 transition-colors duration-300">
-                                <p className="text-[#4ec9b0] font-bold text-xs">{project.category}</p>
-                                <h4 className="text-white font-bold text-sm mt-1">{project.title}</h4>
-                                <p className="text-xs text-zinc-400 mt-2 line-clamp-3 leading-relaxed font-sans">{project.summary}</p>
-                                <div className="mt-3 flex flex-wrap gap-1">
-                                  {project.techStack.map(t => (
-                                    <span key={t} className="rounded bg-[#25252b] px-1.5 py-0.5 text-[10px] text-zinc-400 border border-[#303036]">{t}</span>
-                                  ))}
-                                </div>
-                                <button onClick={() => setSelectedProject(project)} className="mt-4 flex items-center justify-center gap-1.5 w-full bg-[#202025] hover:bg-[#282830] text-emerald-400 text-xs py-1.5 rounded border border-[#2d2d30] transition-colors">
-                                  <span>inspect()</span>
-                                  <ChevronRight className="h-3.5 w-3.5" />
-                                </button>
-                              </div>
-                            </Tilt3DCard>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {activeFileTab === 'Experience.csv' && (
-                    <div className="space-y-6">
-                      <div className="overflow-x-auto rounded-lg border border-[#2d2d30] bg-[#16161a]">
-                        <table className="w-full text-left border-collapse">
-                          <thead>
-                            <tr className="bg-[#1f1f24] text-zinc-400 border-b border-[#2d2d30] text-xs">
-                              <th className="p-3">Role & Org</th>
-                              <th className="p-3">Timeline</th>
-                              <th className="p-3">Type</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-[#2d2d30] text-xs">
-                            {experiences.map((exp, i) => (
-                              <tr key={i} className="hover:bg-[#202025]">
-                                <td className="p-3">
-                                  <p className="font-bold text-white">{exp.role}</p>
-                                  <p className="text-zinc-550 text-[10px]">{exp.organization}</p>
-                                </td>
-                                <td className="p-3 text-zinc-400">
-                                  {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
-                                </td>
-                                <td className="p-3 text-emerald-400 capitalize">{exp.type}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className="space-y-4">
-                        <p className="text-zinc-500 text-xs">// Responsibilities Breakdown</p>
-                        {experiences.map((exp, idx) => (
-                          <div key={idx} className="bg-[#16161a] p-4 rounded-lg border border-[#2d2d30]">
-                            <h4 className="text-sm font-bold text-white">{exp.role} @ {exp.organization}</h4>
-                            <p className="text-xs text-zinc-400 mt-2 font-sans leading-relaxed">{exp.description}</p>
-                            {exp.responsibilities && (
-                              <ul className="mt-2 list-disc list-inside text-xs text-zinc-400 space-y-1 font-sans pl-2">
-                                {exp.responsibilities.map((r, ri) => <li key={ri}>{r}</li>)}
-                              </ul>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activeFileTab === 'Skills.ts' && (
-                    <div className="space-y-6">
-                      <p className="text-zinc-550 text-xs">// TypeScript typings representing skillset</p>
-                      <div className="grid gap-8 lg:grid-cols-5 items-start">
-                        <div className="lg:col-span-2 hidden lg:block">
-                          <div className="p-4 border border-[#2d2d30] bg-[#16161a] rounded-lg h-[400px] flex flex-col justify-between">
-                            <h4 className="text-[#ce9178] font-bold text-xs uppercase mb-3">// Interactive Skills Orbit</h4>
-                            <div className="flex-1 w-full h-full relative min-h-[300px]">
-                              <TechGalaxy />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="lg:col-span-3 grid gap-4 md:grid-cols-2">
-                          {Object.entries(skillsByCategory).map(([category, items]) => (
-                            <div key={category} className="border border-[#2d2d30] bg-[#16161a] p-4 rounded-lg">
-                              <h4 className="text-[#ce9178] font-bold text-xs uppercase mb-3">// {category}</h4>
-                              <div className="space-y-3">
-                                {items.map(skill => (
-                                  <div key={skill.name} className="flex flex-col gap-1">
-                                    <div className="flex justify-between text-xs">
-                                      <span className="text-[#9cdcfe]">{skill.name}</span>
-                                      <span className="text-emerald-400">{skill.proficiency}%</span>
-                                    </div>
-                                    <div className="h-1 w-full bg-[#1e1e24] rounded-full overflow-hidden">
-                                      <div className="h-full bg-emerald-500" style={{ width: `${skill.proficiency}%` }} />
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeFileTab === 'Certifications.yaml' && (
-                    <div className="space-y-6 text-xs">
-                      <p className="text-zinc-550 text-xs"># Verified Professional Credentials</p>
-                      {certifications.length === 0 ? (
-                        <p className="text-[#ce9178] italic">certifications: []</p>
-                      ) : (
-                        <div className="space-y-4">
-                          {certifications.map((cert) => (
-                            <div key={cert._id} className="border border-[#2d2d30] bg-[#16161a] p-4 rounded-lg">
-                              <p className="text-emerald-400 font-bold font-mono">- certification: &quot;{cert.title}&quot;</p>
-                              <p className="text-zinc-400 pl-4 mt-1">issuer: &quot;{cert.issuer}&quot;</p>
-                              {cert.credentialUrl && (
-                                <p className="pl-4 text-sky-400 underline mt-1">
-                                  <a href={cert.credentialUrl} target="_blank" rel="noreferrer">credential_link</a>
-                                </p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {activeFileTab === 'Contact.js' && (
-                    <div className="space-y-6">
-                      <p className="text-zinc-550 text-xs">// Submit form request package</p>
-                      <div className="border border-[#2d2d30] bg-[#16161a] p-6 rounded-lg max-w-xl mx-auto">
-                        <form onSubmit={handleContactSubmit} className="space-y-4">
-                          <div>
-                            <label className="block text-xs text-zinc-400 mb-1">Name</label>
-                            <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} className="w-full bg-[#1e1e24] border border-[#2d2d30] rounded p-2 text-xs text-white outline-none focus:border-emerald-500" />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-zinc-400 mb-1">Email</label>
-                            <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} className="w-full bg-[#1e1e24] border border-[#2d2d30] rounded p-2 text-xs text-white outline-none focus:border-emerald-500" />
-                          </div>
-                          <div>
-                            <label className="block text-xs text-zinc-400 mb-1">Message</label>
-                            <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} className="w-full bg-[#1e1e24] border border-[#2d2d30] rounded p-2 text-xs text-white outline-none focus:border-emerald-500 resize-none" />
-                          </div>
-                          <button type="submit" disabled={contactMutation.isPending} className="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 rounded transition-all">
-                            {contactMutation.isPending ? 'Sending...' : 'Submit Message'}
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {theme === 'minimal' && (
-          <div className="mx-auto max-w-4xl px-6 py-20 space-y-24 text-zinc-900 font-sans selection:bg-zinc-200">
-            <header className="space-y-6">
-              <h1 className="text-5xl font-light tracking-tight text-zinc-900 leading-tight">
-                {ownerName}
-              </h1>
-              <p className="text-xl text-zinc-550 font-serif italic border-l-2 border-zinc-300 pl-4">
-                {headline}
-              </p>
-              <div className="pt-4 flex gap-6 text-sm text-zinc-500">
-                {socialLinks.github && <a href={socialLinks.github} className="hover:text-black hover:underline transition-colors">GitHub</a>}
-                {socialLinks.linkedin && <a href={socialLinks.linkedin} className="hover:text-black hover:underline transition-colors">LinkedIn</a>}
-                {socialLinks.twitter && <a href={socialLinks.twitter} className="hover:text-black hover:underline transition-colors">Twitter</a>}
-                {socialLinks.website && <a href={socialLinks.website} className="hover:text-black hover:underline transition-colors">Website</a>}
-              </div>
-            </header>
-
-            <section className="space-y-4">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">About</h2>
-              <p className="text-zinc-650 font-serif leading-relaxed text-lg">
-                {bio}
-              </p>
-            </section>
-
-            <section className="space-y-8">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">Featured Projects</h2>
-              <div className="divide-y divide-zinc-200">
-                {projects.map((project) => (
-                  <article key={project._id} className="py-6 flex flex-col md:flex-row justify-between gap-4 first:pt-0">
-                    <div className="max-w-xl">
-                      <h3 className="text-lg font-semibold text-zinc-900">{project.title}</h3>
-                      <p className="text-sm text-zinc-550 mt-1 capitalize font-mono text-xs">{project.category}</p>
-                      <p className="text-sm text-zinc-650 mt-2 leading-relaxed font-serif">{project.summary}</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {project.techStack.map(t => (
-                          <span key={t} className="text-xs font-mono text-zinc-550 bg-zinc-100 px-2 py-0.5 rounded">{t}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0 flex items-start">
-                      <button onClick={() => setSelectedProject(project)} className="text-xs font-semibold text-zinc-900 hover:underline flex items-center gap-1">
-                        <span>Read Detail</span>
-                        <ChevronRight className="h-3 w-3" />
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-8">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">Experience</h2>
-              <div className="space-y-10">
-                {experiences.map((exp, i) => (
-                  <div key={i} className="space-y-2">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
-                      <h3 className="text-base font-semibold text-zinc-900">
-                        {exp.role} @ {exp.organization}
-                      </h3>
-                      <span className="text-xs text-zinc-400 font-mono">
-                        {new Date(exp.startDate).getFullYear()} - {exp.endDate ? new Date(exp.endDate).getFullYear() : 'Present'}
-                      </span>
-                    </div>
-                    <p className="text-sm text-zinc-650 font-serif leading-relaxed">{exp.description}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-4">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">Skills</h2>
-              <div className="flex flex-wrap gap-2">
-                {skills.map(skill => (
-                  <span key={skill.name} className="border border-zinc-200 rounded px-3 py-1 text-xs text-zinc-700 bg-white shadow-sm font-mono">
-                    {skill.name} ({skill.proficiency}%)
-                  </span>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-4">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">Certifications</h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {certifications.map(cert => (
-                  <div key={cert._id} className="border border-zinc-200 bg-white p-4 rounded-lg shadow-sm">
-                    <h4 className="text-sm font-semibold text-zinc-900">{cert.title}</h4>
-                    <p className="text-xs text-zinc-505 mt-0.5">{cert.issuer}</p>
-                    {cert.credentialUrl && (
-                      <a href={cert.credentialUrl} target="_blank" rel="noreferrer" className="text-xs text-zinc-400 hover:text-black hover:underline mt-2 inline-block">
-                        View credential
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-8">
-              <h2 className="text-xs uppercase tracking-widest text-zinc-400 font-bold">Get In Touch</h2>
-              <div className="max-w-md">
-                <form onSubmit={handleContactSubmit} className="space-y-4">
-                  <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Your Name" className="w-full bg-white border border-zinc-250 rounded p-3 text-sm text-zinc-800 outline-none focus:border-zinc-850" />
-                  <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Your Email" className="w-full bg-white border border-zinc-250 rounded p-3 text-sm text-zinc-800 outline-none focus:border-zinc-850" />
-                  <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Your Message" className="w-full bg-white border border-zinc-250 rounded p-3 text-sm text-zinc-800 outline-none focus:border-zinc-850 resize-none" />
-                  <button type="submit" disabled={contactMutation.isPending} className="bg-zinc-900 hover:bg-zinc-850 text-white font-semibold px-6 py-2.5 rounded text-sm transition-all">
-                    {contactMutation.isPending ? 'Sending...' : 'Send Message'}
-                  </button>
-                </form>
-              </div>
-            </section>
-          </div>
-        )}
-
+        {/* ========================================================================= */}
+        {/* 2. EXECUTIVE CORPORATE (CLEAN SLATE PROFESSIONAL SYSTEM)                  */}
+        {/* ========================================================================= */}
         {theme === 'corporate' && (
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-slate-100 font-sans">
-            <section className="rounded-2xl bg-gradient-to-br from-indigo-950/80 to-slate-900 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-[-20%] right-[-10%] w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none" />
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-slate-105 font-sans">
+            {/* Elegant Header Block */}
+            <motion.div variants={fadeInVariants} className="rounded-2xl bg-slate-900/60 border border-slate-800 p-8 md:p-12 shadow-2xl relative overflow-hidden backdrop-blur-md">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
               <div className="grid gap-8 md:grid-cols-4 items-center">
                 {portfolio.showProfilePhoto !== false && (
                   <div className="md:col-span-1 flex justify-center">
-                    {renderAvatar("h-40 w-40 rounded-full border-4 border-indigo-500/30 shadow-xl bg-slate-800", "text-4xl")}
+                    {renderAvatar("h-40 w-40 rounded-2xl border-2 border-slate-700 shadow-2xl bg-slate-800 object-cover", "text-4xl")}
                   </div>
                 )}
                 <div className={`${portfolio.showProfilePhoto !== false ? 'md:col-span-2' : 'md:col-span-3'} text-center md:text-left space-y-4`}>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-xs text-indigo-400 font-semibold font-mono">
+                    <span className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse" />
+                    <span>{availabilityStatus}</span>
+                  </div>
                   <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">{ownerName}</h1>
                   <p className="text-indigo-400 font-semibold text-base sm:text-lg">{headline}</p>
                   <p className="text-slate-400 text-sm leading-relaxed max-w-xl">{bio}</p>
                   
                   <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-4">
                     {socialLinks.github && (
-                      <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors text-slate-200">
+                      <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs bg-slate-900 hover:bg-slate-800 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors text-slate-200">
                         <Github className="h-4 w-4" />
                         <span>GitHub</span>
                       </a>
                     )}
                     {socialLinks.linkedin && (
-                      <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-lg transition-colors text-white">
+                      <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded-lg transition-colors text-white shadow-lg shadow-indigo-600/10">
                         <Linkedin className="h-4 w-4" />
                         <span>LinkedIn</span>
                       </a>
@@ -1759,14 +1240,30 @@ export default function PortfolioClient({
                   </div>
                 </div>
                 <div className="md:col-span-1 hidden md:block h-48 w-48 mx-auto">
-                  <Globe3DCanvas color="#6366f1" glowColor="rgba(99, 102, 241, 0.08)" />
+                  <Globe3DCanvas color="#6366f1" glowColor="rgba(99, 102, 241, 0.04)" />
                 </div>
               </div>
-            </section>
+            </motion.div>
 
-            <AnimatedSection id="projects" className="space-y-10">
-              <div className="border-b border-slate-800 pb-4">
-                <h2 className="text-2xl font-extrabold text-white">Case Studies & Portfolios</h2>
+            {/* Core Stats Overview Banner */}
+            <motion.div variants={fadeInVariants} className="grid gap-6 sm:grid-cols-4">
+              {[
+                { label: 'Years Experience', val: displayYearsOfExp },
+                { label: 'Featured Projects', val: projects.length },
+                { label: 'Indexed Technologies', val: skills.length },
+                { label: 'Certifications', val: certifications.length }
+              ].map((stat, i) => (
+                <div key={i} className="border border-slate-900 bg-slate-950/40 p-5 rounded-xl text-center backdrop-blur-sm">
+                  <span className="block text-3xl font-extrabold text-white font-mono">{stat.val}</span>
+                  <span className="text-[10px] text-slate-505 uppercase tracking-wider font-semibold mt-1 block">{stat.label}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Case Studies & Portfolios */}
+            <AnimatedSection id="projects" className="space-y-8">
+              <div className="border-b border-slate-900 pb-4">
+                <h2 className="text-2xl font-extrabold text-white">Featured Case Studies</h2>
                 <p className="text-slate-400 text-sm mt-1">Enterprise projects engineered for production deployment.</p>
               </div>
 
@@ -1776,17 +1273,17 @@ export default function PortfolioClient({
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {projects.map((project) => (
                     <Tilt3DCard key={project._id} glowColor="indigo" className="rounded-xl overflow-hidden h-full flex">
-                      <div className="flex-grow border border-slate-800 bg-slate-900/50 flex flex-col hover:border-indigo-500/40 transition-colors duration-300">
-                        <div className="aspect-video bg-slate-800 overflow-hidden relative">
-                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover" />
+                      <div className="flex-grow border border-slate-900 bg-slate-950/30 flex flex-col hover:border-indigo-500/20 transition-colors duration-300">
+                        <div className="aspect-video bg-slate-900 overflow-hidden relative">
+                          <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover opacity-80" />
                         </div>
                         <div className="p-6 flex-grow flex flex-col justify-between">
                           <div>
                             <span className="text-indigo-400 font-bold text-xs uppercase tracking-wider">{project.category}</span>
-                            <h4 className="text-white text-lg font-bold mt-1.5">{project.title}</h4>
-                            <p className="text-slate-400 text-xs mt-2 line-clamp-3 leading-relaxed">{project.summary}</p>
+                            <h4 className="text-white text-base font-bold mt-1.5">{project.title}</h4>
+                            <p className="text-slate-405 text-xs mt-2 line-clamp-3 leading-relaxed">{project.summary}</p>
                           </div>
-                          <button onClick={() => setSelectedProject(project)} className="mt-4 w-full bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-indigo-300 font-semibold py-2 rounded-lg text-xs transition-colors border border-slate-700">
+                          <button onClick={() => setSelectedProject(project)} className="mt-4 w-full bg-slate-900 hover:bg-slate-850 text-indigo-400 hover:text-indigo-300 font-semibold py-2 rounded-lg text-xs transition-colors border border-slate-800">
                             Review Case Study
                           </button>
                         </div>
@@ -1796,28 +1293,30 @@ export default function PortfolioClient({
                 </div>
               )}
             </AnimatedSection>
-            <AnimatedSection className="space-y-10">
-              <div className="border-b border-slate-800 pb-4">
+
+            {/* Experience timeline */}
+            <AnimatedSection className="space-y-8">
+              <div className="border-b border-slate-900 pb-4">
                 <h2 className="text-2xl font-extrabold text-white">Professional History</h2>
                 <p className="text-slate-400 text-sm mt-1">Selected career milestones and leadership roles.</p>
               </div>
 
               <div className="space-y-6">
                 {experiences.map((exp, i) => (
-                  <div key={i} className="border border-slate-800 bg-slate-900/40 p-6 rounded-xl relative">
+                  <div key={i} className="border border-slate-900 bg-slate-950/30 p-6 rounded-xl relative backdrop-blur-sm hover:border-slate-800 transition-colors">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
-                      <h4 className="text-lg font-bold text-white">
+                      <h4 className="text-base font-bold text-white">
                         {exp.role} @ <span className="text-indigo-400">{exp.organization}</span>
                       </h4>
-                      <span className="text-xs text-slate-500 font-semibold bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">
+                      <span className="text-xs text-slate-500 font-semibold bg-slate-950 border border-slate-900 px-3 py-1 rounded-full">
                         {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">{exp.description}</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">{exp.description}</p>
                     {exp.technologiesUsed && (
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {exp.technologiesUsed.map(t => (
-                          <span key={t} className="rounded bg-slate-950 px-2 py-0.5 text-[10px] text-slate-400 border border-slate-850">{t}</span>
+                          <span key={t} className="rounded bg-slate-900 px-2 py-0.5 text-[9px] text-slate-400 border border-slate-850">{t}</span>
                         ))}
                       </div>
                     )}
@@ -1828,16 +1327,16 @@ export default function PortfolioClient({
 
             <AnimatedSection className="grid gap-12 lg:grid-cols-2">
               <div className="space-y-6">
-                <h3 className="text-xl font-bold text-white">Technical Core</h3>
+                <h3 className="text-lg font-bold text-white">Technical Core</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {skills.map(s => (
-                    <div key={s.name} className="border border-slate-800 bg-slate-900/40 p-4 rounded-xl">
+                    <div key={s.name} className="border border-slate-900 bg-slate-950/30 p-4 rounded-xl">
                       <span className="text-slate-400 text-xs font-bold">{s.name}</span>
-                      <div className="mt-2 flex items-center justify-between text-[10px] text-slate-505">
+                      <div className="mt-2 flex items-center justify-between text-[10px] text-slate-500">
                         <span>Proficiency</span>
                         <span>{s.proficiency}%</span>
                       </div>
-                      <div className="h-1.5 w-full bg-slate-950 rounded-full mt-1.5 overflow-hidden">
+                      <div className="h-1.5 w-full bg-slate-900 rounded-full mt-1.5 overflow-hidden">
                         <div className="h-full bg-indigo-500" style={{ width: `${s.proficiency}%` }} />
                       </div>
                     </div>
@@ -1845,18 +1344,16 @@ export default function PortfolioClient({
                 </div>
               </div>
               <div className="space-y-6">
-                <h3 className="text-xl font-bold text-white">Certifications & Awards</h3>
+                <h3 className="text-lg font-bold text-white">Certifications & Awards</h3>
                 <div className="space-y-4">
                   {certifications.map(c => (
-                    <div key={c._id} className="border border-slate-800 bg-slate-900/40 p-4 rounded-xl flex justify-between items-center gap-3">
+                    <div key={c._id} className="border border-slate-900 bg-slate-950/30 p-4 rounded-xl flex justify-between items-center gap-3">
                       <div>
-                        <h4 className="text-white text-sm font-bold">{c.title}</h4>
-                        <p className="text-slate-505 text-xs">{c.issuer}</p>
+                        <h4 className="text-white text-xs font-bold">{c.title}</h4>
+                        <p className="text-slate-500 text-xs">{c.issuer}</p>
                       </div>
                       {c.credentialUrl && (
-                        <a href={c.credentialUrl} target="_blank" rel="noreferrer" className="flex-shrink-0 text-xs bg-slate-800 hover:bg-slate-700 text-indigo-400 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors">
-                          Verify
-                        </a>
+                        <a href={c.credentialUrl} target="_blank" rel="noreferrer" className="flex-shrink-0 text-xs bg-slate-900 hover:bg-slate-850 text-indigo-400 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors">Verify</a>
                       )}
                     </div>
                   ))}
@@ -1864,56 +1361,76 @@ export default function PortfolioClient({
               </div>
             </AnimatedSection>
 
-            <AnimatedSection className="border-t border-slate-800 pt-16 max-w-xl mx-auto space-y-6">
+            <AnimatedSection className="border-t border-slate-900 pt-16 max-w-xl mx-auto space-y-6">
               <div className="text-center">
                 <h3 className="text-2xl font-bold text-white">Initiate Consultation</h3>
                 <p className="text-slate-400 text-xs mt-1">Submit your details to coordinate project discovery calls.</p>
               </div>
               <form onSubmit={handleContactSubmit} className="space-y-4">
-                <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Full Name" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500" />
-                <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Business Email" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500" />
-                <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Project Scope or Message" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500 resize-none" />
-                <button type="submit" disabled={contactMutation.isPending} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg text-sm transition-all">
+                <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Full Name" className="w-full bg-slate-950 border border-slate-900 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500" />
+                <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Business Email" className="w-full bg-slate-950 border border-slate-900 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500" />
+                <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Project Scope or Message" className="w-full bg-slate-950 border border-slate-900 rounded-lg p-3 text-sm text-slate-300 outline-none focus:border-indigo-500 resize-none" />
+                <button type="submit" disabled={contactMutation.isPending} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg text-sm transition-all shadow-lg shadow-indigo-600/10">
                   Submit Request
                 </button>
               </form>
             </AnimatedSection>
-          </div>
+          </motion.div>
         )}
 
-        {theme === 'creative' && (
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-purple-100 font-sans">
-            <section className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row items-center gap-8">
-              <div className="absolute top-[-10%] left-[-10%] w-[150px] h-[150px] bg-pink-500/30 rounded-full blur-[50px] pointer-events-none" />
-              {portfolio.showProfilePhoto !== false && renderAvatar("h-32 w-32 rounded-3xl border-2 border-pink-400 shadow-xl hover:rotate-3 transition-transform", "text-3xl")}
-              <div className="space-y-4 flex-1">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-pink-500 to-yellow-500 text-white shadow-lg animate-pulse">
+        {/* ========================================================================= */}
+        {/* 3. AURORA GLASSMORPHISM (PREMIUM SHIFTING GRADIENTS & TRANSPARENT CARDS)  */}
+        {/* ========================================================================= */}
+        {theme === 'aurora-glass' && (
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-purple-100 font-sans">
+            {/* Glassmorphic Landing Card */}
+            <motion.div variants={fadeInVariants} className="backdrop-blur-xl bg-[#140e28]/35 border border-purple-500/20 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
+              <div className="absolute top-[-10%] left-[-10%] w-[150px] h-[150px] bg-purple-500/10 rounded-full blur-[50px] pointer-events-none" />
+              {portfolio.showProfilePhoto !== false && renderAvatar("h-32 w-32 rounded-3xl border border-purple-400/40 shadow-2xl hover:rotate-3 transition-transform duration-300 bg-purple-950/20", "text-3xl")}
+              <div className="space-y-4 flex-1 text-center md:text-left z-10">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg">
                   <Sparkles className="h-3.5 w-3.5" />
-                  <span>Creative Workspace</span>
+                  <span>Aurora Workspace</span>
                 </span>
                 <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">{ownerName}</h1>
-                <p className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-extrabold text-base sm:text-lg">{headline}</p>
+                <p className="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent font-extrabold text-base sm:text-lg">{headline}</p>
                 <p className="text-purple-200 text-sm leading-relaxed max-w-xl">{bio}</p>
               </div>
-              <div className="hidden md:block h-48 w-48 flex-shrink-0 mx-auto">
-                <Globe3DCanvas color="#ec4899" glowColor="rgba(236, 72, 153, 0.08)" />
+              <div className="hidden md:block h-48 w-48 flex-shrink-0 mx-auto z-10">
+                <Globe3DCanvas color="#a855f7" glowColor="rgba(168, 85, 247, 0.05)" />
               </div>
-            </section>
+            </motion.div>
 
+            {/* Quick stats grid */}
+            <motion.div variants={fadeInVariants} className="grid gap-6 sm:grid-cols-4">
+              {[
+                { label: 'Years Exp', val: displayYearsOfExp, col: 'from-purple-500 to-indigo-500' },
+                { label: 'Case Studies', val: projects.length, col: 'from-pink-500 to-purple-500' },
+                { label: 'Skills Indexed', val: skills.length, col: 'from-indigo-500 to-blue-500' },
+                { label: 'Certifications', val: certifications.length, col: 'from-purple-500 to-blue-500' }
+              ].map((stat, i) => (
+                <div key={i} className="backdrop-blur-lg bg-[#140e28]/25 border border-purple-500/10 p-5 rounded-xl text-center shadow-lg hover:border-purple-500/20 transition-all">
+                  <span className="block text-3xl font-extrabold text-white font-mono">{stat.val}</span>
+                  <span className="text-[10px] text-purple-400 uppercase tracking-wider font-bold mt-1 block">{stat.label}</span>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Projects Showcase */}
             <AnimatedSection id="projects" className="space-y-10">
-              <h2 className="text-3xl font-extrabold text-white text-center">Selected Artworks & Code</h2>
-              <div className="grid gap-8 md:grid-cols-2">
+              <h2 className="text-3xl font-extrabold text-white text-center">Selected Masterpieces</h2>
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project) => (
                   <Tilt3DCard key={project._id} glowColor="pink" className="rounded-2xl overflow-hidden h-full flex">
-                    <div className="flex-1 backdrop-blur-lg bg-white/5 border border-white/10 flex flex-col hover:border-pink-500/40 transition-colors duration-300">
-                      <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="aspect-video object-cover" />
+                    <div className="flex-1 backdrop-blur-lg bg-[#140e28]/35 border border-purple-500/15 flex flex-col hover:border-purple-500/30 hover:scale-[1.01] transition-all duration-300">
+                      <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="aspect-video object-cover opacity-80" />
                       <div className="p-6 flex-grow flex flex-col justify-between">
                         <div>
-                          <span className="text-pink-400 text-xs font-bold">{project.category}</span>
-                          <h4 className="text-white text-xl font-bold mt-1">{project.title}</h4>
+                          <span className="text-purple-400 text-xs font-bold tracking-widest">{project.category}</span>
+                          <h4 className="text-white text-base font-bold mt-1">{project.title}</h4>
                           <p className="text-purple-200 text-xs mt-2 leading-relaxed">{project.summary}</p>
                         </div>
-                        <button onClick={() => setSelectedProject(project)} className="mt-6 w-full py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-450 hover:to-purple-550 transition-all shadow-md">
+                        <button onClick={() => setSelectedProject(project)} className="mt-6 w-full py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 transition-all shadow-md">
                           Explore Case Study
                         </button>
                       </div>
@@ -1923,49 +1440,218 @@ export default function PortfolioClient({
               </div>
             </AnimatedSection>
 
+            {/* Experience timeline */}
             <AnimatedSection className="space-y-10">
-              <h2 className="text-3xl font-extrabold text-white text-center">Journey & History</h2>
+              <h2 className="text-3xl font-extrabold text-white text-center">Professional Trail</h2>
               <div className="space-y-6">
                 {experiences.map((exp, i) => (
-                  <div key={i} className="backdrop-blur-lg bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-colors">
+                  <div key={i} className="backdrop-blur-lg bg-[#140e28]/35 border border-purple-500/15 p-6 rounded-2xl hover:bg-[#140e28]/45 hover:border-purple-500/25 transition-all">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                      <h4 className="text-lg font-bold text-white">
-                        {exp.role} @ <span className="bg-gradient-to-r from-pink-400 to-yellow-400 bg-clip-text text-transparent">{exp.organization}</span>
+                      <h4 className="text-base font-bold text-white">
+                        {exp.role} @ <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{exp.organization}</span>
                       </h4>
                       <span className="text-xs text-purple-300 font-mono">
                         {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} - {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                       </span>
                     </div>
-                    <p className="text-sm text-purple-200 leading-relaxed">{exp.description}</p>
+                    <p className="text-xs text-purple-200 leading-relaxed">{exp.description}</p>
                   </div>
                 ))}
               </div>
             </AnimatedSection>
 
+            {/* Skill categories */}
             <AnimatedSection className="space-y-8">
               <h2 className="text-3xl font-extrabold text-white text-center">Skill Spheres</h2>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {skills.map(s => (
-                  <div key={s.name} className="backdrop-blur-md bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3">
+                  <div key={s.name} className="backdrop-blur-md bg-[#140e28]/35 border border-purple-500/15 p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-3 hover:border-purple-500/30 transition-all">
                     <span className="text-white text-sm font-bold">{s.name}</span>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/20">{s.proficiency}% Proficiency</span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/20">{s.proficiency}% Proficiency</span>
                   </div>
                 ))}
               </div>
             </AnimatedSection>
 
-            <AnimatedSection className="backdrop-blur-xl bg-white/5 border border-white/10 p-8 rounded-3xl max-w-xl mx-auto space-y-6">
+            {/* Form */}
+            <AnimatedSection className="backdrop-blur-xl bg-[#140e28]/35 border border-purple-500/20 p-8 rounded-3xl max-w-xl mx-auto space-y-6">
               <h3 className="text-2xl font-extrabold text-white text-center">Spark a Conversation</h3>
               <form onSubmit={handleContactSubmit} className="space-y-4">
-                <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Your Name" className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white outline-none focus:border-pink-500" />
-                <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Your Email" className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white outline-none focus:border-pink-500" />
-                <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Tell me something exciting..." className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-sm text-white outline-none focus:border-pink-500 resize-none" />
-                <button type="submit" disabled={contactMutation.isPending} className="w-full py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 transition-all shadow-lg">
+                <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Your Name" className="w-full bg-purple-950/20 border border-purple-500/15 rounded-xl p-3 text-sm text-white outline-none focus:border-purple-400" />
+                <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Your Email" className="w-full bg-purple-950/20 border border-purple-500/15 rounded-xl p-3 text-sm text-white outline-none focus:border-purple-400" />
+                <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Tell me something exciting..." className="w-full bg-purple-950/20 border border-purple-500/15 rounded-xl p-3 text-sm text-white outline-none focus:border-purple-400 resize-none" />
+                <button type="submit" disabled={contactMutation.isPending} className="w-full py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 hover:opacity-90 transition-all shadow-lg">
                   Submit Request
                 </button>
               </form>
             </AnimatedSection>
-          </div>
+          </motion.div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* 4. NORDIC FROST (SLEEK COOL ICE-BLUE & SLEEK MONO/SANS SYSTEM)           */}
+        {/* ========================================================================= */}
+        {theme === 'nordic-frost' && (
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-slate-200 font-sans">
+            {/* Frost Cover & Profile Header */}
+            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-slate-800 bg-[#0f172a]/30 backdrop-blur-md shadow-2xl">
+              <div className="h-40 md:h-52 w-full relative bg-gradient-to-r from-slate-900 via-slate-950 to-sky-950 border-b border-slate-800">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/30 to-transparent" />
+              </div>
+              <div className="px-6 pb-6 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20 z-10">
+                <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left">
+                  {portfolio.showProfilePhoto !== false && (
+                    <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-slate-850 bg-slate-900 shadow-2xl">
+                      {renderAvatar("w-full h-full object-cover filter brightness-95 contrast-105", "text-xl")}
+                    </div>
+                  )}
+                  <div className="md:pb-2">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
+                      <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl">{ownerName}</h1>
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded bg-sky-500/10 border border-sky-500/20 text-[9px] font-bold text-sky-400 font-mono">
+                        {availabilityStatus}
+                      </div>
+                    </div>
+                    <p className="text-sky-400 text-sm font-semibold">{headline}</p>
+                    <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-slate-405 mt-2">
+                      <MapPin className="h-3.5 w-3.5 text-sky-400" />
+                      <span>{userLocation}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap justify-center gap-3 md:pb-2">
+                  {activeResume && (
+                    <a
+                      href={`${API_BASE_URL}/resume/${activeResume._id}/download`}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded bg-sky-500 hover:bg-sky-400 text-slate-955 font-bold px-4 py-2.5 text-xs transition-all"
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span>Resume File</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Profile Bio Section */}
+            <motion.section variants={fadeInVariants} className="grid gap-8 md:grid-cols-3 items-center">
+              <div className="md:col-span-2 space-y-4">
+                <div className="inline-flex items-center space-x-2 rounded border border-sky-500/20 bg-sky-500/5 px-3 py-1 text-xs font-semibold text-sky-400 font-mono">
+                  <span>Biography</span>
+                </div>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  {bio}
+                </p>
+              </div>
+              <div className="md:col-span-1 hidden md:block h-64 border border-slate-800 rounded bg-[#0f172a]/30 relative overflow-hidden">
+                <Globe3DCanvas color="#38bdf8" glowColor="rgba(56, 189, 248, 0.04)" />
+              </div>
+            </motion.section>
+
+            {/* Featured Projects */}
+            <AnimatedSection id="projects" className="space-y-8">
+              <div className="border-b border-slate-850 pb-4">
+                <h2 className="text-2xl font-bold tracking-tight text-white">Selected Works</h2>
+                <p className="text-slate-400 text-sm mt-1">Highlighted project implementations.</p>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {projects.map((project) => (
+                  <Tilt3DCard key={project._id} glowColor="teal" className="rounded overflow-hidden h-full flex">
+                    <article className="flex-grow border border-slate-800 bg-[#0f172a]/20 flex flex-col hover:border-sky-500/20 transition-all duration-300">
+                      <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="aspect-video object-cover opacity-80" />
+                      <div className="p-6 flex-grow flex flex-col justify-between">
+                        <div>
+                          <span className="text-sky-400 text-[10px] font-mono uppercase tracking-widest">{project.category}</span>
+                          <h4 className="text-white text-base font-bold mt-1">{project.title}</h4>
+                          <p className="text-slate-400 text-xs mt-2 line-clamp-3 leading-relaxed">{project.summary}</p>
+                        </div>
+                        <button onClick={() => setSelectedProject(project)} className="mt-4 w-full bg-slate-900 hover:bg-slate-850 text-sky-400 font-semibold py-2 rounded text-xs transition-colors border border-slate-800">
+                          Inspect Code Details
+                        </button>
+                      </div>
+                    </article>
+                  </Tilt3DCard>
+                ))}
+              </div>
+            </AnimatedSection>
+
+            {/* Professional Timeline */}
+            <AnimatedSection className="space-y-8">
+              <h2 className="text-2xl font-bold text-white border-b border-slate-850 pb-4">Work History</h2>
+              <div className="space-y-6">
+                {experiences.map((exp, idx) => (
+                  <div key={idx} className="border border-slate-800 bg-[#0f172a]/20 p-5 rounded">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                      <h3 className="text-base font-bold text-white">
+                        {exp.role} @ <span className="text-sky-400">{exp.organization}</span>
+                      </h3>
+                      <span className="text-xs text-slate-500 font-mono">
+                        {new Date(exp.startDate).getFullYear()} - {exp.endDate ? new Date(exp.endDate).getFullYear() : 'Present'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">{exp.description}</p>
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+
+            {/* Technical Skills and Certifications */}
+            <AnimatedSection className="grid gap-12 lg:grid-cols-2">
+              <div className="space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-slate-850 pb-2">Technical Competency</h3>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {skills.map(s => (
+                    <div key={s.name} className="border border-slate-800 bg-[#0f172a]/20 p-4 rounded">
+                      <span className="text-slate-350 text-xs font-semibold">{s.name}</span>
+                      <div className="mt-2 flex items-center justify-between text-[10px] text-slate-500">
+                        <span>Verified Level</span>
+                        <span>{s.proficiency}%</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-900 border border-slate-800 rounded-full mt-1.5 overflow-hidden">
+                        <div className="h-full bg-sky-500" style={{ width: `${s.proficiency}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-slate-850 pb-2">Credentials</h3>
+                <div className="space-y-4">
+                  {certifications.map(c => (
+                    <div key={c._id} className="border border-slate-800 bg-[#0f172a]/20 p-4 rounded flex justify-between items-center gap-3">
+                      <div>
+                        <h4 className="text-white text-xs font-bold">{c.title}</h4>
+                        <p className="text-slate-500 text-[10px] mt-0.5">{c.issuer}</p>
+                      </div>
+                      {c.credentialUrl && (
+                        <a href={c.credentialUrl} target="_blank" rel="noreferrer" className="text-xs text-sky-400 hover:text-sky-300 font-semibold border-b border-sky-400/20">Verify</a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
+
+            {/* Contact Form */}
+            <AnimatedSection className="border-t border-slate-855 pt-16 max-w-xl mx-auto space-y-6">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-white">Consultation Booking</h3>
+                <p className="text-slate-400 text-xs mt-1">Submit your parameters to initiate communication channel.</p>
+              </div>
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <input type="text" required value={contactName} onChange={e => setContactName(e.target.value)} placeholder="Full Name" className="w-full bg-[#0f172a] border border-slate-800 rounded p-3 text-xs text-slate-300 outline-none focus:border-sky-500" />
+                <input type="email" required value={contactEmail} onChange={e => setContactEmail(e.target.value)} placeholder="Email Address" className="w-full bg-[#0f172a] border border-slate-800 rounded p-3 text-xs text-slate-300 outline-none focus:border-sky-500" />
+                <textarea required rows={4} value={contactBody} onChange={e => setContactBody(e.target.value)} placeholder="Message Content..." className="w-full bg-[#0f172a] border border-slate-800 rounded p-3 text-xs text-slate-300 outline-none focus:border-sky-500 resize-none" />
+                <button type="submit" disabled={contactMutation.isPending} className="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold py-3 rounded text-xs transition-all">
+                  Initiate Link Request
+                </button>
+              </form>
+            </AnimatedSection>
+          </motion.div>
         )}
       </main>
 

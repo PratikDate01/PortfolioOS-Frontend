@@ -110,7 +110,7 @@ export default function DashboardView() {
   const [profileWebsite, setProfileWebsite] = useState('');
   
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'developer' | 'minimal' | 'corporate' | 'creative' | 'portfolio-os'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');

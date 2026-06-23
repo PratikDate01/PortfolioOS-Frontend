@@ -23,7 +23,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [profileWebsite, setProfileWebsite] = useState(user.socialLinks?.website || '');
 
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'developer' | 'minimal' | 'corporate' | 'creative' | 'portfolio-os'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
@@ -171,10 +171,9 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-xs text-zinc-200 outline-none focus:border-teal-500 font-mono"
             >
               <option value="portfolio-os">Portfolio OS (Premium Terminal style)</option>
-              <option value="developer">Modern Developer (Dark theme)</option>
-              <option value="minimal">Minimalist (Clean light/dark)</option>
-              <option value="creative">Creative Glass (Animated background)</option>
-              <option value="corporate">Executive Corporate (Clean layout)</option>
+              <option value="corporate">Executive Corporate (Sleek professional)</option>
+              <option value="aurora-glass">Aurora Glassmorphism (Interactive Glow)</option>
+              <option value="nordic-frost">Nordic Frost (Clean Ice-Blue)</option>
             </select>
           </div>
 

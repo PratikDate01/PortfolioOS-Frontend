@@ -105,7 +105,7 @@ export default function MarketingLandingPage() {
                 {
                   icon: <Laptop className="h-6 w-6 text-teal-400" />,
                   title: 'Multi-Theme Rendering Engine',
-                  desc: 'Switch instantly between Cyberpunk, IDE Workspace, Corporate Executive, Minimalist, and Vibrant Creative themes. Tailor your brand to your target audience.'
+                  desc: 'Switch instantly between Portfolio OS, Corporate Executive, Aurora Glassmorphism, and Nordic Frost themes. Tailor your brand to your target audience.'
                 },
                 {
                   icon: <Brain className="h-6 w-6 text-purple-400" />,
@@ -210,7 +210,7 @@ export default function MarketingLandingPage() {
                     </li>
                     <li className="flex items-center gap-2.5">
                       <CheckCircle2 className="h-4.5 w-4.5 text-teal-500 flex-shrink-0" />
-                      <span>All 5 Premium Themes (IDE, Minimal, etc.)</span>
+                      <span>All 4 Premium Themes (Portfolio OS, Nordic Frost, etc.)</span>
                     </li>
                     <li className="flex items-center gap-2.5">
                       <CheckCircle2 className="h-4.5 w-4.5 text-teal-500 flex-shrink-0" />
