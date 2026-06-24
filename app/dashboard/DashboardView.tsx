@@ -135,15 +135,7 @@ export default function DashboardView() {
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  // Password States
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordSuccess, setPasswordSuccess] = useState(false);
+
 
   // Sync profile form states when user loads
   useEffect(() => {
@@ -328,40 +320,7 @@ export default function DashboardView() {
     });
   };
 
-  // Change Password
-  const changePasswordMutation = useMutation({
-    mutationFn: async (passwordData: { currentPassword: string; newPassword?: string }) => {
-      const res = await apiFetch('/users/me/password', {
-        method: 'POST',
-        body: JSON.stringify(passwordData)
-      });
-      if (res.error) throw new Error(res.error);
-      return res.data;
-    },
-    onSuccess: () => {
-      setPasswordSuccess(true);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setShowCurrentPassword(false);
-      setShowNewPassword(false);
-      setShowConfirmPassword(false);
-      setPasswordError('');
-      setTimeout(() => setPasswordSuccess(false), 5000);
-    },
-    onError: (error: Error) => {
-      setPasswordError(error.message || 'Failed to update password');
-    }
-  });
 
-  const handlePasswordChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setPasswordError('New passwords do not match');
-      return;
-    }
-    changePasswordMutation.mutate({ currentPassword, newPassword });
-  };
 
   // Projects CRUD mutations
   const createProjectMutation = useMutation({

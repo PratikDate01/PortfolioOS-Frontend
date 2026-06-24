@@ -32,7 +32,6 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [showProfilePhoto, setShowProfilePhoto] = useState(true);
 
   // Password States
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
@@ -88,7 +87,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   });
 
   const changePasswordMutation = useMutation({
-    mutationFn: async (passwordData: { currentPassword: string; newPassword?: string }) => {
+    mutationFn: async (passwordData: { newPassword: string }) => {
       const res = await apiFetch('/users/me/password', {
         method: 'POST',
         body: JSON.stringify(passwordData)
@@ -98,7 +97,6 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
     },
     onSuccess: () => {
       setPasswordSuccess(true);
-      setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setPasswordError('');
@@ -143,7 +141,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       setPasswordError('New passwords do not match');
       return;
     }
-    changePasswordMutation.mutate({ currentPassword, newPassword });
+    changePasswordMutation.mutate({ newPassword });
   };
 
   return (
@@ -314,11 +312,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
             <span>{passwordError}</span>
           </div>
         )}
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div>
-            <label className="block text-xs text-zinc-400 font-mono mb-1">Current Password</label>
-            <input type="password" required value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} className="w-full rounded bg-zinc-950 border border-zinc-800 p-2 text-xs outline-none focus:border-teal-500" />
-          </div>
+        <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="block text-xs text-zinc-400 font-mono mb-1">New Password</label>
             <input type="password" required value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full rounded bg-zinc-950 border border-zinc-800 p-2 text-xs outline-none focus:border-teal-500" />
