@@ -270,7 +270,7 @@ export default function PortfolioClient({
   }
 
   // Resolve dynamic values from portfolio/owner models
-  const theme = portfolio.theme || 'portfolio-os';
+  const theme = (!portfolio.theme || portfolio.theme === 'portfolio-os') ? 'corporate' : portfolio.theme;
   const ownerName = (portfolio.ownerId as any)?.name || username;
   const headline = portfolio.headline || 'Software Engineer & Designer';
   const bio = portfolio.bio || (portfolio.ownerId as any)?.bio || 'Building future-focused applications.';
