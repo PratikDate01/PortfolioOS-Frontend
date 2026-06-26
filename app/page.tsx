@@ -78,8 +78,8 @@ export default function MarketingLandingPage() {
             {/* Live Demos Check */}
             <div id="examples" className="pt-6 flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-xs font-mono text-zinc-500">
               <span>Try Live User Pages:</span>
-              <Link href="/p/pratik-satish-date" className="text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1">
-                <span>@pratik-satish-date</span>
+              <Link href="/p/pratik-date" className="text-teal-400 hover:text-teal-300 hover:underline flex items-center gap-1">
+                <span>@pratik-date</span>
                 <ChevronRight className="h-3 w-3" />
               </Link>
               <span className="text-zinc-800">|</span>

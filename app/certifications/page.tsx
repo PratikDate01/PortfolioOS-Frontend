@@ -14,7 +14,7 @@ export default function Page() {
       if (user?.username) {
         router.replace(`/p/${user.username}/certifications`);
       } else {
-        router.replace('/p/pratik-satish-date/certifications');
+        router.replace('/p/pratik-date/certifications');
       }
     }
   }, [user, isLoading, router]);

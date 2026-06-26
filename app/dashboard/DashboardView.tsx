@@ -129,7 +129,7 @@ export default function DashboardView() {
   const [profileWebsite, setProfileWebsite] = useState('');
   
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('corporate');
+  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
@@ -172,7 +172,7 @@ export default function DashboardView() {
   // Sync portfolio states when settings fetch
   useEffect(() => {
     if (portfolioSettings) {
-      setPortfolioTheme(portfolioSettings.theme === 'portfolio-os' || !portfolioSettings.theme ? 'corporate' : portfolioSettings.theme);
+      setPortfolioTheme(portfolioSettings.theme || 'portfolio-os');
       setPortfolioHeadline(portfolioSettings.headline || '');
       setPortfolioVisibility(portfolioSettings.visibility || 'public');
       setPortfolioCustomDomain(portfolioSettings.customDomain || '');
@@ -786,7 +786,7 @@ export default function DashboardView() {
                         <h4 className="text-white text-sm font-bold">Theme Setting</h4>
                         <p className="text-xs text-zinc-500 mt-1">Active theme template configuration.</p>
                         <span className="mt-4 inline-block text-xs text-indigo-400 font-mono bg-indigo-950/30 border border-indigo-500/20 px-3 py-1.5 rounded-lg uppercase font-bold">
-                          {portfolioSettings?.theme === 'portfolio-os' || !portfolioSettings?.theme ? 'corporate' : portfolioSettings.theme}
+                          {portfolioSettings?.theme || 'portfolio-os'}
                         </span>
                       </div>
                     </div>

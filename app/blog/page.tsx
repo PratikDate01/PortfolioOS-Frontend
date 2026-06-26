@@ -14,7 +14,7 @@ export default function Page() {
       if (user?.username) {
         router.replace(`/p/${user.username}/blog`);
       } else {
-        router.replace('/p/pratik-satish-date/blog');
+        router.replace('/p/pratik-date/blog');
       }
     }
   }, [user, isLoading, router]);

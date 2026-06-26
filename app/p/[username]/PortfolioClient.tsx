@@ -14,7 +14,7 @@ import GitHubStats from '@/components/sections/GitHubStats';
 import AIChatWidget from '@/components/features/AIChatWidget';
 import { Project, Experience, Skill, Certification, Portfolio, BlogPost, Resume, Testimonial } from '@/types';
 import {
-  Terminal, Cpu, Database, Cloud, Brain, CheckCircle2, Eye, Award, FileText, Code, ChevronRight, Link2, Mail, Github, Linkedin, Twitter, Globe, ShieldAlert, Loader2, Calendar, User as UserIcon, Briefcase, Sparkles, MapPin, ExternalLink
+  Terminal, Cpu, Database, Cloud, Brain, CheckCircle2, Eye, Award, FileText, Code, ChevronRight, Link2, Mail, Github, Linkedin, Twitter, Globe, ShieldAlert, Loader2, Calendar, User as UserIcon, Briefcase, Sparkles, MapPin, ExternalLink, BookOpen
 } from 'lucide-react';
 
 interface PortfolioClientProps {
@@ -270,7 +270,7 @@ export default function PortfolioClient({
   }
 
   // Resolve dynamic values from portfolio/owner models
-  const theme = (!portfolio.theme || portfolio.theme === 'portfolio-os') ? 'corporate' : portfolio.theme;
+  const theme = portfolio.theme || 'portfolio-os';
   const ownerName = (portfolio.ownerId as any)?.name || username;
   const headline = portfolio.headline || 'Software Engineer & Designer';
   const bio = portfolio.bio || (portfolio.ownerId as any)?.bio || 'Building future-focused applications.';
@@ -472,7 +472,7 @@ export default function PortfolioClient({
       theme === 'corporate' ? 'bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30' :
       theme === 'aurora-glass' ? 'bg-[#080512] text-purple-100 font-sans selection:bg-purple-500/30' :
       theme === 'nordic-frost' ? 'bg-[#0f172a] text-slate-200 font-sans selection:bg-sky-500/25' :
-      'bg-black text-teal-400 font-mono selection:bg-teal-500/30 crt-screen-active crt-overlay-active' // portfolio-os
+      'bg-slate-950 text-slate-200 font-sans selection:bg-sky-500/20' // portfolio-os
     }`}>
       
       <style dangerouslySetInnerHTML={{__html: `
@@ -562,9 +562,8 @@ export default function PortfolioClient({
 
       {theme === 'portfolio-os' && (
         <div className="absolute top-0 inset-x-0 h-[600px] overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-teal-500/5 rounded-full blur-[140px]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,184,166,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,184,166,0.02)_1px,transparent_1px)] bg-[size:30px_30px]" />
-          <div className="crt-scanline" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-sky-500/5 rounded-full blur-[140px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:30px_30px]" />
         </div>
       )}
 
@@ -580,7 +579,7 @@ export default function PortfolioClient({
         theme === 'nordic-frost' ? 'bg-slate-900/80 border-slate-800 text-slate-200' :
         theme === 'aurora-glass' ? 'bg-[#080512]/80 border-purple-950/30 text-purple-200' :
         theme === 'corporate' ? 'bg-slate-950/80 border-slate-900 text-slate-100' :
-        'bg-black/80 border-teal-950 text-teal-400 font-mono' // portfolio-os
+        'bg-slate-950/80 border-slate-900 text-slate-100' // portfolio-os
       }`}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -589,7 +588,7 @@ export default function PortfolioClient({
                 theme === 'nordic-frost' ? 'bg-slate-850 text-sky-400 border border-slate-700' :
                 theme === 'aurora-glass' ? 'bg-purple-950/50 text-purple-300 border border-purple-800/30' :
                 theme === 'corporate' ? 'bg-indigo-900/50 text-indigo-300 border border-indigo-700/30' :
-                'bg-teal-950/60 text-teal-400 border border-teal-500/30'
+                'bg-sky-950/60 text-sky-400 border border-sky-500/30'
               }`}>
                 {username.toUpperCase()}
               </span>
@@ -602,7 +601,7 @@ export default function PortfolioClient({
                   theme === 'nordic-frost' ? 'border-slate-850 bg-slate-900/50 text-slate-400' :
                   theme === 'aurora-glass' ? 'border-purple-950 bg-purple-950/20 text-purple-350' :
                   theme === 'corporate' ? 'border-slate-900 bg-slate-950/20 text-slate-400' :
-                  'border-teal-950/50 bg-teal-950/15 text-teal-400/80'
+                  'border-slate-800/50 bg-slate-900/20 text-slate-300'
                 }`}>
                   <Eye className="h-3.5 w-3.5" />
                   <span>{visitorCount.toLocaleString()} views</span>
@@ -615,7 +614,7 @@ export default function PortfolioClient({
                   theme === 'nordic-frost' ? 'border-slate-850 bg-slate-900/40 hover:bg-slate-800 text-slate-350 hover:text-white' :
                   theme === 'aurora-glass' ? 'border-purple-950 bg-purple-950/30 hover:bg-purple-900/25 text-purple-300 hover:text-purple-100' :
                   theme === 'corporate' ? 'border-slate-900 bg-slate-950/30 hover:bg-slate-900 text-slate-300 hover:text-white' :
-                  'border-teal-950 bg-black/60 hover:bg-teal-950/40 text-teal-400 hover:text-teal-300'
+                  'border-slate-800 bg-slate-900/40 hover:bg-slate-800 text-slate-300 hover:text-white'
                 }`}
               >
                 {copiedSuccess ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Link2 className="h-3.5 w-3.5" />}
@@ -631,27 +630,30 @@ export default function PortfolioClient({
         {/* 1. PORTFOLIO OS (PREMIUM RETRO TERMINAL STYLE)                            */}
         {/* ========================================================================= */}
         {theme === 'portfolio-os' && (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 font-mono text-teal-400">
-            {/* Terminal Top Alert / System Status Bar */}
-            <motion.div variants={fadeInVariants} className="rounded-xl border border-teal-500/20 bg-black/80 p-4 text-xs space-y-1 shadow-lg shadow-teal-500/5">
-              <p className="text-teal-400"><span className="text-zinc-650">guest@portfolio-os:~$</span> systemctl status portfolio-service.service</p>
-              <p className="text-emerald-400">● portfolio-service.service - Portfolio OS Premium Core System</p>
-              <p className="text-zinc-500">   Loaded: loaded (/etc/systemd/system/portfolio-service.service; enabled; vendor preset: enabled)</p>
-              <p className="text-zinc-500">   Active: <span className="text-emerald-400 font-bold">active (running)</span> since Tue 2026-06-23; live session initialized</p>
-              <p className="text-teal-400/80">   Main PID: 31337 (core-engine)</p>
-              <div className="pt-2 flex items-center gap-1.5 text-zinc-600">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>All units operational. CLI ready for guest queries.</span>
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24 text-slate-200">
+            {/* System Status Banner */}
+            <motion.div variants={fadeInVariants} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 text-xs space-y-2 shadow-lg backdrop-blur-md">
+              <div className="flex items-center justify-between border-b border-slate-850 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-semibold text-slate-200 uppercase tracking-wider text-[10px]">Workspace Status</span>
+                </div>
+                <span className="text-[10px] text-slate-500 font-mono">NODE: ONLINE</span>
+              </div>
+              <div className="grid gap-2 sm:grid-cols-3 text-slate-400 font-mono">
+                <p>Status: <span className="text-emerald-400 font-bold">Active</span></p>
+                <p>Environment: <span className="text-sky-400">Production</span></p>
+                <p>Session: <span className="text-indigo-400">{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-USER'}</span></p>
               </div>
             </motion.div>
 
             {/* Widescreen Banner Cover & Profile Header */}
-            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-teal-950 bg-black/40 shadow-xl shadow-teal-955/10">
-              <div className="h-48 md:h-64 w-full relative bg-gradient-to-r from-teal-950/80 via-black to-zinc-950 border-b border-teal-950">
+            <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-900/40 shadow-xl">
+              <div className="h-48 md:h-64 w-full relative bg-gradient-to-r from-slate-900/80 via-black to-zinc-950 border-b border-slate-800">
                 {coverImageUrl ? (
                   <img src={coverImageUrl} alt="Profile Cover" className="w-full h-full object-cover opacity-50" />
                 ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:20px_20px]" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               </div>
@@ -660,20 +662,20 @@ export default function PortfolioClient({
                 <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left z-10">
                   {portfolio.showProfilePhoto !== false && (
                     <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-black bg-zinc-900 shadow-2xl flex-shrink-0">
-                      {renderAvatar("w-full h-full filter sepia brightness-90 contrast-125 border border-teal-500/30", "text-2xl")}
+                      {renderAvatar("w-full h-full object-cover border border-slate-850", "text-2xl")}
                     </div>
                   )}
                   <div className="md:pb-2">
                     <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
-                      <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl font-mono">{ownerName}</h1>
-                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-teal-500/10 border border-teal-500/20 text-[9px] font-semibold text-teal-400">
+                      <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">{ownerName}</h1>
+                      <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-[9px] font-semibold text-sky-400">
                         <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         <span>{availabilityStatus}</span>
                       </div>
                     </div>
-                    <p className="text-teal-450 text-sm font-semibold">&lt;{headline} /&gt;</p>
+                    <p className="text-slate-400 text-sm font-semibold">{headline}</p>
                     <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-zinc-500 mt-2">
-                      <MapPin className="h-3.5 w-3.5 text-teal-500" />
+                      <MapPin className="h-3.5 w-3.5 text-sky-400" />
                       <span>{userLocation}</span>
                     </div>
                   </div>
@@ -685,7 +687,7 @@ export default function PortfolioClient({
                       download
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl bg-teal-950 text-teal-400 border border-teal-500/30 hover:bg-teal-900 hover:text-teal-300 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
+                      className="inline-flex items-center gap-2 rounded-xl bg-sky-950 text-sky-400 border border-sky-500/30 hover:bg-sky-900 hover:text-sky-300 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-sky-500/10"
                     >
                       <FileText className="h-4 w-4" />
                       <span>Download Resume</span>
@@ -693,9 +695,9 @@ export default function PortfolioClient({
                   )}
                   <a
                     href="#contact"
-                    className="inline-flex items-center gap-2 rounded-xl border border-zinc-800 bg-black/60 hover:bg-zinc-900 text-teal-500 hover:text-teal-400 font-semibold px-4 py-2.5 text-xs transition-all duration-300"
+                    className="inline-flex items-center gap-2 rounded-xl border border-zinc-800 bg-black/60 hover:bg-zinc-900 text-slate-200 hover:text-sky-400 font-semibold px-4 py-2.5 text-xs transition-all duration-300"
                   >
-                    <Mail className="h-4 w-4 text-teal-500" />
+                    <Mail className="h-4 w-4 text-slate-400" />
                     <span>Get in Touch</span>
                   </a>
                 </div>
@@ -704,41 +706,41 @@ export default function PortfolioClient({
 
             {/* Profile Bio Section */}
             <motion.section variants={fadeInVariants} className="relative pt-4">
-              <div className="border border-teal-950 bg-black/40 rounded-xl p-6">
-                <div className="flex items-center space-x-2 border-b border-teal-950 pb-3 mb-4 text-xs text-teal-500">
-                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                  <span>cat about_me.txt</span>
+              <div className="border border-slate-800 bg-slate-900/40 rounded-xl p-6">
+                <div className="flex items-center space-x-2 border-b border-slate-800 pb-3 mb-4">
+                  <UserIcon className="h-4 w-4 text-sky-400" />
+                  <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">About Me</span>
                 </div>
                 <div className="grid gap-8 md:grid-cols-3 items-center">
                   <div className="md:col-span-2 max-w-4xl">
-                    <p className="text-sm text-zinc-300 leading-relaxed font-mono">
+                    <p className="text-sm text-zinc-350 leading-relaxed">
                       {bio}
                     </p>
                     <div className="mt-6 flex gap-3">
                       {socialLinks.github && (
-                        <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                        <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-800 bg-slate-800/20 p-2 text-slate-300 hover:bg-slate-800/40 transition-all">
                           <Github className="h-4.5 w-4.5" />
                         </a>
                       )}
                       {socialLinks.linkedin && (
-                        <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                        <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-800 bg-slate-800/20 p-2 text-slate-300 hover:bg-slate-800/40 transition-all">
                           <Linkedin className="h-4.5 w-4.5" />
                         </a>
                       )}
                       {socialLinks.twitter && (
-                        <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                        <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-800 bg-slate-800/20 p-2 text-slate-300 hover:bg-slate-800/40 transition-all">
                           <Twitter className="h-4.5 w-4.5" />
                         </a>
                       )}
                       {socialLinks.website && (
-                        <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-teal-950 bg-teal-950/10 p-2 text-teal-400 hover:bg-teal-950/20 transition-all">
+                        <a href={socialLinks.website} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-800 bg-slate-800/20 p-2 text-slate-300 hover:bg-slate-800/40 transition-all">
                           <Globe className="h-4.5 w-4.5" />
                         </a>
                       )}
                     </div>
                   </div>
-                  <div className="md:col-span-1 hidden md:block h-64 border border-teal-950 rounded-xl bg-black/60 relative overflow-hidden">
-                    <Globe3DCanvas color="#14b8a6" glowColor="rgba(20, 184, 166, 0.04)" />
+                  <div className="md:col-span-1 hidden md:block h-64 border border-slate-800 rounded-xl bg-slate-900/60 relative overflow-hidden">
+                    <Globe3DCanvas color="#38bdf8" glowColor="rgba(56, 189, 248, 0.04)" />
                   </div>
                 </div>
               </div>
@@ -746,49 +748,49 @@ export default function PortfolioClient({
 
             {/* Candidate Snapshot */}
             <motion.section variants={fadeInVariants} className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>run candidate_metrics.sh</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Briefcase className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Candidate Snapshot</span>
               </div>
               <div className="grid gap-6 md:grid-cols-3">
-                <Tilt3DCard glowColor="teal" className="md:col-span-2 rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between">
+                <Tilt3DCard glowColor="sky" className="md:col-span-2 rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                    <div className="p-3 bg-slate-800/10 rounded-lg border border-slate-800/30 text-center">
                       <span className="block text-2xl font-extrabold text-white">{displayYearsOfExp}</span>
-                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Years Exp</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Years Exp</span>
                     </div>
-                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
-                      <span className="block text-2xl font-extrabold text-teal-400">{projects.length}</span>
-                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Projects</span>
+                    <div className="p-3 bg-slate-800/10 rounded-lg border border-slate-800/30 text-center">
+                      <span className="block text-2xl font-extrabold text-sky-400">{projects.length}</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Projects</span>
                     </div>
-                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                    <div className="p-3 bg-slate-800/10 rounded-lg border border-slate-800/30 text-center">
                       <span className="block text-2xl font-extrabold text-white">{skills.length}</span>
-                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Skills</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Skills</span>
                     </div>
-                    <div className="p-3 bg-teal-950/10 rounded-lg border border-teal-950/30 text-center">
+                    <div className="p-3 bg-slate-800/10 rounded-lg border border-slate-800/30 text-center">
                       <span className="block text-2xl font-extrabold text-white">{certifications.length}</span>
-                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Certs</span>
+                      <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Certs</span>
                     </div>
                   </div>
-                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-teal-950/40 text-xs">
+                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-slate-800/40 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-zinc-550">GitHub Status:</span>
+                      <span className="text-zinc-550 font-semibold">GitHub Status:</span>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
-                        githubUser ? 'bg-teal-500/10 text-teal-400 border border-teal-500/20' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'
+                        githubUser ? 'bg-sky-500/10 text-sky-450 border border-sky-500/20' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'
                       }`}>
                         {githubUser ? 'Connected' : 'Not Connected'}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-zinc-550">Availability:</span>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-400 truncate max-w-full">
+                      <span className="text-zinc-550 font-semibold">Availability:</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/20 text-[10px] font-bold text-sky-450 truncate max-w-full">
                         {availabilityStatus}
                       </span>
                     </div>
                   </div>
                 </Tilt3DCard>
 
-                <Tilt3DCard glowColor="purple" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between">
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between">
                   <div>
                     <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold block mb-3">// Top Stack</span>
                     <div className="flex flex-wrap gap-2">
@@ -797,40 +799,40 @@ export default function PortfolioClient({
                         .sort((a, b) => b.proficiency - a.proficiency)
                         .slice(0, 4)
                         .map((s) => (
-                          <span key={s.name} className="px-2 py-0.5 rounded bg-teal-950/20 border border-teal-950/40 text-xs text-teal-450">
+                          <span key={s.name} className="px-2 py-0.5 rounded bg-sky-950/20 border border-sky-900/30 text-xs text-sky-400">
                             {s.name}
                           </span>
                         ))}
                     </div>
                   </div>
-                  <p className="text-[10px] text-zinc-550 leading-relaxed mt-4">Top technologies sorted by verified proficiency level.</p>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed mt-4">Top technologies sorted by verified proficiency level.</p>
                 </Tilt3DCard>
               </div>
             </motion.section>
 
             {/* Recruiter Intelligence Dashboard */}
             <motion.section variants={fadeInVariants} className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>dashboard --recruiter-intelligence</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Cpu className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Recruiter Intelligence Dashboard</span>
               </div>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
+                <Tilt3DCard glowColor="sky" className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Portfolio Score</span>
-                    <CheckCircle2 className="h-4 w-4 text-teal-400" />
+                    <CheckCircle2 className="h-4 w-4 text-sky-450" />
                   </div>
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-3xl font-extrabold text-white">{scores.portfolioScore}</span>
                     <span className="text-xs text-zinc-550">/ 100</span>
                   </div>
-                  <div className="h-1.5 w-full bg-zinc-950 border border-teal-950/40 rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" style={{ width: `${scores.portfolioScore}%` }} />
+                  <div className="h-1.5 w-full bg-zinc-950 border border-slate-800/40 rounded-full overflow-hidden mb-2">
+                    <div className="h-full bg-gradient-to-r from-sky-500 to-indigo-400" style={{ width: `${scores.portfolioScore}%` }} />
                   </div>
                   <p className="text-[9px] text-zinc-500">Profile completeness index score.</p>
                 </Tilt3DCard>
 
-                <Tilt3DCard glowColor="purple" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
+                <Tilt3DCard glowColor="purple" className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Recruiter Readiness</span>
                     <Sparkles className="h-4 w-4 text-purple-400" />
@@ -843,7 +845,7 @@ export default function PortfolioClient({
                   <p className="text-[9px] text-zinc-500">Formatting and navigation evaluation.</p>
                 </Tilt3DCard>
 
-                <Tilt3DCard glowColor="pink" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
+                <Tilt3DCard glowColor="pink" className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">ATS Match Capability</span>
                     <FileText className="h-4 w-4 text-pink-400" />
@@ -851,13 +853,13 @@ export default function PortfolioClient({
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-3xl font-extrabold text-white">{scores.atsScore}%</span>
                   </div>
-                  <div className="h-1.5 w-full bg-zinc-950 border border-teal-950/40 rounded-full overflow-hidden mb-2">
+                  <div className="h-1.5 w-full bg-zinc-950 border border-slate-800/40 rounded-full overflow-hidden mb-2">
                     <div className="h-full bg-gradient-to-r from-pink-500 to-yellow-400" style={{ width: `${scores.atsScore}%` }} />
                   </div>
                   <p className="text-[9px] text-zinc-500">Resume parsed match index capability.</p>
                 </Tilt3DCard>
 
-                <Tilt3DCard glowColor="indigo" className="rounded-xl border border-teal-950 bg-black/40 p-5 flex flex-col justify-between h-full">
+                <Tilt3DCard glowColor="indigo" className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between h-full">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">GitHub Sync Health</span>
                     <Github className="h-4 w-4 text-indigo-400" />
@@ -874,9 +876,9 @@ export default function PortfolioClient({
 
             {githubUser && (
               <AnimatedSection className="space-y-6">
-                <div className="flex items-center space-x-2 text-xs text-teal-500">
-                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                  <span>run github_metrics.sh --user={githubUser}</span>
+                <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                  <Github className="h-4 w-4 text-sky-400" />
+                  <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">GitHub Integration Metrics</span>
                 </div>
                 <GitHubStats username={githubUser} />
               </AnimatedSection>
@@ -884,52 +886,52 @@ export default function PortfolioClient({
 
             {/* Featured Projects Showcase */}
             <AnimatedSection id="projects" className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>list_projects --featured</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Code className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Featured Projects Showcase</span>
               </div>
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 {projectCategories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveFilterCategory(cat)}
-                    className={`rounded-lg px-3.5 py-1.5 text-xs font-mono border transition-all ${
+                    className={`rounded-lg px-3.5 py-1.5 text-xs border transition-all ${
                       activeFilterCategory === cat
-                        ? 'bg-teal-950 text-teal-400 border-teal-500/50 font-bold'
-                        : 'bg-black/50 text-zinc-500 border-teal-950/40 hover:text-teal-400 hover:border-teal-950'
+                        ? 'bg-sky-950 text-sky-400 border-sky-500/50 font-bold'
+                        : 'bg-slate-900/50 text-zinc-400 border-slate-800/40 hover:text-sky-400 hover:border-slate-800'
                     }`}
                   >
-                    [{cat.toUpperCase()}]
+                    {cat.toUpperCase()}
                   </button>
                 ))}
               </div>
 
               {filteredProjects.length === 0 ? (
-                <div className="text-center py-12 border border-teal-950 rounded-xl bg-black/20">
+                <div className="text-center py-12 border border-slate-800 rounded-xl bg-slate-900/20">
                   <p className="text-sm text-zinc-500">No matching projects found.</p>
                 </div>
               ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {filteredProjects.map((project) => (
-                    <Tilt3DCard key={project._id} glowColor="teal" className="rounded-xl overflow-hidden h-full flex">
-                      <article className="flex-1 flex flex-col overflow-hidden border border-teal-950 bg-black/40 hover:border-teal-500/30 transition-all duration-300 group relative">
+                    <Tilt3DCard key={project._id} glowColor="sky" className="rounded-xl overflow-hidden h-full flex">
+                      <article className="flex-1 flex flex-col overflow-hidden border border-slate-800 bg-slate-900/40 hover:border-sky-500/30 transition-all duration-300 group relative">
                         <div className="aspect-video w-full overflow-hidden bg-zinc-950 relative">
                           <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" />
-                          <div className="absolute top-3 right-3 rounded-md bg-black/85 px-2 py-0.5 text-[9px] font-mono text-teal-400 border border-teal-500/20">
+                          <div className="absolute top-3 right-3 rounded-md bg-black/85 px-2 py-0.5 text-[9px] text-sky-400 border border-sky-500/20">
                             {project.category}
                           </div>
                         </div>
                         <div className="flex flex-1 flex-col p-5">
-                          <h3 className="text-base font-bold text-white group-hover:text-teal-400 transition-colors font-mono">{project.title}</h3>
-                          <p className="mt-2 text-xs text-zinc-400 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
+                          <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors">{project.title}</h3>
+                          <p className="mt-2 text-xs text-slate-405 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
                           <div className="mt-4 flex flex-wrap gap-1.5">
                             {project.techStack.slice(0, 4).map((tech) => (
-                              <span key={tech} className="rounded bg-teal-950/20 px-2 py-0.5 text-[10px] text-teal-450 border border-teal-950/40">{tech}</span>
+                              <span key={tech} className="rounded bg-sky-950/20 px-2 py-0.5 text-[10px] text-sky-400 border border-sky-900/30">{tech}</span>
                             ))}
                           </div>
                           <div className="mt-4 flex gap-2">
-                            <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-teal-950 bg-teal-950/10 py-2 text-xs font-semibold text-teal-450 hover:bg-teal-950/20 transition-all">
-                              <span>read_case_study()</span>
+                            <button onClick={() => setSelectedProject(project)} className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-slate-800 bg-slate-800/20 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-800/40 transition-all">
+                              <span>Review Case Study</span>
                             </button>
                           </div>
                         </div>
@@ -940,35 +942,35 @@ export default function PortfolioClient({
               )}
             </AnimatedSection>
 
-            {/* Technical Skills grouped and galaxy orbit */}
+            {/* Technical Skills breakdown */}
             <AnimatedSection className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>analyze_skills --category-breakdown</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Cpu className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Technical Skills Breakdown</span>
               </div>
               <div className="grid gap-12 lg:grid-cols-5 items-start">
                 <div className="lg:col-span-2">
-                  <div className="p-4 border border-teal-950 bg-black/40 rounded-xl">
+                  <div className="p-4 border border-slate-800 bg-slate-900/40 rounded-xl">
                     <p className="text-[10px] uppercase text-zinc-500 font-bold mb-3">// 3D Galaxy Visualization</p>
                     <TechGalaxy />
                   </div>
                 </div>
                 <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
                   {Object.entries(skillsByCategory).map(([category, items]) => (
-                    <div key={category} className="rounded-xl border border-teal-950 bg-black/40 p-5">
-                      <div className="flex items-center space-x-2 border-b border-teal-950 pb-3 mb-4">
+                    <div key={category} className="rounded-xl border border-slate-800 bg-slate-900/40 p-5">
+                      <div className="flex items-center space-x-2 border-b border-slate-800 pb-3 mb-4">
                         {getCategoryIcon(category)}
-                        <h3 className="font-mono text-xs font-bold text-teal-400 capitalize">{category}</h3>
+                        <h3 className="text-xs font-bold text-sky-455 capitalize">{category}</h3>
                       </div>
                       <div className="space-y-4">
                         {items.map((skill) => (
                           <div key={skill.name}>
-                            <div className="flex items-center justify-between text-[11px] text-zinc-400 mb-1">
+                            <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
                               <span>{skill.name}</span>
-                              <span className="text-teal-400">{skill.proficiency}%</span>
+                              <span className="text-sky-400">{skill.proficiency}%</span>
                             </div>
-                            <div className="h-1 w-full rounded-full bg-zinc-950 border border-teal-950/30 overflow-hidden">
-                              <div className="h-full rounded-full bg-gradient-to-r from-teal-600 to-emerald-400" style={{ width: `${skill.proficiency}%` }} />
+                            <div className="h-1 w-full rounded-full bg-zinc-950 border border-slate-800/30 overflow-hidden">
+                              <div className="h-full rounded-full bg-gradient-to-r from-sky-600 to-indigo-400" style={{ width: `${skill.proficiency}%` }} />
                             </div>
                           </div>
                         ))}
@@ -981,29 +983,29 @@ export default function PortfolioClient({
 
             {/* Experience Timeline */}
             <AnimatedSection className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>journalctl -u work-experience.log --no-pager</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Briefcase className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Work History Timeline</span>
               </div>
-              <div className="relative border-l border-teal-950/60 ml-4 space-y-12">
+              <div className="relative border-l border-slate-800/60 ml-4 space-y-12">
                 {experiences
                   .filter(exp => exp.type === 'job' || exp.type === 'internship')
                   .map((exp, idx) => (
                     <div key={idx} className="relative pl-8 group">
-                      <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-teal-500 bg-black group-hover:scale-125 transition-transform duration-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-teal-400 mx-auto" />
+                      <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-sky-500 bg-slate-950 group-hover:scale-125 transition-transform duration-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-sky-400 mx-auto" />
                       </div>
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                        <h3 className="text-sm font-bold text-white group-hover:text-teal-400 transition-colors">
-                          {exp.role} @ <span className="text-teal-500">{exp.organization}</span>
+                        <h3 className="text-sm font-bold text-white group-hover:text-sky-400 transition-colors">
+                          {exp.role} @ <span className="text-sky-500">{exp.organization}</span>
                         </h3>
-                        <span className="text-xs text-zinc-500 flex items-center gap-1.5">
+                        <span className="text-xs text-zinc-550 flex items-center gap-1.5">
                           <Calendar className="h-3.5 w-3.5" />
                           {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                         </span>
                       </div>
-                      <p className="text-[10px] text-teal-600 uppercase tracking-widest font-semibold">{exp.type}</p>
-                      <p className="text-xs text-zinc-400 leading-relaxed mb-3">{exp.description}</p>
+                      <p className="text-[10px] text-sky-600 uppercase tracking-widest font-semibold">{exp.type}</p>
+                      <p className="text-xs text-slate-400 leading-relaxed mb-3">{exp.description}</p>
                       {exp.responsibilities && exp.responsibilities.length > 0 && (
                         <ul className="list-disc list-inside text-xs text-zinc-500 space-y-1 pl-2 mb-3">
                           {exp.responsibilities.map((r, ri) => (
@@ -1014,7 +1016,7 @@ export default function PortfolioClient({
                       {exp.technologiesUsed && (
                         <div className="flex flex-wrap gap-1.5">
                           {exp.technologiesUsed.map(t => (
-                            <span key={t} className="rounded bg-teal-950/20 px-2 py-0.5 text-[9px] text-teal-400/80 border border-teal-950/30">{t}</span>
+                            <span key={t} className="rounded bg-sky-950/20 px-2 py-0.5 text-[9px] text-sky-400/80 border border-sky-900/30">{t}</span>
                           ))}
                         </div>
                       )}
@@ -1025,26 +1027,26 @@ export default function PortfolioClient({
 
             {/* Education and certifications/achievements */}
             <AnimatedSection className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>cat education_and_certs.md</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <BookOpen className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Education & Credentials</span>
               </div>
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-6">
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">// Education Credentials</h3>
                   {educationExperiences.map((edu, idx) => (
-                    <div key={idx} className="rounded-xl border border-teal-950 bg-black/40 p-5 relative overflow-hidden">
+                    <div key={idx} className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 relative overflow-hidden">
                       <div className="flex justify-between items-start gap-4 mb-3">
                         <div>
                           <h4 className="text-xs font-bold text-white">{edu.role}</h4>
-                          <p className="text-[10px] text-teal-400 font-mono mt-0.5">{edu.organization}</p>
+                          <p className="text-[10px] text-sky-405 mt-0.5">{edu.organization}</p>
                         </div>
-                        <span className="text-[10px] text-zinc-550 font-mono flex items-center gap-1 shrink-0">
+                        <span className="text-[10px] text-zinc-550 flex items-center gap-1 shrink-0">
                           <Calendar className="h-3.5 w-3.5 text-zinc-650" />
                           {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
                         </span>
                       </div>
-                      <p className="text-[11px] text-zinc-405 leading-relaxed">{edu.description}</p>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">{edu.description}</p>
                     </div>
                   ))}
                 </div>
@@ -1053,13 +1055,13 @@ export default function PortfolioClient({
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">// Certifications</h3>
                   <div className="space-y-4">
                     {certifications.slice(0, 3).map((cert) => (
-                      <div key={cert._id} className="rounded-xl border border-teal-950 bg-black/40 p-4 flex justify-between items-center gap-3 hover:border-teal-500/20 transition-all duration-300">
+                      <div key={cert._id} className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 flex justify-between items-center gap-3 hover:border-sky-500/20 transition-all duration-300">
                         <div>
                           <h4 className="text-xs font-bold text-white leading-snug">{cert.title}</h4>
-                          <p className="text-[10px] text-zinc-550 font-mono">{cert.issuer}</p>
+                          <p className="text-[10px] text-zinc-500">{cert.issuer}</p>
                         </div>
                         {cert.credentialUrl && (
-                          <a href={cert.credentialUrl} target="_blank" rel="noreferrer" className="flex-shrink-0 text-[10px] bg-teal-950/40 text-teal-400 border border-teal-500/20 px-2 py-1 rounded">Verify</a>
+                          <a href={cert.credentialUrl} target="_blank" rel="noreferrer" className="flex-shrink-0 text-[10px] bg-sky-950/40 text-sky-400 border border-sky-500/20 px-2 py-1 rounded">Verify</a>
                         )}
                       </div>
                     ))}
@@ -1071,21 +1073,21 @@ export default function PortfolioClient({
             {/* Testimonials */}
             {testimonials.length > 0 && (
               <AnimatedSection className="space-y-6">
-                <div className="flex items-center space-x-2 text-xs text-teal-500">
-                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                  <span>read_recommendations.sh --approved</span>
+                <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                  <Sparkles className="h-4 w-4 text-sky-400" />
+                  <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Recommendations & Endorsements</span>
                 </div>
                 <div className="grid gap-6 md:grid-cols-2">
                   {testimonials.map((testimonial) => (
-                    <div key={testimonial._id} className="rounded-xl border border-teal-950 bg-black/40 p-6 flex flex-col justify-between font-mono">
-                      <p className="text-xs text-zinc-305 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
+                    <div key={testimonial._id} className="rounded-xl border border-slate-800 bg-slate-900/40 p-6 flex flex-col justify-between">
+                      <p className="text-xs text-zinc-300 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
                       <div className="mt-6 flex items-center gap-3">
-                        <div className="h-8 w-8 rounded bg-teal-950/50 border border-teal-900 flex items-center justify-center text-xs font-bold text-teal-400">
+                        <div className="h-8 w-8 rounded bg-sky-950/50 border border-sky-900 flex items-center justify-center text-xs font-bold text-sky-400">
                           {testimonial.authorName.charAt(0)}
                         </div>
                         <div>
                           <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
-                          <p className="text-[9px] text-teal-400/80">{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                          <p className="text-[9px] text-sky-400/80">{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
                         </div>
                       </div>
                     </div>
@@ -1097,19 +1099,19 @@ export default function PortfolioClient({
             {/* Resume Center */}
             {activeResume && (
               <AnimatedSection className="space-y-6">
-                <div className="flex items-center space-x-2 text-xs text-teal-500">
-                  <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                  <span>render_cv_document --interactive</span>
+                <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                  <FileText className="h-4 w-4 text-sky-400" />
+                  <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Professional Resume</span>
                 </div>
-                <div className="rounded-2xl border border-teal-950 bg-black/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
                   <div className="space-y-4 text-center md:text-left">
                     <div className="flex items-center justify-center md:justify-start gap-2.5">
-                      <div className="h-10 w-10 rounded-lg bg-teal-950/40 text-teal-400 flex items-center justify-center border border-teal-500/20">
+                      <div className="h-10 w-10 rounded-lg bg-sky-950/40 text-sky-400 flex items-center justify-center border border-sky-500/20">
                         <FileText className="h-5.5 w-5.5" />
                       </div>
                       <div>
                         <h3 className="text-sm font-bold text-white">{activeResume.label || 'Standard Professional Resume'}</h3>
-                        <p className="text-[10px] text-zinc-550 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
+                        <p className="text-[10px] text-zinc-500 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
                       </div>
                     </div>
                     <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
@@ -1118,7 +1120,7 @@ export default function PortfolioClient({
                         download
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-xl bg-teal-950 hover:bg-teal-900 border border-teal-500/30 text-teal-400 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/10"
+                        className="inline-flex items-center gap-2 rounded-xl bg-sky-955 hover:bg-sky-900 border border-sky-500/30 text-sky-400 font-bold px-4 py-2.5 text-xs transition-all duration-300 hover:shadow-lg hover:shadow-sky-500/10"
                       >
                         <FileText className="h-4 w-4" />
                         <span>Download Active Resume</span>
@@ -1126,15 +1128,15 @@ export default function PortfolioClient({
                     </div>
                   </div>
                   
-                  <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-teal-950 bg-black/60 p-4 flex flex-col justify-between hover:border-teal-500/20 transition-colors">
-                    <div className="border-b border-teal-950/50 pb-3 flex items-center justify-between text-[9px] text-zinc-500 uppercase tracking-wider font-bold">
+                  <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-slate-800 bg-slate-950/60 p-4 flex flex-col justify-between hover:border-sky-500/20 transition-colors">
+                    <div className="border-b border-slate-800 pb-3 flex items-center justify-between text-[9px] text-zinc-550 uppercase tracking-wider font-bold">
                       <span>Document Preview</span>
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
-                      <FileText className="h-10 w-10 text-teal-950 mb-2 animate-bounce" />
-                      <p className="text-xs text-teal-400 font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
-                      <p className="text-[9px] text-zinc-550 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
+                      <FileText className="h-10 w-10 text-slate-800 mb-2 animate-bounce" />
+                      <p className="text-xs text-sky-400 font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
+                      <p className="text-[9px] text-zinc-500 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
                     </div>
                   </div>
                 </div>
@@ -1143,57 +1145,57 @@ export default function PortfolioClient({
 
             {/* Contact Coordinates & Form */}
             <AnimatedSection id="contact" className="space-y-6">
-              <div className="flex items-center space-x-2 text-xs text-teal-500">
-                <span className="text-zinc-650">guest@portfolio-os:~$</span>
-                <span>telnet contact-session.port:23</span>
+              <div className="flex items-center space-x-2 border-b border-slate-850 pb-2">
+                <Mail className="h-4 w-4 text-sky-400" />
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">Get In Touch</span>
               </div>
               <div className="grid gap-12 lg:grid-cols-5 items-start">
                 <div className="lg:col-span-2 space-y-6">
-                  <div className="rounded-xl border border-teal-950 bg-black/40 p-5 space-y-4">
-                    <p className="text-[10px] uppercase tracking-wider text-zinc-550 font-bold border-b border-teal-950/50 pb-2">// Contact Coordinates</p>
-                    {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Github className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.github}</span></a>}
-                    {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Linkedin className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.linkedin}</span></a>}
-                    {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Twitter className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.twitter}</span></a>}
-                    {socialLinks.website && <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-450 hover:text-teal-400 transition-colors"><Globe className="h-4.5 w-4.5 text-teal-500" /><span className="truncate">{socialLinks.website}</span></a>}
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-4">
+                    <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold border-b border-slate-850 pb-2">// Contact Coordinates</p>
+                    {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-400 hover:text-sky-400 transition-colors"><Github className="h-4.5 w-4.5 text-sky-500" /><span className="truncate">{socialLinks.github}</span></a>}
+                    {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-400 hover:text-sky-400 transition-colors"><Linkedin className="h-4.5 w-4.5 text-sky-500" /><span className="truncate">{socialLinks.linkedin}</span></a>}
+                    {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-400 hover:text-sky-400 transition-colors"><Twitter className="h-4.5 w-4.5 text-sky-500" /><span className="truncate">{socialLinks.twitter}</span></a>}
+                    {socialLinks.website && <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-zinc-400 hover:text-sky-400 transition-colors"><Globe className="h-4.5 w-4.5 text-sky-500" /><span className="truncate">{socialLinks.website}</span></a>}
                   </div>
 
-                  <div className="rounded-xl border border-teal-950 bg-black/40 p-5 space-y-4">
-                    <p className="text-[10px] uppercase tracking-wider text-zinc-550 font-bold border-b border-teal-950/50 pb-2">// Recruiter Actions</p>
+                  <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-4">
+                    <p className="text-[10px] uppercase tracking-wider text-zinc-500 font-bold border-b border-slate-850 pb-2">// Recruiter Actions</p>
                     <div className="grid gap-2">
-                      <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-950/30 hover:bg-teal-950/50 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono">
+                      <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-sky-950/30 hover:bg-sky-955/50 border border-sky-500/25 px-3 py-2 text-left text-xs font-semibold text-sky-400 transition-all">
                         <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
                       </button>
-                      <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-teal-950/30 hover:bg-teal-950/50 border border-teal-500/25 px-3 py-2 text-left text-xs font-semibold text-teal-400 transition-all font-mono">
+                      <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-sky-950/30 hover:bg-sky-955/50 border border-sky-500/25 px-3 py-2 text-left text-xs font-semibold text-sky-400 transition-all">
                         <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   </div>
                 </div>
 
-                <div className="lg:col-span-3 rounded-xl border border-teal-950 bg-black/40 p-6">
+                <div className="lg:col-span-3 rounded-xl border border-slate-800 bg-slate-900/40 p-6">
                   <form id="contact-form" onSubmit={handleContactSubmit} className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
-                        <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                        <label className="block text-[9px] uppercase tracking-wider text-zinc-500 mb-1">Your Name</label>
+                        <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-slate-950 border border-slate-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-sky-500 transition-colors" />
                       </div>
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Email</label>
-                        <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                        <label className="block text-[9px] uppercase tracking-wider text-zinc-500 mb-1">Your Email</label>
+                        <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-slate-950 border border-slate-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-sky-500 transition-colors" />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Subject</label>
-                      <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                      <label className="block text-[9px] uppercase tracking-wider text-zinc-500 mb-1">Subject</label>
+                      <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-slate-950 border border-slate-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-sky-500 transition-colors" />
                     </div>
                     <div>
-                      <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Message</label>
-                      <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-black border border-teal-950 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
+                      <label className="block text-[9px] uppercase tracking-wider text-zinc-500 mb-1">Message</label>
+                      <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-slate-950 border border-slate-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-sky-500 transition-colors resize-none" />
                     </div>
-                    <button type="submit" disabled={contactMutation.isPending} className="w-full bg-teal-955 hover:bg-teal-900 border border-teal-500/40 text-teal-400 font-bold py-3 rounded-lg text-xs transition-all flex items-center justify-center gap-2">
+                    <button type="submit" disabled={contactMutation.isPending} className="w-full bg-sky-500 hover:bg-sky-400 text-slate-955 font-bold py-3 rounded-lg text-xs transition-all flex items-center justify-center gap-2">
                       {contactMutation.isPending ? 'Sending...' : 'Submit Message Request'}
                     </button>
-                    {contactSuccess && <p className="text-[10px] text-emerald-400 text-center mt-2">✓ Message submitted successfully.</p>}
+                    {contactSuccess && <p className="text-[10px] text-emerald-450 text-center mt-2">✓ Message submitted successfully.</p>}
                   </form>
                 </div>
               </div>

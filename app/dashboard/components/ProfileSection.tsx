@@ -23,7 +23,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [profileWebsite, setProfileWebsite] = useState(user.socialLinks?.website || '');
 
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('corporate');
+  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
@@ -53,7 +53,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   // Sync portfolio settings when fetched
   useEffect(() => {
     if (portfolioSettings) {
-      setPortfolioTheme(portfolioSettings.theme === 'portfolio-os' || !portfolioSettings.theme ? 'corporate' : portfolioSettings.theme);
+      setPortfolioTheme(portfolioSettings.theme || 'portfolio-os');
       setPortfolioHeadline(portfolioSettings.headline || '');
       setPortfolioVisibility(portfolioSettings.visibility || 'public');
       setPortfolioCustomDomain(portfolioSettings.customDomain || '');
@@ -168,6 +168,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
               onChange={e => setPortfolioTheme(e.target.value as any)}
               className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-xs text-zinc-200 outline-none focus:border-teal-500 font-mono"
             >
+              <option value="portfolio-os">Portfolio OS (Slate & Sky Theme)</option>
               <option value="corporate">Executive Corporate (Sleek professional)</option>
               <option value="aurora-glass">Aurora Glassmorphism (Interactive Glow)</option>
               <option value="nordic-frost">Nordic Frost (Clean Ice-Blue)</option>

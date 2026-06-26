@@ -19,7 +19,7 @@ export default function Page({ params }: Props) {
       if (user?.username) {
         router.replace(`/p/${user.username}/blog/${slug}`);
       } else {
-        router.replace(`/p/pratik-satish-date/blog/${slug}`);
+        router.replace(`/p/pratik-date/blog/${slug}`);
       }
     }
   }, [user, isLoading, router, slug]);

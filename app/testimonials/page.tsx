@@ -14,7 +14,7 @@ export default function Page() {
       if (user?.username) {
         router.replace(`/p/${user.username}/testimonials`);
       } else {
-        router.replace('/p/pratik-satish-date/testimonials');
+        router.replace('/p/pratik-date/testimonials');
       }
     }
   }, [user, isLoading, router]);
