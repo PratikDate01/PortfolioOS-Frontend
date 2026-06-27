@@ -149,8 +149,8 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       <form onSubmit={handleProfileSave} className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-6 backdrop-blur-md space-y-6">
         <div className="border-b border-zinc-900 pb-3 flex justify-between items-center">
           <div>
-            <h2 className="text-base font-bold text-white font-sans">Theme & General Portfolio Settings</h2>
-            <p className="text-xs text-zinc-500 font-sans">Configure your portfolio aesthetics, domain details, and sync hooks.</p>
+            <h2 className="text-base font-bold text-white font-sans">General Portfolio Settings</h2>
+            <p className="text-xs text-zinc-500 font-sans">Configure your portfolio visibility, domain details, and sync hooks.</p>
           </div>
           {saveSuccess && (
             <span className="text-xs text-teal-400 font-semibold font-mono flex items-center gap-1">
@@ -161,20 +161,6 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2">
-          <div>
-            <label className="block text-xs text-zinc-400 font-mono mb-1.5 uppercase font-bold">Portfolio Theme Choice</label>
-            <select
-              value={portfolioTheme}
-              onChange={e => setPortfolioTheme(e.target.value as any)}
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-xs text-zinc-200 outline-none focus:border-teal-500 font-mono"
-            >
-              <option value="portfolio-os">Portfolio OS (Slate & Sky Theme)</option>
-              <option value="corporate">Executive Corporate (Sleek professional)</option>
-              <option value="aurora-glass">Aurora Glassmorphism (Interactive Glow)</option>
-              <option value="nordic-frost">Nordic Frost (Clean Ice-Blue)</option>
-            </select>
-          </div>
-
           <div>
             <label className="block text-xs text-zinc-400 font-mono mb-1.5 uppercase font-bold">Portfolio Visibility</label>
             <select

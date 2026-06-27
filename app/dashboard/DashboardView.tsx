@@ -271,6 +271,21 @@ export default function DashboardView() {
 
   // --- MUTATIONS & HANDLERS ---
 
+  // Theme update mutation
+  const updateThemeMutation = useMutation({
+    mutationFn: async (theme: string) => {
+      const res = await apiFetch('/portfolios/me', {
+        method: 'PATCH',
+        body: JSON.stringify({ theme })
+      });
+      if (res.error) throw new Error(res.error);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['portfolio-settings'] });
+    }
+  });
+
   // Portfolio and Profile save
   const updateProfileMutation = useMutation({
     mutationFn: async (payload: { profile: any; portfolio: any }) => {
@@ -729,7 +744,7 @@ export default function DashboardView() {
             <div className="flex flex-row overflow-x-auto lg:flex-col lg:overflow-x-visible space-x-1.5 lg:space-x-0 lg:space-y-1.5 pb-3 lg:pb-0 scrollbar-none">
               {[
                 { tab: 'overview', label: 'Console Overview', icon: <Layers className="h-4 w-4" /> },
-                { tab: 'profile', label: 'Theme & Profile', icon: <UserIcon className="h-4 w-4" /> },
+                { tab: 'profile', label: 'Profile', icon: <UserIcon className="h-4 w-4" /> },
                 { tab: 'projects', label: 'Projects Showcase', icon: <Code className="h-4 w-4" /> },
                 { tab: 'skills', label: 'Technical Skills', icon: <Cpu className="h-4 w-4" /> },
                 { tab: 'experience', label: 'Work History', icon: <Briefcase className="h-4 w-4" /> },
@@ -781,13 +796,26 @@ export default function DashboardView() {
                         </Link>
                       </div>
 
-                      <div className="border border-zinc-850 bg-zinc-950/50 p-5 rounded-xl text-center">
-                        <Settings className="h-8 w-8 text-indigo-400 mx-auto mb-3" />
-                        <h4 className="text-white text-sm font-bold">Theme Setting</h4>
-                        <p className="text-xs text-zinc-500 mt-1">Active theme template configuration.</p>
-                        <span className="mt-4 inline-block text-xs text-indigo-400 font-mono bg-indigo-950/30 border border-indigo-500/20 px-3 py-1.5 rounded-lg uppercase font-bold">
-                          {portfolioSettings?.theme || 'portfolio-os'}
-                        </span>
+                      <div className="border border-zinc-850 bg-zinc-950/50 p-5 rounded-xl text-center flex flex-col items-center justify-between">
+                        <div className="w-full">
+                          <Settings className="h-8 w-8 text-indigo-400 mx-auto mb-3" />
+                          <h4 className="text-white text-sm font-bold">Theme Setting</h4>
+                          <p className="text-xs text-zinc-500 mt-1 mb-3">Select and configure your active portfolio theme.</p>
+                        </div>
+                        <select
+                          value={portfolioTheme}
+                          onChange={e => {
+                            const newTheme = e.target.value;
+                            setPortfolioTheme(newTheme as any);
+                            updateThemeMutation.mutate(newTheme);
+                          }}
+                          className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-zinc-200 outline-none focus:border-teal-500 font-mono text-center cursor-pointer"
+                        >
+                          <option value="portfolio-os">Portfolio OS (Obsidian Teal)</option>
+                          <option value="corporate">Executive Corporate (Sleek Professional)</option>
+                          <option value="aurora-glass">Aurora Glassmorphism (Interactive Glow)</option>
+                          <option value="nordic-frost">Nordic Frost (Clean Ice-Blue)</option>
+                        </select>
                       </div>
                     </div>
                   </div>
