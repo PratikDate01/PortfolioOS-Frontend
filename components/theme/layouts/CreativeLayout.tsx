@@ -4,9 +4,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Eye, Cpu, Database, Cloud, Brain, CheckCircle2, Award, FileText, Code, 
-  Mail, Github, Linkedin, Twitter, Globe, MapPin, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon
+  Mail, Github, Linkedin, Twitter, Globe, MapPin, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon, X
 } from 'lucide-react';
 import { ThemeLayoutProps } from './types';
+import GitHubStats from '@/components/sections/GitHubStats';
 import Globe3DCanvas from '@/components/sections/Globe3DCanvas';
 import TechGalaxy from '@/components/sections/TechGalaxy';
 
@@ -21,6 +22,7 @@ export default function CreativeLayout({
   blogPosts,
   testimonials,
   visitorCount,
+  sessionId,
   selectedProject,
   setSelectedProject,
   activeFilterCategory,
@@ -146,7 +148,23 @@ export default function CreativeLayout({
       <main className="flex-grow z-10">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
           
-          {/* Creative Hero Display Banner */}
+          {/* 1. System Status Banner */}
+          <AnimatedSection className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-xs space-y-2 shadow-xl backdrop-blur-md">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: themeAccent }} />
+                <span className="font-semibold text-purple-105 uppercase tracking-wider text-[10px] font-mono">Profile Verified</span>
+              </div>
+              <span className="text-[10px] text-purple-400/50 font-mono">WORKSPACE SECURED</span>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-3 text-purple-300/60 font-mono">
+              <p>Status: <span className="font-bold" style={{ color: themeAccent }}>Active</span></p>
+              <p>Platform: <span style={{ color: themeAccent }}>Creative Theme</span></p>
+              <p>Session ID: <span className="opacity-90" style={{ color: themeAccent }}>{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</span></p>
+            </div>
+          </AnimatedSection>
+
+          {/* 2. Creative Hero Display Banner */}
           <AnimatedSection className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl backdrop-blur-md">
             <div className="h-52 md:h-72 w-full relative bg-gradient-to-r from-[#1b033a] via-[#050212] to-[#3a0333] border-b border-white/5">
               {coverImageUrl && (
@@ -206,7 +224,7 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* Interactive About Panel */}
+          {/* 3. Interactive About Panel */}
           <AnimatedSection className="border border-white/10 bg-white/[0.02] rounded-3xl p-8 shadow-2xl backdrop-blur-md">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-3 mb-6">
               <UserIcon className="h-4 w-4" style={{ color: themeAccent }} />
@@ -241,7 +259,7 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* Snapshot Grid */}
+          {/* 4. Snapshot Grid */}
           <AnimatedSection className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
               <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
@@ -299,11 +317,11 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* Interactive Intelligence Dashboard */}
+          {/* 5. Interactive Intelligence Dashboard */}
           <AnimatedSection className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
               <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-purple-100 uppercase tracking-wider">Candidate Intelligence Metrics</span>
+              <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">Candidate Intelligence Metrics</span>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md flex flex-col justify-between">
@@ -366,7 +384,20 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* Featured Projects Gallery */}
+          {/* 6. GitHub Integration Stats */}
+          {githubUser && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
+                <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">GitHub Integration Metrics</span>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md">
+                <GitHubStats username={githubUser} />
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 7. Featured Projects Gallery */}
           {projects.length > 0 && (
             <AnimatedSection id="projects" className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -380,7 +411,7 @@ export default function CreativeLayout({
                     onClick={() => setActiveFilterCategory(cat)}
                     className={`rounded-xl px-4 py-2 text-xs border transition-all ${
                       activeFilterCategory === cat
-                        ? 'bg-purple-950 text-white font-bold'
+                        ? 'bg-purple-955 text-white font-bold'
                         : 'bg-white/5 text-purple-300 border-white/5 hover:text-white hover:border-white/10'
                     }`}
                     style={{
@@ -425,7 +456,7 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* Technical Skills breakdown */}
+          {/* 8. Technical Skills breakdown */}
           {skills.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -472,7 +503,7 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* Work History */}
+          {/* 9. Work History */}
           {jobExperiences.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -512,7 +543,7 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* Education and credentials */}
+          {/* 10. Education and credentials */}
           {(educationExperiences.length > 0 || certifications.length > 0) && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -571,7 +602,7 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* Testimonials */}
+          {/* 11. Testimonials */}
           {testimonials.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -600,7 +631,55 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* Contact form section */}
+          {/* 12. Resume Center */}
+          {activeResume && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
+                <FileText className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">Interactive Resume Workstation</span>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-xl backdrop-blur-md">
+                <div className="space-y-4 text-center md:text-left">
+                  <div className="flex items-center justify-center md:justify-start gap-2.5">
+                    <div 
+                      className="h-10 w-10 rounded-xl flex items-center justify-center border"
+                      style={{ color: themeAccent, borderColor: `${themeAccent}20`, backgroundColor: `${themeAccent}10` }}
+                    >
+                      <FileText className="h-5.5 w-5.5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-white">{activeResume.label || 'Standard Professional Resume'}</h3>
+                      <p className="text-[10px] text-purple-400/50 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
+                    </div>
+                  </div>
+                  <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
+                    <button
+                      onClick={() => handleQuickAction('resume')}
+                      className="inline-flex items-center gap-2 rounded-2xl font-bold px-5 py-2.5 text-xs transition-all text-white"
+                      style={{ background: `linear-gradient(135deg, ${themeAccent}, #ec4899)` }}
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span>Download Active Resume</span>
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="w-full max-w-sm aspect-[4/3] rounded-2xl border border-white/10 bg-black/60 p-4 flex flex-col justify-between hover:border-purple-550 transition-colors">
+                  <div className="border-b border-white/5 pb-3 flex items-center justify-between text-[9px] text-purple-400/50 uppercase tracking-wider font-bold">
+                    <span>Document View</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
+                    <FileText className="h-10 w-10 text-purple-950 mb-2 animate-bounce" style={{ color: themeAccent }} />
+                    <p className="text-xs font-bold" style={{ color: themeAccent }}>{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
+                    <p className="text-[9px] text-purple-400/40 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Verified</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 13. Contact form section */}
           <AnimatedSection id="contact" className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
               <Mail className="h-4 w-4" style={{ color: themeAccent }} />
@@ -617,6 +696,18 @@ export default function CreativeLayout({
                     {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-purple-300 hover:text-white transition-colors"><Twitter className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.twitter}</span></a>}
                   </div>
                 )}
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 space-y-4 shadow-xl">
+                  <p className="text-[10px] uppercase tracking-wider text-purple-400/50 font-bold border-b border-white/5 pb-2">// Quick Actions</p>
+                  <div className="grid gap-2">
+                    <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
+                      <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
+                    </button>
+                    <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
+                      <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
               </div>
 
               <div className="lg:col-span-3 rounded-2xl border border-white/10 bg-white/[0.02] p-6 w-full shadow-2xl backdrop-blur-md">
@@ -653,6 +744,75 @@ export default function CreativeLayout({
           </AnimatedSection>
         </motion.div>
       </main>
+
+      {/* 14. Case Study Detail Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="bg-[#0c051e] border border-purple-500/20 rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto shadow-2xl relative text-purple-200 font-sans">
+            
+            <div className="relative aspect-video w-full bg-black/40 border-b border-white/10">
+              <img src={selectedProject.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={selectedProject.title} className="h-full w-full object-cover opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c051e] via-[#0c051e]/30 to-transparent" />
+              <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 rounded-full bg-black/60 p-2 text-purple-300 hover:text-white transition-colors border border-white/10 shadow">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="p-6 md:p-8 space-y-6">
+              <div>
+                <span className="text-xs font-bold border rounded px-2.5 py-0.5" style={{ color: themeAccent, borderColor: `${themeAccent}30`, backgroundColor: `${themeAccent}12` }}>{selectedProject.category}</span>
+                <h2 className="text-2xl font-black text-white mt-2 bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-pink-300">{selectedProject.title}</h2>
+                <p className="text-xs text-purple-400 mt-2 font-mono flex items-center gap-1">
+                  <Eye className="h-4 w-4 animate-pulse" />
+                  <span>{selectedProject.viewCount || 0} times analyzed</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">// Summary</h4>
+                <p className="text-purple-300/80 text-sm leading-relaxed">{selectedProject.summary}</p>
+              </div>
+
+              {selectedProject.description && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">// Detailed Description</h4>
+                  <div className="text-purple-305 text-sm leading-relaxed whitespace-pre-line bg-white/[0.02] p-4 rounded-xl border border-white/10">{selectedProject.description}</div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">// Tech Stack Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map(tech => (
+                    <span key={tech} className="rounded-lg bg-white/5 px-3 py-1 text-xs font-mono text-purple-300 border border-white/10">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {selectedProject.links && (Object.values(selectedProject.links).some(Boolean)) && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">// Deployment Coordinates</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.links.github && (
+                      <a href={selectedProject.links.github} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Github className="h-4 w-4" />
+                        <span>Source Code</span>
+                      </a>
+                    )}
+                    {selectedProject.links.liveDemo && (
+                      <a href={selectedProject.links.liveDemo} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Globe className="h-4 w-4" />
+                        <span>Production URL</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

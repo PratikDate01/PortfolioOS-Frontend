@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { ThemeLayoutProps } from './types';
 import GitHubStats from '@/components/sections/GitHubStats';
+import Globe3DCanvas from '@/components/sections/Globe3DCanvas';
+import TechGalaxy from '@/components/sections/TechGalaxy';
 
 export default function TerminalLayout({
   username,
@@ -19,6 +21,7 @@ export default function TerminalLayout({
   blogPosts,
   testimonials,
   visitorCount,
+  sessionId,
   selectedProject,
   setSelectedProject,
   activeFilterCategory,
@@ -67,17 +70,18 @@ export default function TerminalLayout({
   return (
     <div className="min-h-screen flex flex-col bg-black text-green-400 font-mono selection:bg-green-500/30 p-4 md:p-8 space-y-12">
       
-      {/* simulated CLI Header */}
+      {/* 1. System Status Banner / CLI Header */}
       <div className="border border-green-500/20 rounded-md p-3 text-xs bg-zinc-950/30">
         <p className="opacity-60">// PORTFOLIO OS TERMINAL INTERACTION SERVICE</p>
         <p className="opacity-60">Last login: {new Date().toUTCString()} on ttys002</p>
         <p className="text-white mt-1">Type help or navigate sections below. Secure connection verified.</p>
+        <p className="text-green-300 mt-0.5">Session ID: {sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</p>
         {visitorCount !== null && (
-          <p className="text-yellow-500 mt-1">● Views logged: {visitorCount.toLocaleString()} visualizers</p>
+          <p className="text-yellow-550 mt-1">● Views logged: {visitorCount.toLocaleString()} visualizers</p>
         )}
       </div>
 
-      {/* Hero: whoami */}
+      {/* 2. Hero: whoami */}
       <div className="space-y-4">
         <div className="flex items-center space-x-2 text-sm text-white">
           <Terminal className="h-4 w-4 text-green-500" />
@@ -100,14 +104,11 @@ export default function TerminalLayout({
               </div>
             </div>
           </div>
-          <p className="text-xs text-green-300/80 leading-relaxed max-w-4xl">
-            {bio}
-          </p>
           <div className="flex flex-wrap gap-3 pt-2 text-xs">
             {activeResume && (
               <button 
                 onClick={() => handleQuickAction('resume')}
-                className="bg-green-500 text-black px-4 py-1.5 font-bold hover:bg-green-400 transition-colors"
+                className="bg-green-500 text-black px-4 py-1.5 font-bold hover:bg-green-400 transition-colors animate-pulse"
               >
                 ./download_cv.sh
               </button>
@@ -122,14 +123,36 @@ export default function TerminalLayout({
         </div>
       </div>
 
-      {/* Snapshot: ./snapshot.sh */}
+      {/* 3. About Me / Bio Section */}
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2 text-sm text-white">
+          <Terminal className="h-4 w-4 text-green-500" />
+          <span>guest@{username}:~$ cat bio.txt</span>
+        </div>
+        
+        <div className="border-l-2 border-green-500/30 pl-4 grid gap-8 md:grid-cols-3 items-center">
+          <div className="md:col-span-2 text-xs text-green-300/85 leading-relaxed">
+            <p>{bio}</p>
+            <div className="mt-4 flex gap-4 text-[10px]">
+              {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:underline">GITHUB: {socialLinks.github}</a>}
+              {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:underline">LINKEDIN: {socialLinks.linkedin}</a>}
+              {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:underline">TWITTER: {socialLinks.twitter}</a>}
+            </div>
+          </div>
+          <div className="md:col-span-1 h-48 border border-green-500/20 bg-black relative overflow-hidden rounded">
+            <Globe3DCanvas color="#22c55e" glowColor="rgba(34, 197, 94, 0.05)" />
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Snapshot: ./snapshot.sh */}
       <div className="space-y-4">
         <div className="flex items-center space-x-2 text-sm text-white">
           <Terminal className="h-4 w-4 text-green-500" />
           <span>guest@{username}:~$ ./snapshot.sh</span>
         </div>
         
-        <div className="border border-green-500/20 bg-zinc-950/20 rounded p-4 max-w-3xl text-xs space-y-2">
+        <div className="border border-green-500/20 bg-zinc-950/20 rounded p-4 max-w-3xl text-xs space-y-4">
           <p className="text-white border-b border-green-500/20 pb-1">CANDIDATE STATS MATRIX</p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1">
             <div>
@@ -149,10 +172,26 @@ export default function TerminalLayout({
               <p className="text-base font-bold text-white">{certifications.length}</p>
             </div>
           </div>
+          {skills.length > 0 && (
+            <div className="pt-2 border-t border-green-500/10">
+              <span className="opacity-50 block mb-2">// TOP VERIFIED STACK</span>
+              <div className="flex flex-wrap gap-2">
+                {skills
+                  .slice()
+                  .sort((a, b) => b.proficiency - a.proficiency)
+                  .slice(0, 4)
+                  .map((s) => (
+                    <span key={s.name} className="border border-green-500/30 px-2 py-0.5 rounded text-[10px] text-green-300">
+                      {s.name}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Intelligence Dashboard */}
+      {/* 5. Intelligence Dashboard */}
       <div className="space-y-4">
         <div className="flex items-center space-x-2 text-sm text-white">
           <Terminal className="h-4 w-4 text-green-500" />
@@ -186,7 +225,7 @@ export default function TerminalLayout({
         </div>
       </div>
 
-      {/* GitHub Integration */}
+      {/* 6. GitHub Integration */}
       {githubUser && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -199,7 +238,7 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* Projects Showcase */}
+      {/* 7. Projects Showcase */}
       {projects.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -250,7 +289,7 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* Skills config: cat skills.conf */}
+      {/* 8. Technical Skills / Tech Galaxy */}
       {skills.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -258,25 +297,33 @@ export default function TerminalLayout({
             <span>guest@{username}:~$ cat skills.conf</span>
           </div>
           
-          <div className="border border-green-500/20 p-6 rounded bg-zinc-950/20 grid gap-6 sm:grid-cols-2 md:grid-cols-3 text-xs">
-            {Object.entries(skillsByCategory).map(([category, items]) => (
-              <div key={category} className="space-y-3">
-                <p className="text-white border-b border-green-500/20 pb-1 font-bold uppercase">{category}</p>
-                <div className="space-y-2">
-                  {items.map(skill => (
-                    <div key={skill.name}>
-                      <p>{skill.name}</p>
-                      <p className="text-green-500/80 font-mono mt-0.5">{renderProgressBar(skill.proficiency)}</p>
-                    </div>
-                  ))}
-                </div>
+          <div className="grid gap-12 lg:grid-cols-5 items-start text-xs">
+            <div className="lg:col-span-2">
+              <div className="p-4 border border-green-500/20 bg-black rounded shadow-[0_0_15px_rgba(34,197,94,0.05)]">
+                <p className="text-[10px] uppercase text-green-500/50 font-bold mb-3">// 3D Galaxy Visualization</p>
+                <TechGalaxy />
               </div>
-            ))}
+            </div>
+            <div className="lg:col-span-3 border border-green-500/20 p-6 rounded bg-zinc-950/20 grid gap-6 sm:grid-cols-2">
+              {Object.entries(skillsByCategory).map(([category, items]) => (
+                <div key={category} className="space-y-3">
+                  <p className="text-white border-b border-green-500/20 pb-1 font-bold uppercase">{category}</p>
+                  <div className="space-y-2">
+                    {items.map(skill => (
+                      <div key={skill.name}>
+                        <p>{skill.name}</p>
+                        <p className="text-green-500/80 font-mono mt-0.5">{renderProgressBar(skill.proficiency)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Work History Timeline */}
+      {/* 9. Work History Timeline */}
       {jobExperiences.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -302,7 +349,7 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* Credentials */}
+      {/* 10 & 11. Credentials */}
       {(educationExperiences.length > 0 || certifications.length > 0) && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -344,7 +391,7 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* Testimonials */}
+      {/* 11. Testimonials */}
       {testimonials.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -363,43 +410,171 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* Contact Form */}
+      {/* 12. Resume Center */}
+      {activeResume && (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 text-sm text-white">
+            <Terminal className="h-4 w-4 text-green-500" />
+            <span>guest@{username}:~$ ./resume-workstation.sh</span>
+          </div>
+          
+          <div className="border border-green-500/20 rounded p-6 bg-zinc-950/20 text-xs flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <div className="space-y-4 text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2.5">
+                <div className="h-10 w-10 border border-green-500/30 rounded flex items-center justify-center text-green-500 bg-black">
+                  <FileText className="h-5.5 w-5.5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">{activeResume.label || 'Standard Professional Resume'}</h3>
+                  <p className="text-[10px] opacity-60 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
+                </div>
+              </div>
+              <div className="pt-2">
+                <button
+                  onClick={() => handleQuickAction('resume')}
+                  className="bg-green-500 text-black px-5 py-2 font-bold hover:bg-green-400 transition-colors uppercase"
+                >
+                  Download Active Document
+                </button>
+              </div>
+            </div>
+            
+            <div className="w-full max-w-sm aspect-[4/3] border border-green-500/20 rounded bg-black p-4 flex flex-col justify-between hover:border-green-500/40 transition-colors">
+              <div className="border-b border-green-500/20 pb-3 flex items-center justify-between text-[9px] opacity-60 uppercase tracking-wider font-bold">
+                <span>Document Frame</span>
+                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+              </div>
+              <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
+                <FileText className="h-10 w-10 text-green-950 mb-2 animate-bounce" />
+                <p className="text-xs text-green-300 font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
+                <p className="text-[9px] opacity-50 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Public Link Verified</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 13. Contact Form & Actions */}
       <div id="contact" className="space-y-4">
         <div className="flex items-center space-x-2 text-sm text-white">
           <Terminal className="h-4 w-4 text-green-500" />
           <span>guest@{username}:~$ mail -s &quot;Inquiry&quot; administrator</span>
         </div>
         
-        <div className="border border-green-500/20 p-6 rounded bg-zinc-950/20 text-xs max-w-2xl">
-          <form onSubmit={handleContactSubmit} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block opacity-55 mb-1">FROM_NAME</label>
-                <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Hiring Specialist" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
+        <div className="grid gap-8 lg:grid-cols-5 items-start text-xs">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="border border-green-500/20 p-5 rounded bg-zinc-950/20 space-y-4">
+              <p className="text-[10px] uppercase opacity-55 border-b border-green-500/20 pb-2">// Recruiter Workspace</p>
+              <div className="grid gap-2">
+                <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 border border-green-500/30 bg-black hover:bg-green-950/20 px-3 py-2 text-left font-semibold text-green-400 transition-all">
+                  <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
+                </button>
+                <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 border border-green-500/30 bg-black hover:bg-green-950/20 px-3 py-2 text-left font-semibold text-green-400 transition-all">
+                  <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-3 border border-green-500/20 p-6 rounded bg-zinc-950/20 w-full">
+            <form onSubmit={handleContactSubmit} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block opacity-55 mb-1">FROM_NAME</label>
+                  <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Hiring Specialist" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
+                </div>
+                <div>
+                  <label className="block opacity-55 mb-1">FROM_EMAIL</label>
+                  <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="lead@company.com" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
+                </div>
               </div>
               <div>
-                <label className="block opacity-55 mb-1">FROM_EMAIL</label>
-                <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="lead@company.com" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
+                <label className="block opacity-55 mb-1">SUBJECT</label>
+                <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
               </div>
-            </div>
-            <div>
-              <label className="block opacity-55 mb-1">SUBJECT</label>
-              <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono" />
-            </div>
-            <div>
-              <label className="block opacity-55 mb-1">MESSAGE_BODY</label>
-              <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type message lines..." className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono resize-none" />
-            </div>
-            <button 
-              type="submit" 
-              className="bg-green-500 text-black px-6 py-2.5 font-bold hover:bg-green-400 transition-colors uppercase w-full"
-            >
-              send_mail
-            </button>
-            {contactSuccess && <p className="text-center text-emerald-450 mt-2">✓ Message queued successfully.</p>}
-          </form>
+              <div>
+                <label className="block opacity-55 mb-1">MESSAGE_BODY</label>
+                <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type message lines..." className="w-full bg-black border border-green-500/30 text-green-400 p-2.5 rounded outline-none focus:border-green-400 font-mono resize-none" />
+              </div>
+              <button 
+                type="submit" 
+                className="bg-green-500 text-black px-6 py-2.5 font-bold hover:bg-green-400 transition-colors uppercase w-full"
+              >
+                send_mail
+              </button>
+              {contactSuccess && <p className="text-center text-emerald-450 mt-2">✓ Message queued successfully.</p>}
+            </form>
+          </div>
         </div>
       </div>
+
+      {/* 14. Case Study Detail Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+          <div className="bg-black border border-green-500/30 rounded w-full max-w-3xl max-h-[85vh] overflow-y-auto shadow-[0_0_30px_rgba(34,197,94,0.15)] relative text-green-400 font-mono">
+            
+            <div className="relative aspect-video w-full bg-zinc-950 border-b border-green-500/20">
+              <img src={selectedProject.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={selectedProject.title} className="h-full w-full object-cover opacity-50 grayscale brightness-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
+              <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 bg-black border border-green-500/40 p-2 text-green-400 hover:text-white transition-colors shadow">
+                <span>[X] Close</span>
+              </button>
+            </div>
+
+            <div className="p-6 md:p-8 space-y-6">
+              <div>
+                <span className="border border-green-500/40 bg-green-950/20 rounded px-2.5 py-0.5 text-xs text-green-300">[{selectedProject.category.toUpperCase()}]</span>
+                <h2 className="text-xl font-bold text-white mt-2 uppercase">{selectedProject.title}</h2>
+                <p className="text-xs opacity-65 mt-2 font-mono flex items-center gap-1">
+                  <Eye className="h-4 w-4" />
+                  <span>{selectedProject.viewCount || 0} analyses logged</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Summary</h4>
+                <p className="text-green-300/90 text-xs leading-relaxed">{selectedProject.summary}</p>
+              </div>
+
+              {selectedProject.description && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Detailed Log</h4>
+                  <div className="text-green-300/80 text-xs leading-relaxed whitespace-pre-line bg-zinc-950/80 p-4 rounded border border-green-500/20">{selectedProject.description}</div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Tech Stack Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map(tech => (
+                    <span key={tech} className="border border-green-500/20 px-2 py-0.5 rounded text-xs text-green-300">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {selectedProject.links && (Object.values(selectedProject.links).some(Boolean)) && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Coordinates</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.links.github && (
+                      <a href={selectedProject.links.github} target="_blank" rel="noreferrer" className="text-green-400 hover:underline flex items-center gap-1">
+                        <Github className="h-4 w-4" />
+                        <span>Source Code</span>
+                      </a>
+                    )}
+                    {selectedProject.links.liveDemo && (
+                      <a href={selectedProject.links.liveDemo} target="_blank" rel="noreferrer" className="text-green-400 hover:underline flex items-center gap-1">
+                        <Globe className="h-4 w-4" />
+                        <span>Production URL</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

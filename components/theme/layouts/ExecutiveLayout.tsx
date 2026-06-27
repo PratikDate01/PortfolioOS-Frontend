@@ -4,10 +4,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Eye, Cpu, Database, Cloud, Brain, CheckCircle2, Award, FileText, Code, 
-  Mail, Github, Linkedin, Twitter, Globe, MapPin, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon
+  Mail, Github, Linkedin, Twitter, Globe, MapPin, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon, X
 } from 'lucide-react';
 import { ThemeLayoutProps } from './types';
 import GitHubStats from '@/components/sections/GitHubStats';
+import Globe3DCanvas from '@/components/sections/Globe3DCanvas';
+import TechGalaxy from '@/components/sections/TechGalaxy';
 
 export default function ExecutiveLayout({
   username,
@@ -20,6 +22,7 @@ export default function ExecutiveLayout({
   blogPosts,
   testimonials,
   visitorCount,
+  sessionId,
   selectedProject,
   setSelectedProject,
   activeFilterCategory,
@@ -68,6 +71,16 @@ export default function ExecutiveLayout({
     visible: { opacity: 1, y: 0, transition: { duration: animationDuration, ease: 'easeOut' } }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
   const AnimatedSection = ({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) => {
     if (!animationEnabled) {
       return <section id={id} className={className}>{children}</section>;
@@ -87,7 +100,7 @@ export default function ExecutiveLayout({
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-blue-500/10">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-800 font-sans selection:bg-blue-500/10">
       
       {/* Navigation Header */}
       <nav className="sticky top-0 z-40 bg-white/80 border-b border-slate-200 backdrop-blur-md">
@@ -105,7 +118,7 @@ export default function ExecutiveLayout({
             
             <div className="flex items-center gap-4">
               {visitorCount !== null && (
-                <div className="flex items-center space-x-1 px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-600 border border-slate-250/30">
+                <div className="flex items-center space-x-1 px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-650 border border-slate-200">
                   <Eye className="h-3.5 w-3.5" style={{ color: themeAccent }} />
                   <span>{visitorCount.toLocaleString()} views</span>
                 </div>
@@ -124,411 +137,660 @@ export default function ExecutiveLayout({
       </nav>
 
       {/* Main Container */}
-      <main className="flex-grow max-w-6xl mx-auto px-6 lg:px-8 py-12 space-y-16">
-        
-        {/* Profile Card Header */}
-        <AnimatedSection className="bg-white border border-slate-200/80 rounded-xl overflow-hidden shadow-sm">
-          <div className="h-40 md:h-52 w-full relative bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-200">
-            {coverImageUrl && (
-              <img src={coverImageUrl} alt="Cover Banner" className="w-full h-full object-cover opacity-70" />
-            )}
-          </div>
+      <main className="flex-grow max-w-6xl mx-auto px-6 lg:px-8 py-12">
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-16">
           
-          <div className="px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
-            <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
-              {portfolio.showProfilePhoto !== false && (
-                <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border-4 border-white bg-slate-100 shadow-md">
-                  {renderAvatar("w-full h-full object-cover", "text-3xl text-slate-700 bg-slate-200")}
-                </div>
-              )}
-              <div className="md:pb-2">
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
-                  <h1 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">{ownerName}</h1>
-                  <span 
-                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold border"
-                    style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: themeAccent }} />
-                    {availabilityStatus}
-                  </span>
-                </div>
-                <p className="text-slate-500 text-sm font-medium">{headline}</p>
-                <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-slate-400 mt-2">
-                  <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                  <span>{userLocation}</span>
-                </div>
+          {/* 1. System Status Banner */}
+          <AnimatedSection className="rounded-xl border border-slate-200 bg-white p-4 text-xs space-y-2 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: themeAccent }} />
+                <span className="font-semibold text-slate-700 uppercase tracking-wider text-[10px] font-mono">Profile Verified</span>
               </div>
+              <span className="text-[10px] text-slate-400 font-mono">WORKSPACE SECURED</span>
             </div>
-            <div className="flex flex-wrap justify-center gap-3 md:pb-2">
-              {activeResume && (
-                <button
-                  onClick={() => handleQuickAction('resume')}
-                  className="inline-flex items-center gap-2 rounded-lg font-bold px-4 py-2.5 text-xs transition-all shadow-sm text-white"
-                  style={{ backgroundColor: themeAccent }}
-                >
-                  <FileText className="h-4 w-4" />
-                  <span>Download Resume</span>
-                </button>
-              )}
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-4 py-2.5 text-xs transition-all shadow-sm"
-              >
-                <Mail className="h-4 w-4 text-slate-450" />
-                <span>Contact Details</span>
-              </a>
-            </div>
-          </div>
-        </AnimatedSection>
-
-        {/* About Executive Summary */}
-        <AnimatedSection className="bg-white border border-slate-200/85 rounded-xl p-8 shadow-sm">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-6">
-            <UserIcon className="h-4 w-4 text-slate-500" style={{ color: themeAccent }} />
-            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Executive Overview</h2>
-          </div>
-          <p className="text-sm text-slate-650 leading-relaxed max-w-4xl font-sans">
-            {bio}
-          </p>
-        </AnimatedSection>
-
-        {/* Performance Metrics Dashboard */}
-        <AnimatedSection className="space-y-6">
-          <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-            <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-            <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Executive Metrics Index</span>
-          </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="bg-white border border-slate-200/80 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-              <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Portfolio Index</span>
-              <div className="flex items-baseline gap-1.5 my-3">
-                <span className="text-3xl font-extrabold text-slate-900">{scores.portfolioScore}</span>
-                <span className="text-xs text-slate-450">/ 100</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
-                <div className="h-full" style={{ width: `${scores.portfolioScore}%`, backgroundColor: themeAccent }} />
-              </div>
-              <p className="text-[9px] text-slate-400">Profile completeness index.</p>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-              <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Years Experience</span>
-              <div className="my-3">
-                <span className="text-3xl font-extrabold text-slate-900">{displayYearsOfExp}</span>
-                <span className="text-xs text-slate-450 ml-1">Years</span>
-              </div>
-              <p className="text-[9px] text-slate-400 mt-2">Verified professional history timeline.</p>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-              <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">ATS Alignment</span>
-              <div className="flex items-baseline gap-1.5 my-3">
-                <span className="text-3xl font-extrabold text-slate-900">{scores.atsScore}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
-                <div className="h-full bg-indigo-500" style={{ width: `${scores.atsScore}%` }} />
-              </div>
-              <p className="text-[9px] text-slate-400">CV parse match rating.</p>
-            </div>
-
-            <div className="bg-white border border-slate-200/80 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-              <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Recruiter Readiness</span>
-              <div className="my-3">
-                <span 
-                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border"
-                  style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
-                >
-                  {scores.readinessScore}
-                </span>
-              </div>
-              <p className="text-[9px] text-slate-400 mt-2">Evaluation metric status.</p>
-            </div>
-          </div>
-        </AnimatedSection>
-
-        {/* Featured Projects Showcase */}
-        {projects.length > 0 && (
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-              <Code className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Project Portfolio Case Studies</span>
-            </div>
-            
-            <div className="flex flex-wrap items-center gap-2">
-              {projectCategories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilterCategory(cat)}
-                  className={`rounded-lg px-3.5 py-1.5 text-xs border transition-all ${
-                    activeFilterCategory === cat
-                      ? 'bg-slate-900 border-slate-900 text-white font-bold'
-                      : 'bg-white text-slate-500 border-slate-200 hover:text-slate-800 hover:border-slate-350'
-                  }`}
-                  style={{
-                    backgroundColor: activeFilterCategory === cat ? themeAccent : undefined,
-                    borderColor: activeFilterCategory === cat ? themeAccent : undefined
-                  }}
-                >
-                  {cat.toUpperCase()}
-                </button>
-              ))}
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredProjects.map((project) => (
-                <article key={project._id} className="bg-white border border-slate-200 hover:border-slate-300 transition-all rounded-xl overflow-hidden shadow-sm flex flex-col group">
-                  <div className="aspect-video w-full overflow-hidden bg-slate-100 relative">
-                    <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                    <div className="absolute top-3 right-3 rounded bg-white/95 shadow px-2 py-0.5 text-[9px] font-semibold text-slate-850">
-                      {project.category}
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-650 transition-colors">{project.title}</h3>
-                    <p className="mt-2 text-xs text-slate-500 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.techStack.slice(0, 4).map((tech) => (
-                        <span key={tech} className="rounded bg-slate-100 border border-slate-200/50 px-2 py-0.5 text-[10px] text-slate-600">{tech}</span>
-                      ))}
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2">
-                      <button 
-                        onClick={() => setSelectedProject(project)} 
-                        className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-55 py-2 text-xs font-semibold text-slate-700 transition-all shadow-sm"
-                      >
-                        <span>Review Case Study</span>
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              ))}
+            <div className="grid gap-2 sm:grid-cols-3 text-slate-500 font-mono">
+              <p>Status: <span className="font-bold" style={{ color: themeAccent }}>Active</span></p>
+              <p>Platform: <span style={{ color: themeAccent }}>Executive Theme</span></p>
+              <p>Session ID: <span className="opacity-90" style={{ color: themeAccent }}>{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</span></p>
             </div>
           </AnimatedSection>
-        )}
 
-        {/* Technical Skills */}
-        {skills.length > 0 && (
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-              <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Expertise Index</span>
+          {/* 2. Profile Card Header */}
+          <AnimatedSection className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+            <div className="h-40 md:h-52 w-full relative bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-200">
+              {coverImageUrl && (
+                <img src={coverImageUrl} alt="Cover Banner" className="w-full h-full object-cover opacity-70" />
+              )}
             </div>
             
-            <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {Object.entries(skillsByCategory).map(([category, items]) => (
-                <div key={category} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
-                  <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-4">
-                    {getCategoryIcon(category)}
-                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider capitalize">{category}</h3>
+            <div className="px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
+              <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
+                {portfolio.showProfilePhoto !== false && (
+                  <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border-4 border-white bg-slate-100 shadow-md">
+                    {renderAvatar("w-full h-full object-cover", "text-3xl text-slate-700 bg-slate-200")}
                   </div>
-                  <div className="space-y-4">
-                    {items.map((skill) => (
-                      <div key={skill.name}>
-                        <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
-                          <span>{skill.name}</span>
-                          <span className="font-semibold text-slate-800">{skill.proficiency}%</span>
-                        </div>
-                        <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
-                          <div className="h-full rounded-full" style={{ width: `${skill.proficiency}%`, backgroundColor: themeAccent }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
-        )}
-
-        {/* Experience Timeline */}
-        {jobExperiences.length > 0 && (
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-              <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Professional Timeline</span>
-            </div>
-            <div className="relative border-l border-slate-200 ml-4 space-y-12">
-              {jobExperiences.map((exp, idx) => (
-                <div key={idx} className="relative pl-8 group">
-                  <div 
-                    className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border bg-white transition-transform"
-                    style={{ borderColor: themeAccent }}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full mx-auto" style={{ backgroundColor: themeAccent }} />
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                    <h3 className="text-sm font-bold text-slate-900">
-                      {exp.role} @ <span style={{ color: themeAccent }}>{exp.organization}</span>
-                    </h3>
-                    <span className="text-xs text-slate-400 flex items-center gap-1.5 font-mono">
-                      <Calendar className="h-3.5 w-3.5 text-slate-350" />
-                      {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
+                )}
+                <div className="md:pb-2">
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">{ownerName}</h1>
+                    <span 
+                      className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold border"
+                      style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: themeAccent }} />
+                      {availabilityStatus}
                     </span>
                   </div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-2">{exp.type}</p>
-                  <p className="text-xs text-slate-600 leading-relaxed mb-3">{exp.description}</p>
-                  {exp.responsibilities && exp.responsibilities.length > 0 && (
-                    <ul className="list-disc list-inside text-xs text-slate-500 space-y-1 pl-2 mb-3">
-                      {exp.responsibilities.map((r, ri) => (
-                        <li key={ri} className="leading-relaxed">{r}</li>
-                      ))}
-                    </ul>
-                  )}
-                  {exp.technologiesUsed && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {exp.technologiesUsed.map(t => (
-                        <span key={t} className="rounded bg-slate-100 border border-slate-200/50 px-2 py-0.5 text-[10px] text-slate-600">{t}</span>
-                      ))}
-                    </div>
-                  )}
+                  <p className="text-slate-550 text-sm font-medium">{headline}</p>
+                  <div className="flex items-center justify-center md:justify-start gap-1.5 text-xs text-slate-400 mt-2">
+                    <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                    <span>{userLocation}</span>
+                  </div>
                 </div>
-              ))}
+              </div>
+              <div className="flex flex-wrap justify-center gap-3 md:pb-2">
+                {activeResume && (
+                  <button
+                    onClick={() => handleQuickAction('resume')}
+                    className="inline-flex items-center gap-2 rounded-lg font-bold px-4 py-2.5 text-xs transition-all shadow-sm text-white"
+                    style={{ backgroundColor: themeAccent }}
+                  >
+                    <FileText className="h-4 w-4" />
+                    <span>Download Resume</span>
+                  </button>
+                )}
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-4 py-2.5 text-xs transition-all shadow-sm"
+                >
+                  <Mail className="h-4 w-4 text-slate-500" />
+                  <span>Contact Details</span>
+                </a>
+              </div>
             </div>
           </AnimatedSection>
-        )}
 
-        {/* Education and Credentials */}
-        {(educationExperiences.length > 0 || certifications.length > 0) && (
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-              <BookOpen className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Education & Credentials</span>
+          {/* 3. About Executive Summary */}
+          <AnimatedSection className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+            <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-6">
+              <UserIcon className="h-4 w-4 text-slate-500" style={{ color: themeAccent }} />
+              <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Executive Overview</h2>
             </div>
-            <div className={`grid gap-6 ${educationExperiences.length > 0 && certifications.length > 0 ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
-              {educationExperiences.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">// Education</h3>
-                  {educationExperiences.map((edu, idx) => (
-                    <div key={idx} className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-                      <div className="flex justify-between items-start gap-4 mb-2">
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-900">{edu.role}</h4>
-                          <p className="text-[10px] font-medium" style={{ color: themeAccent }}>{edu.organization}</p>
-                        </div>
-                        <span className="text-[10px] text-slate-400 flex items-center gap-1 shrink-0 font-mono">
-                          <Calendar className="h-3.5 w-3.5" />
-                          {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
-                        </span>
+            <div className="grid gap-8 md:grid-cols-3 items-center">
+              <div className="md:col-span-2">
+                <p className="text-sm text-slate-650 leading-relaxed font-sans">
+                  {bio}
+                </p>
+                <div className="mt-6 flex gap-3">
+                  {socialLinks.github && (
+                    <a href={socialLinks.github} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-200 bg-white p-2 text-slate-500 hover:text-slate-900 hover:border-slate-350 transition-all shadow-sm">
+                      <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                    </a>
+                  )}
+                  {socialLinks.linkedin && (
+                    <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-200 bg-white p-2 text-slate-500 hover:text-slate-900 hover:border-slate-350 transition-all shadow-sm">
+                      <Linkedin className="h-4 w-4" style={{ color: themeAccent }} />
+                    </a>
+                  )}
+                  {socialLinks.twitter && (
+                    <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="rounded-lg border border-slate-200 bg-white p-2 text-slate-500 hover:text-slate-900 hover:border-slate-350 transition-all shadow-sm">
+                      <Twitter className="h-4 w-4" style={{ color: themeAccent }} />
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div className="md:col-span-1 h-64 border border-slate-200 bg-slate-50 relative overflow-hidden rounded-xl">
+                <Globe3DCanvas color={themeAccent} glowColor={`${themeAccent}05`} />
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* 4. Candidate Snapshot */}
+          <AnimatedSection className="space-y-6">
+            <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+              <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
+              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Candidate Snapshot</span>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm flex flex-col justify-between md:col-span-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-center">
+                    <span className="block text-2xl font-extrabold text-slate-900">{displayYearsOfExp}</span>
+                    <span className="text-[9px] text-slate-450 uppercase tracking-wider font-semibold">Years Exp</span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-center">
+                    <span className="block text-2xl font-extrabold" style={{ color: themeAccent }}>{projects.length}</span>
+                    <span className="text-[9px] text-slate-450 uppercase tracking-wider font-semibold">Projects</span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-center">
+                    <span className="block text-2xl font-extrabold text-slate-900">{skills.length}</span>
+                    <span className="text-[9px] text-slate-450 uppercase tracking-wider font-semibold">Skills</span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-lg border border-slate-100 text-center">
+                    <span className="block text-2xl font-extrabold text-slate-900">{certifications.length}</span>
+                    <span className="text-[9px] text-slate-450 uppercase tracking-wider font-semibold">Certs</span>
+                  </div>
+                </div>
+                <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-slate-100 text-xs text-slate-500">
+                  <p>GitHub Status: <span className="text-slate-800 font-bold">{githubUser ? 'Connected' : 'Not Linked'}</span></p>
+                  <p>Availability: <span className="font-bold" style={{ color: themeAccent }}>{availabilityStatus}</span></p>
+                </div>
+              </div>
+
+              {skills.length > 0 && (
+                <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold block mb-3">// Top Stack</span>
+                    <div className="flex flex-wrap gap-2">
+                      {skills
+                        .slice()
+                        .sort((a, b) => b.proficiency - a.proficiency)
+                        .slice(0, 4)
+                        .map((s) => (
+                          <span 
+                            key={s.name} 
+                            className="px-2.5 py-0.5 rounded border text-xs"
+                            style={{ color: themeAccent, borderColor: `${themeAccent}20`, backgroundColor: `${themeAccent}05` }}
+                          >
+                            {s.name}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-slate-400 leading-relaxed mt-4">Top technologies sorted by verified proficiency level.</p>
+                </div>
+              )}
+            </div>
+          </AnimatedSection>
+
+          {/* 5. Performance Metrics Dashboard */}
+          <AnimatedSection className="space-y-6">
+            <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+              <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
+              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Executive Metrics Index</span>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Portfolio Index</span>
+                <div className="flex items-baseline gap-1.5 my-3">
+                  <span className="text-3xl font-extrabold text-slate-900">{scores.portfolioScore}</span>
+                  <span className="text-xs text-slate-450">/ 100</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
+                  <div className="h-full" style={{ width: `${scores.portfolioScore}%`, backgroundColor: themeAccent }} />
+                </div>
+                <p className="text-[9px] text-slate-400">Profile completeness index.</p>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Years Experience</span>
+                <div className="my-3">
+                  <span className="text-3xl font-extrabold text-slate-900">{displayYearsOfExp}</span>
+                  <span className="text-xs text-slate-450 ml-1">Years</span>
+                </div>
+                <p className="text-[9px] text-slate-400 mt-2">Verified professional history timeline.</p>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">ATS Alignment</span>
+                <div className="flex items-baseline gap-1.5 my-3">
+                  <span className="text-3xl font-extrabold text-slate-900">{scores.atsScore}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
+                  <div className="h-full" style={{ width: `${scores.atsScore}%`, backgroundColor: themeAccent }} />
+                </div>
+                <p className="text-[9px] text-slate-400">CV parse match rating.</p>
+              </div>
+
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Recruiter Readiness</span>
+                <div className="my-3">
+                  <span 
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border"
+                    style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
+                  >
+                    {scores.readinessScore}
+                  </span>
+                </div>
+                <p className="text-[9px] text-slate-400 mt-2">Evaluation metric status.</p>
+              </div>
+            </div>
+          </AnimatedSection>
+
+          {/* 6. GitHub Stats */}
+          {githubUser && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">GitHub Integration Metrics</span>
+              </div>
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-slate-800">
+                <GitHubStats username={githubUser} />
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 7. Featured Projects Showcase */}
+          {projects.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Code className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Project Portfolio Case Studies</span>
+              </div>
+              
+              <div className="flex flex-wrap items-center gap-2">
+                {projectCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveFilterCategory(cat)}
+                    className={`rounded-lg px-3.5 py-1.5 text-xs border transition-all ${
+                      activeFilterCategory === cat
+                        ? 'bg-slate-900 border-slate-900 text-white font-bold'
+                        : 'bg-white text-slate-500 border-slate-200 hover:text-slate-800 hover:border-slate-350'
+                    }`}
+                    style={{
+                      backgroundColor: activeFilterCategory === cat ? themeAccent : undefined,
+                      borderColor: activeFilterCategory === cat ? themeAccent : undefined
+                    }}
+                  >
+                    {cat.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {filteredProjects.map((project) => (
+                  <article key={project._id} className="bg-white border border-slate-200 hover:border-slate-300 transition-all rounded-xl overflow-hidden shadow-sm flex flex-col group">
+                    <div className="aspect-video w-full overflow-hidden bg-slate-100 relative">
+                      <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300" />
+                      <div className="absolute top-3 right-3 rounded bg-white/95 shadow px-2 py-0.5 text-[9px] font-semibold text-slate-850">
+                        {project.category}
                       </div>
-                      <p className="text-[11px] text-slate-500 leading-relaxed">{edu.description}</p>
+                    </div>
+                    <div className="flex flex-1 flex-col p-6">
+                      <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-650 transition-colors">{project.title}</h3>
+                      <p className="mt-2 text-xs text-slate-550 line-clamp-3 leading-relaxed flex-1">{project.summary}</p>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {project.techStack.slice(0, 4).map((tech) => (
+                          <span key={tech} className="rounded bg-slate-100 border border-slate-200/50 px-2 py-0.5 text-[10px] text-slate-650">{tech}</span>
+                        ))}
+                      </div>
+                      <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2">
+                        <button 
+                          onClick={() => setSelectedProject(project)} 
+                          className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 py-2 text-xs font-semibold text-slate-705 transition-all shadow-sm"
+                        >
+                          <span>Review Case Study</span>
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 8. Technical Skills */}
+          {skills.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Expertise Index</span>
+              </div>
+              <div className="grid gap-12 lg:grid-cols-5 items-start">
+                <div className="lg:col-span-2">
+                  <div className="p-4 border border-slate-200 bg-white rounded-xl shadow-sm">
+                    <p className="text-[10px] uppercase text-slate-400 font-bold mb-3">// 3D Galaxy Visualization</p>
+                    <TechGalaxy />
+                  </div>
+                </div>
+                <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
+                  {Object.entries(skillsByCategory).map(([category, items]) => (
+                    <div key={category} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
+                      <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-4">
+                        {getCategoryIcon(category)}
+                        <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider capitalize">{category}</h3>
+                      </div>
+                      <div className="space-y-4">
+                        {items.map((skill) => (
+                          <div key={skill.name}>
+                            <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
+                              <span>{skill.name}</span>
+                              <span className="font-semibold text-slate-800">{skill.proficiency}%</span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                              <div className="h-full rounded-full" style={{ width: `${skill.proficiency}%`, backgroundColor: themeAccent }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
+            </AnimatedSection>
+          )}
 
-              {certifications.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">// Professional Certifications</h3>
-                  <div className="space-y-3">
-                    {certifications.slice(0, 3).map((cert) => (
-                      <div key={cert._id} className="bg-white border border-slate-200 p-4 flex justify-between items-center gap-3 rounded-xl shadow-sm">
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-900">{cert.title}</h4>
-                          <p className="text-[10px] text-slate-400">{cert.issuer}</p>
+          {/* 9. Experience Timeline */}
+          {jobExperiences.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Professional Timeline</span>
+              </div>
+              <div className="relative border-l border-slate-200 ml-4 space-y-12">
+                {jobExperiences.map((exp, idx) => (
+                  <div key={idx} className="relative pl-8 group">
+                    <div 
+                      className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border bg-white transition-transform"
+                      style={{ borderColor: themeAccent }}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full mx-auto" style={{ backgroundColor: themeAccent }} />
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                      <h3 className="text-sm font-bold text-slate-900">
+                        {exp.role} @ <span style={{ color: themeAccent }}>{exp.organization}</span>
+                      </h3>
+                      <span className="text-xs text-slate-400 flex items-center gap-1.5 font-mono">
+                        <Calendar className="h-3.5 w-3.5 text-slate-350" />
+                        {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
+                      </span>
+                    </div>
+                    <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-2">{exp.type}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed mb-3">{exp.description}</p>
+                    {exp.responsibilities && exp.responsibilities.length > 0 && (
+                      <ul className="list-disc list-inside text-xs text-slate-505 space-y-1 pl-2 mb-3">
+                        {exp.responsibilities.map((r, ri) => (
+                          <li key={ri} className="leading-relaxed">{r}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {exp.technologiesUsed && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {exp.technologiesUsed.map(t => (
+                          <span key={t} className="rounded bg-slate-100 border border-slate-205 px-2 py-0.5 text-[10px] text-slate-600">{t}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 10. Education and Credentials */}
+          {(educationExperiences.length > 0 || certifications.length > 0) && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <BookOpen className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Education & Credentials</span>
+              </div>
+              <div className={`grid gap-6 ${educationExperiences.length > 0 && certifications.length > 0 ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+                {educationExperiences.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">// Education</h3>
+                    {educationExperiences.map((edu, idx) => (
+                      <div key={idx} className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
+                        <div className="flex justify-between items-start gap-4 mb-2">
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-900">{edu.role}</h4>
+                            <p className="text-[10px] font-medium" style={{ color: themeAccent }}>{edu.organization}</p>
+                          </div>
+                          <span className="text-[10px] text-slate-400 flex items-center gap-1 shrink-0 font-mono">
+                            <Calendar className="h-3.5 w-3.5" />
+                            {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
+                          </span>
                         </div>
-                        {cert.credentialUrl && (
-                          <a 
-                            href={cert.credentialUrl} 
-                            target="_blank" 
-                            rel="noreferrer" 
-                            className="flex-shrink-0 text-[10px] border px-2 py-1 rounded bg-slate-50 font-medium"
-                            style={{ color: themeAccent, borderColor: `${themeAccent}25` }}
-                          >
-                            Verify
-                          </a>
-                        )}
+                        <p className="text-[11px] text-slate-500 leading-relaxed">{edu.description}</p>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-            </div>
-          </AnimatedSection>
-        )}
+                )}
 
-        {/* Recommendations */}
-        {testimonials.length > 0 && (
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-              <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Recommendations</span>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2">
-              {testimonials.map((testimonial) => (
-                <div key={testimonial._id} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                  <p className="text-xs text-slate-650 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
-                  <div className="mt-6 flex items-center gap-3">
+                {certifications.length > 0 && (
+                  <div className="space-y-4">
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">// Professional Certifications</h3>
+                    <div className="space-y-3">
+                      {certifications.slice(0, 3).map((cert) => (
+                        <div key={cert._id} className="bg-white border border-slate-200 p-4 flex justify-between items-center gap-3 rounded-xl shadow-sm">
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-900">{cert.title}</h4>
+                            <p className="text-[10px] text-slate-400">{cert.issuer}</p>
+                          </div>
+                          {cert.credentialUrl && (
+                            <a 
+                              href={cert.credentialUrl} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="flex-shrink-0 text-[10px] border px-2 py-1 rounded bg-slate-50 font-medium"
+                              style={{ color: themeAccent, borderColor: `${themeAccent}25` }}
+                            >
+                              Verify
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 11. Recommendations */}
+          {testimonials.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Recommendations</span>
+              </div>
+              <div className="grid gap-6 md:grid-cols-2">
+                {testimonials.map((testimonial) => (
+                  <div key={testimonial._id} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                    <p className="text-xs text-slate-650 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
+                    <div className="mt-6 flex items-center gap-3">
+                      <div 
+                        className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{ color: themeAccent, backgroundColor: `${themeAccent}10` }}
+                      >
+                        {testimonial.authorName.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="text-[10px] font-bold text-slate-900">{testimonial.authorName}</h4>
+                        <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 12. Resume Center */}
+          {activeResume && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <FileText className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-850 uppercase tracking-wider">Professional Resume Workstation</span>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-white p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden shadow-sm">
+                <div className="space-y-4 text-center md:text-left">
+                  <div className="flex items-center justify-center md:justify-start gap-2.5">
                     <div 
-                      className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold"
-                      style={{ color: themeAccent, backgroundColor: `${themeAccent}10` }}
+                      className="h-10 w-10 rounded-lg flex items-center justify-center border"
+                      style={{ color: themeAccent, borderColor: `${themeAccent}20`, backgroundColor: `${themeAccent}08` }}
                     >
-                      {testimonial.authorName.charAt(0)}
+                      <FileText className="h-5.5 w-5.5" />
                     </div>
                     <div>
-                      <h4 className="text-[10px] font-bold text-slate-900">{testimonial.authorName}</h4>
-                      <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                      <h3 className="text-sm font-bold text-slate-900">{activeResume.label || 'Standard Professional Resume'}</h3>
+                      <p className="text-[10px] text-slate-500 mt-0.5">PDF • Updated: {activeResume.updatedAt ? new Date(activeResume.updatedAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recently'}</p>
                     </div>
                   </div>
+                  <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-3">
+                    <button
+                      onClick={() => handleQuickAction('resume')}
+                      className="inline-flex items-center gap-2 rounded-lg font-bold px-4 py-2.5 text-xs transition-all shadow-sm text-white"
+                      style={{ backgroundColor: themeAccent }}
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span>Download Active Resume</span>
+                    </button>
+                  </div>
                 </div>
-              ))}
+                
+                <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col justify-between hover:border-slate-350 transition-colors">
+                  <div className="border-b border-slate-200 pb-3 flex items-center justify-between text-[9px] text-slate-450 uppercase tracking-wider font-bold">
+                    <span>Document View</span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
+                    <FileText className="h-10 w-10 text-slate-300 mb-2 animate-bounce" />
+                    <p className="text-xs text-slate-700 font-bold">{activeResume.resumeFile?.format?.toUpperCase() || 'PDF'} Document File</p>
+                    <p className="text-[9px] text-slate-400 mt-1">{(activeResume.resumeFile?.bytes ? (activeResume.resumeFile.bytes / 1024).toFixed(1) : '150')} KB • Verified</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* 13. Contact form section */}
+          <AnimatedSection id="contact" className="space-y-6">
+            <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+              <Mail className="h-4 w-4" style={{ color: themeAccent }} />
+              <span className="text-xs font-semibold text-slate-850 uppercase tracking-wider">Contact Request Workspace</span>
+            </div>
+            
+            <div className="grid gap-8 lg:grid-cols-5 items-start">
+              <div className="lg:col-span-2 space-y-6">
+                {(socialLinks.github || socialLinks.linkedin || socialLinks.twitter || socialLinks.website) && (
+                  <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm space-y-4">
+                    <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold border-b border-slate-100 pb-2">// Communication Links</p>
+                    {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Github className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.github}</span></a>}
+                    {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Linkedin className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.linkedin}</span></a>}
+                    {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Twitter className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.twitter}</span></a>}
+                    {socialLinks.website && <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Globe className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.website}</span></a>}
+                  </div>
+                )}
+
+                <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm space-y-4">
+                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold border-b border-slate-100 pb-2">// Recruiter Quick Actions</p>
+                  <div className="grid gap-2">
+                    <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
+                      <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
+                    </button>
+                    <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
+                      <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-3 bg-white border border-slate-200 p-6 rounded-xl shadow-sm w-full">
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Name</label>
+                      <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Partner" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Email</label>
+                      <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="partner@firm.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Subject</label>
+                    <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Message</label>
+                    <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type requirements details..." className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors resize-none" />
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full text-white font-bold py-3 rounded-lg text-xs transition-all shadow"
+                    style={{ backgroundColor: themeAccent }}
+                  >
+                    Submit Inquiry
+                  </button>
+                  {contactSuccess && <p className="text-[10px] text-emerald-600 text-center mt-2">✓ Inquiry submitted successfully.</p>}
+                </form>
+              </div>
             </div>
           </AnimatedSection>
-        )}
 
-        {/* Contact form section */}
-        <AnimatedSection id="contact" className="space-y-6">
-          <div className="flex items-center space-x-2 border-b border-slate-200/60 pb-2">
-            <Mail className="h-4 w-4" style={{ color: themeAccent }} />
-            <span className="text-xs font-semibold text-slate-850 uppercase tracking-wider">Contact Request Workspace</span>
-          </div>
-          
-          <div className="grid gap-8 lg:grid-cols-5 items-start">
-            <div className="lg:col-span-2 space-y-6">
-              {(socialLinks.github || socialLinks.linkedin || socialLinks.twitter || socialLinks.website) && (
-                <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm space-y-4">
-                  <p className="text-[10px] uppercase tracking-wider text-slate-400 font-bold border-b border-slate-100 pb-2">// Communication Links</p>
-                  {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Github className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.github}</span></a>}
-                  {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Linkedin className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.linkedin}</span></a>}
-                  {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Twitter className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.twitter}</span></a>}
-                  {socialLinks.website && <a href={socialLinks.website} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-xs text-slate-550 hover:text-slate-900 transition-colors"><Globe className="h-4.5 w-4.5" style={{ color: themeAccent }} /><span className="truncate">{socialLinks.website}</span></a>}
+        </motion.div>
+      </main>
+
+      {/* 14. Case Study Detail Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto shadow-2xl relative text-slate-800 font-sans">
+            
+            <div className="relative aspect-video w-full bg-slate-100 border-b border-slate-200">
+              <img src={selectedProject.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={selectedProject.title} className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/10 to-transparent" />
+              <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 rounded-full bg-white/80 p-2 text-slate-500 hover:text-slate-900 transition-colors border border-slate-200 shadow">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="p-6 md:p-8 space-y-6">
+              <div>
+                <span className="text-xs font-bold border rounded px-2 py-0.5" style={{ color: themeAccent, borderColor: `${themeAccent}30`, backgroundColor: `${themeAccent}08` }}>{selectedProject.category}</span>
+                <h2 className="text-2xl font-bold text-slate-900 mt-2">{selectedProject.title}</h2>
+                <p className="text-xs text-slate-400 mt-2 font-mono flex items-center gap-1">
+                  <Eye className="h-4 w-4" />
+                  <span>{selectedProject.viewCount || 0} times analyzed</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-sans">// Summary</h4>
+                <p className="text-slate-650 text-sm leading-relaxed">{selectedProject.summary}</p>
+              </div>
+
+              {selectedProject.description && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-sans">// Detailed Description</h4>
+                  <div className="text-slate-600 text-sm leading-relaxed whitespace-pre-line bg-slate-50 p-4 rounded-xl border border-slate-200">{selectedProject.description}</div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-sans">// Tech Stack Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map(tech => (
+                    <span key={tech} className="rounded bg-slate-100 px-3 py-1 text-xs font-sans text-slate-600 border border-slate-200">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {selectedProject.links && (Object.values(selectedProject.links).some(Boolean)) && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-sans">// Deployment Coordinates</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.links.github && (
+                      <a href={selectedProject.links.github} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Github className="h-4 w-4" />
+                        <span>Source Code</span>
+                      </a>
+                    )}
+                    {selectedProject.links.liveDemo && (
+                      <a href={selectedProject.links.liveDemo} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Globe className="h-4 w-4" />
+                        <span>Production URL</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
-
-            <div className="lg:col-span-3 bg-white border border-slate-200 p-6 rounded-xl shadow-sm w-full">
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Name</label>
-                    <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Partner" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Email</label>
-                    <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="partner@firm.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Subject</label>
-                  <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Message</label>
-                  <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type requirements details..." className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors resize-none" />
-                </div>
-                <button 
-                  type="submit" 
-                  className="w-full text-white font-bold py-3 rounded-lg text-xs transition-all shadow"
-                  style={{ backgroundColor: themeAccent }}
-                >
-                  Submit Inquiry
-                </button>
-                {contactSuccess && <p className="text-[10px] text-emerald-600 text-center mt-2">✓ Inquiry submitted successfully.</p>}
-              </form>
-            </div>
           </div>
-        </AnimatedSection>
+        </div>
+      )}
 
-      </main>
     </div>
   );
 }
