@@ -8,28 +8,6 @@ import { apiFetch } from '@/lib/api-client';
 import { Testimonial, Project } from '@/types';
 import { Star, MessageSquare, Plus, CheckCircle, Terminal, User } from 'lucide-react';
 
-const fallbackTestimonials: Testimonial[] = [
-  {
-    portfolioOwnerId: 'fallback',
-    authorName: 'Sarah Jenkins',
-    authorRole: 'VP of Product',
-    authorCompany: 'OrbitTech Corp',
-    authorAvatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
-    rating: 5,
-    body: 'Pratik is an exceptional engineer who transformed our development pipeline. His knowledge of monorepos, isolated builds, and typed schemas saved our team hours.',
-    status: 'approved',
-  },
-  {
-    portfolioOwnerId: 'fallback',
-    authorName: 'David Chen',
-    authorRole: 'CTO',
-    authorCompany: 'SaaSify Inc',
-    authorAvatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
-    rating: 5,
-    body: 'Outstanding attention to detail and design. The real-time interactive canvas he built works flawlessly, and he was very helpful with training our staff.',
-    status: 'approved',
-  },
-];
 
 export default function TestimonialsView({ username }: { username?: string }) {
   const queryClient = useQueryClient();
@@ -72,9 +50,9 @@ export default function TestimonialsView({ username }: { username?: string }) {
   });
 
   const testimonials =
-    serverTestimonials && serverTestimonials.length > 0
+    serverTestimonials
       ? serverTestimonials.filter((t) => t.status === 'approved')
-      : fallbackTestimonials;
+      : [];
 
   // Submit mutation
   const submitMutation = useMutation({
@@ -162,50 +140,58 @@ export default function TestimonialsView({ username }: { username?: string }) {
           )}
 
           {/* Testimonial grid */}
-          <div className="grid gap-8 md:grid-cols-2">
-            {testimonials.map((test, index) => (
-              <div
-                key={test._id || index}
-                className="rounded-xl border border-zinc-900 bg-zinc-950/40 p-6 flex flex-col justify-between hover:border-zinc-800 transition-all duration-300"
-              >
-                <div>
-                  {/* Rating Stars */}
-                  <div className="flex items-center space-x-1 mb-4 text-teal-400">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < test.rating ? 'fill-teal-400' : 'text-zinc-800'
-                        }`}
-                      />
-                    ))}
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic">
-                    &ldquo;{test.body}&rdquo;
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-6 border-t border-zinc-900/60 flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-full overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
-                    {test.authorAvatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={test.authorAvatarUrl} alt={test.authorName} className="h-full w-full object-cover" />
-                    ) : (
-                      <User className="h-5 w-5 text-zinc-600" />
-                    )}
-                  </div>
+          {testimonials.length === 0 ? (
+            <div className="text-center py-20 border border-dashed border-zinc-900 rounded-xl">
+              <MessageSquare className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
+              <h3 className="text-sm font-bold text-zinc-400 font-sans">No recommendations yet</h3>
+              <p className="text-xs text-zinc-650 mt-1">Be the first to submit a recommendation!</p>
+            </div>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2">
+              {testimonials.map((test, index) => (
+                <div
+                  key={test._id || index}
+                  className="rounded-xl border border-zinc-900 bg-zinc-950/40 p-6 flex flex-col justify-between hover:border-zinc-800 transition-all duration-300"
+                >
                   <div>
-                    <h4 className="text-sm font-bold text-white leading-tight">{test.authorName}</h4>
-                    <p className="text-[11px] font-mono text-zinc-500 mt-0.5">
-                      {test.authorRole}
-                      {test.authorCompany && ` @ ${test.authorCompany}`}
+                    {/* Rating Stars */}
+                    <div className="flex items-center space-x-1 mb-4 text-teal-400">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-4 w-4 ${
+                            i < test.rating ? 'fill-teal-400' : 'text-zinc-800'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed italic">
+                      &ldquo;{test.body}&rdquo;
                     </p>
                   </div>
+
+                  <div className="mt-6 pt-6 border-t border-zinc-900/60 flex items-center space-x-3">
+                    <div className="h-10 w-10 rounded-full overflow-hidden bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
+                      {test.authorAvatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={test.authorAvatarUrl} alt={test.authorName} className="h-full w-full object-cover" />
+                      ) : (
+                        <User className="h-5 w-5 text-zinc-600" />
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-white leading-tight">{test.authorName}</h4>
+                      <p className="text-[11px] font-mono text-zinc-500 mt-0.5">
+                        {test.authorRole}
+                        {test.authorCompany && ` @ ${test.authorCompany}`}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
 

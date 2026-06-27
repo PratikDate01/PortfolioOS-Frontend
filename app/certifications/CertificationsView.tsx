@@ -8,63 +8,6 @@ import { apiFetch } from '@/lib/api-client';
 import { Certification } from '@/types';
 import { Award, ExternalLink, Calendar, Search, ShieldCheck } from 'lucide-react';
 
-const fallbackCertifications: Certification[] = [
-  {
-    ownerId: 'fallback',
-    title: 'AWS Certified Solutions Architect Job Simulation',
-    issuer: 'Amazon Web Services (AWS) / Forage',
-    issueDate: new Date('2025-01-15').toISOString(),
-    expiryDate: undefined,
-    credentialUrl: 'https://www.theforage.com/',
-    imageUrl: 'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=800&q=80',
-    skills: ['AWS', 'Cloud Architecture', 'S3', 'EC2', 'IAM'],
-    category: 'cloud',
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Accenture Software Engineering Job Simulation',
-    issuer: 'Accenture / Forage',
-    issueDate: new Date('2025-02-10').toISOString(),
-    expiryDate: undefined,
-    credentialUrl: 'https://www.theforage.com/',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-    skills: ['Software Engineering', 'Agile Methodologies', 'System Architecture'],
-    category: 'development',
-  },
-  {
-    ownerId: 'fallback',
-    title: 'TATA GenAI Powered Data Analytics Job Simulation',
-    issuer: 'TATA Group / Forage',
-    issueDate: new Date('2025-03-20').toISOString(),
-    expiryDate: undefined,
-    credentialUrl: 'https://www.theforage.com/',
-    imageUrl: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=800&q=80',
-    skills: ['Generative AI', 'Data Analytics', 'Python', 'Data Visualization'],
-    category: 'ai',
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Microsoft C# Certification',
-    issuer: 'Microsoft',
-    issueDate: new Date('2024-10-05').toISOString(),
-    expiryDate: undefined,
-    credentialUrl: 'https://learn.microsoft.com/',
-    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80',
-    skills: ['C#', '.NET', 'OOP', 'Programming'],
-    category: 'development',
-  },
-  {
-    ownerId: 'fallback',
-    title: 'IBM Web Development & Programming Certifications',
-    issuer: 'IBM',
-    issueDate: new Date('2024-08-12').toISOString(),
-    expiryDate: undefined,
-    credentialUrl: 'https://www.credly.com/',
-    imageUrl: 'https://images.unsplash.com/photo-1618401471353-b98aedd07871?auto=format&fit=crop&w=800&q=80',
-    skills: ['HTML', 'CSS', 'JavaScript', 'Java'],
-    category: 'development',
-  },
-];
 
 export default function CertificationsView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,7 +24,7 @@ export default function CertificationsView({ username }: { username?: string }) 
     retry: false,
   });
 
-  const certifications = serverCertifications && serverCertifications.length > 0 ? serverCertifications : fallbackCertifications;
+  const certifications = serverCertifications || [];
 
   const categories = ['all', ...Array.from(new Set(certifications.map((c) => c.category)))];
 

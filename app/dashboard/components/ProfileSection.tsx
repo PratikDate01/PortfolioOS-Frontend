@@ -23,7 +23,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [profileWebsite, setProfileWebsite] = useState(user.socialLinks?.website || '');
 
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<'portfolio-os'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');

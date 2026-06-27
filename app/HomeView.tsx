@@ -28,158 +28,6 @@ import {
 
 // Static fallbacks
 // Static fallbacks
-const fallbackProjects: Project[] = [
-  {
-    ownerId: 'fallback',
-    title: 'SpeakWrite',
-    slug: 'speakwrite',
-    summary: 'A full-stack web application designed for text-to-speech conversion with custom options.',
-    description: 'SpeakWrite is a clean, simple utility to convert text into speech. Built with modern web technologies, it features an interactive interface with options to customize speed, pitch, and voice, making digital content more accessible.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&w=800&q=80',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
-    category: 'Frontend Web',
-    tags: ['Accessibility', 'Web Speech API', 'Audio'],
-    links: { github: 'https://github.com/PratikDate01/SpeakWrite', liveDemo: 'https://speakwrite.netlify.app/' },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 154,
-    order: 1
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Mind Map Generator',
-    slug: 'mind-map-generator',
-    summary: 'An interactive visual tool that allows users to dynamically generate, edit, and visualize mind maps.',
-    description: 'Mind Map Generator provides a visual canvas for mapping out thoughts, brainstorming ideas, and structuring information. Users can create nodes, establish relationships, and design interactive diagrams dynamically.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
-    category: 'Frontend Web',
-    tags: ['Visualization', 'SVG', 'Interactive Canvas'],
-    links: { github: 'https://github.com/PratikDate01/Mind-Map-Generator', liveDemo: 'https://pratikdate.netlify.app/' },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 210,
-    order: 2
-  },
-  {
-    ownerId: 'fallback',
-    title: 'AI Code Reviewer System',
-    slug: 'ai-code-reviewer',
-    summary: 'An AI-powered system designed to analyze and review code quality with intelligent suggestions.',
-    description: 'AI Code Reviewer automates pull request code diagnostics. By analyzing syntax structures, it detects performance regressions, typical bugs, and security weaknesses, suggesting exact code corrections for developers.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    techStack: ['Node.js', 'Express.js', 'React.js', 'Gemini API'],
-    category: 'Artificial Intelligence',
-    tags: ['LLM', 'Static Analysis', 'GitHub Integration'],
-    links: { github: 'https://github.com/PratikDate01/ai-code-reviewer' },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 310,
-    order: 3
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Online Freelance Marketplace Platform',
-    slug: 'freelance-marketplace',
-    summary: 'A full-stack web platform connecting freelancers and clients with secure authentication.',
-    description: 'A marketplace that enables freelancers to list their services and clients to hire them. Features user profiles, search filters, secure authentication sessions, and real-time database transactions.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
-    category: 'Full Stack Web',
-    tags: ['E-Commerce', 'User Profiles', 'JWT'],
-    links: { github: 'https://github.com/PratikDate01/freelancermarketplace' },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 128,
-    order: 4
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Drive Clone System',
-    slug: 'drive-clone',
-    summary: 'A cloud-based file storage system with secure authentication and file management.',
-    description: 'Drive Clone provides users with a private cloud environment to upload, organize, and download files. It features secure credential storage, upload progress bars, and nested folders.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloud Storage'],
-    category: 'Cloud Storage',
-    tags: ['Cloud', 'Multer', 'File Uploads'],
-    links: { github: 'https://github.com/PratikDate01/cloud-drive' },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 165,
-    order: 5
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Lost and Found Portal',
-    slug: 'lost-found-portal',
-    summary: 'A community bulletin board portal to report lost and found items with location tags.',
-    description: 'Lost & Found Portal helps communities recover lost items by letting users publish reports with images, categories, and locations. Other users can view reports and securely contact owners.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
-    category: 'Full Stack Web',
-    tags: ['Community', 'Location Services', 'Geospatial Query'],
-    links: { github: 'https://github.com/PratikDate01/lost-found-portal' },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 92,
-    order: 6
-  }
-];
-
-const fallbackExperiences: Experience[] = [
-  {
-    ownerId: 'fallback',
-    organization: 'Labmentix',
-    role: 'Web Development Intern',
-    type: 'internship',
-    startDate: '2025-07-01',
-    endDate: '2025-10-01',
-    description: 'Developed responsive web applications using React.js and Node.js backend services. Implemented REST APIs and optimized database queries, collaborating on system integrations.',
-    responsibilities: [
-      'Developed responsive web applications using React.js and Node.js backend services.',
-      'Implemented REST APIs and optimized database queries improving performance.',
-      'Collaborated on frontend-backend integration and version control using Git.'
-    ],
-    technologiesUsed: ['React.js', 'Node.js', 'Express.js', 'JavaScript', 'MongoDB', 'Git'],
-    order: 1
-  },
-  {
-    ownerId: 'fallback',
-    organization: 'AICTE Edunet Foundation',
-    role: 'AI & Machine Learning Intern',
-    type: 'internship',
-    startDate: '2026-01-01',
-    endDate: '2026-02-01',
-    description: 'Worked on machine learning models and NLP techniques on real-world datasets for predictive analysis and intelligent solution generation.',
-    responsibilities: [
-      'Worked on machine learning models and real-world datasets for predictive analysis.',
-      'Applied NLP techniques for text processing and intelligent solutions.'
-    ],
-    technologiesUsed: ['Python', 'Machine Learning', 'NLP', 'Data Science'],
-    order: 2
-  }
-];
-
-const fallbackSkills: Skill[] = [
-  { ownerId: 'fallback', name: 'Java', category: 'backend', proficiency: 85, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'JavaScript', category: 'frontend', proficiency: 90, yearsExperience: 3, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'Python', category: 'backend', proficiency: 80, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'HTML & CSS', category: 'frontend', proficiency: 95, yearsExperience: 4, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'React.js', category: 'frontend', proficiency: 88, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'Node.js & Express.js', category: 'backend', proficiency: 85, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'MySQL', category: 'database', proficiency: 85, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'MongoDB', category: 'database', proficiency: 80, yearsExperience: 2, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'Git & GitHub', category: 'other', proficiency: 90, yearsExperience: 3, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'AWS (Basics)', category: 'other', proficiency: 75, yearsExperience: 1, relatedProjectIds: [] },
-  { ownerId: 'fallback', name: 'Postman', category: 'other', proficiency: 85, yearsExperience: 2, relatedProjectIds: [] }
-];
 
 export default function HomeView() {
   const { user } = useAuth();
@@ -283,9 +131,9 @@ export default function HomeView() {
     contactMutation.mutate({ name, email, subject, body });
   };
 
-  const projects = serverProjects && serverProjects.length > 0 ? serverProjects : fallbackProjects;
-  const experiences = serverExperiences && serverExperiences.length > 0 ? serverExperiences : fallbackExperiences;
-  const skills = serverSkills && serverSkills.length > 0 ? serverSkills : fallbackSkills;
+  const projects = serverProjects || [];
+  const experiences = serverExperiences || [];
+  const skills = serverSkills || [];
 
   // Group skills by category
   const skillsByCategory = skills.reduce((acc, skill) => {
@@ -390,52 +238,60 @@ export default function HomeView() {
               </Link>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-2">
-              {projects.map((project, idx) => (
-                <article
-                  key={project.slug || idx}
-                  className="flex flex-col overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700/80 transition-all hover:-translate-y-1 duration-300 group"
-                >
-                  <div className="aspect-video w-full overflow-hidden bg-zinc-900 relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={project.coverImageUrl}
-                      alt={project.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2.5 py-1 text-xs font-mono text-teal-400 border border-teal-500/20">
-                      {project.category}
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="mt-3 text-sm text-zinc-400 line-clamp-3 leading-relaxed flex-1">
-                      {project.summary}
-                    </p>
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {project.techStack.map((tech) => (
-                        <span key={tech} className="rounded bg-zinc-900 px-2.5 py-0.5 text-xs font-mono text-zinc-300 border border-zinc-800">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    {project.slug && (
-                      <div className="mt-6 pt-4 border-t border-zinc-900 flex justify-end">
-                        <Link
-                          href={`/projects/${project.slug}`}
-                          className="inline-flex items-center space-x-1 text-xs font-semibold text-teal-400 hover:text-teal-300 font-sans"
-                        >
-                          <span>Read Case Study</span>
-                          <ExternalLink className="h-3 w-3" />
-                        </Link>
+            {projects.length === 0 ? (
+              <div className="text-center py-20 border border-dashed border-zinc-900 rounded-xl">
+                <Terminal className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
+                <h3 className="text-sm font-bold text-zinc-400 font-sans">No projects showcase yet</h3>
+                <p className="text-xs text-zinc-650 mt-1">Check back later or register to build your portfolio!</p>
+              </div>
+            ) : (
+              <div className="grid gap-8 md:grid-cols-2">
+                {projects.map((project, idx) => (
+                  <article
+                    key={project.slug || idx}
+                    className="flex flex-col overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700/80 transition-all hover:-translate-y-1 duration-300 group"
+                  >
+                    <div className="aspect-video w-full overflow-hidden bg-zinc-900 relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={project.coverImageUrl}
+                        alt={project.title}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute top-3 right-3 rounded-md bg-zinc-950/80 px-2.5 py-1 text-xs font-mono text-teal-400 border border-teal-500/20">
+                        {project.category}
                       </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
+                    </div>
+                    <div className="flex flex-1 flex-col p-6">
+                      <h3 className="text-xl font-bold text-white group-hover:text-teal-400 transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="mt-3 text-sm text-zinc-400 line-clamp-3 leading-relaxed flex-1">
+                        {project.summary}
+                      </p>
+                      <div className="mt-6 flex flex-wrap gap-2">
+                        {project.techStack.map((tech) => (
+                          <span key={tech} className="rounded bg-zinc-900 px-2.5 py-0.5 text-xs font-mono text-zinc-300 border border-zinc-800">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      {project.slug && (
+                        <div className="mt-6 pt-4 border-t border-zinc-900 flex justify-end">
+                          <Link
+                            href={`/projects/${project.slug}`}
+                            className="inline-flex items-center space-x-1 text-xs font-semibold text-teal-400 hover:text-teal-300 font-sans"
+                          >
+                            <span>Read Case Study</span>
+                            <ExternalLink className="h-3 w-3" />
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
@@ -455,35 +311,42 @@ export default function HomeView() {
 
               {/* Skills Proficiency Grid */}
               <div className="lg:col-span-3 grid gap-6 sm:grid-cols-2">
-                {Object.entries(skillsByCategory).map(([category, items]) => (
-                  <div
-                    key={category}
-                    className="rounded-xl border border-zinc-800/60 bg-zinc-950/40 p-6 backdrop-blur-sm"
-                  >
-                    <div className="flex items-center space-x-2.5 border-b border-zinc-900 pb-4 mb-6">
-                      {getCategoryIcon(category)}
-                      <h3 className="font-mono text-sm font-bold text-zinc-200 capitalize tracking-wide">
-                        {category}
-                      </h3>
-                    </div>
-                    <div className="space-y-5">
-                      {items.map((skill) => (
-                        <div key={skill.name}>
-                          <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-1.5">
-                            <span>{skill.name}</span>
-                            <span className="text-teal-400 font-bold">{skill.proficiency}%</span>
-                          </div>
-                          <div className="h-1.5 w-full rounded-full bg-zinc-900 overflow-hidden border border-zinc-800/40">
-                            <div
-                              className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-400"
-                              style={{ width: `${skill.proficiency}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                {Object.keys(skillsByCategory).length === 0 ? (
+                  <div className="col-span-2 text-center py-12 border border-dashed border-zinc-900 rounded-xl">
+                    <Terminal className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
+                    <p className="text-xs text-zinc-500 font-mono">No skills listed yet.</p>
                   </div>
-                ))}
+                ) : (
+                  Object.entries(skillsByCategory).map(([category, items]) => (
+                    <div
+                      key={category}
+                      className="rounded-xl border border-zinc-800/60 bg-zinc-950/40 p-6 backdrop-blur-sm"
+                    >
+                      <div className="flex items-center space-x-2.5 border-b border-zinc-900 pb-4 mb-6">
+                        {getCategoryIcon(category)}
+                        <h3 className="font-mono text-sm font-bold text-zinc-200 capitalize tracking-wide">
+                          {category}
+                        </h3>
+                      </div>
+                      <div className="space-y-5">
+                        {items.map((skill) => (
+                          <div key={skill.name}>
+                            <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-1.5">
+                              <span>{skill.name}</span>
+                              <span className="text-teal-400 font-bold">{skill.proficiency}%</span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-zinc-900 overflow-hidden border border-zinc-800/40">
+                              <div
+                                className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-400"
+                                style={{ width: `${skill.proficiency}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
@@ -497,57 +360,64 @@ export default function HomeView() {
               <p className="mt-3 text-zinc-400">A timeline of my professional roles, achievements, and internships.</p>
             </div>
 
-            <div className="relative border-l border-zinc-800 ml-4 md:ml-6 space-y-12">
-              {experiences.map((exp, idx) => (
-                <div key={idx} className="relative pl-8 md:pl-10 group">
-                  {/* Timeline bullet */}
-                  <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-teal-500 bg-zinc-950 group-hover:scale-125 transition-transform duration-300">
-                    <span className="h-1.5 w-1.5 rounded-full bg-teal-400 mx-auto" />
-                  </div>
-
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-                    <h3 className="text-lg font-bold text-white group-hover:text-teal-400 transition-colors">
-                      {exp.role} @ <span className="text-zinc-300 font-medium">{exp.organization}</span>
-                    </h3>
-                    <div className="flex items-center space-x-1.5 text-xs text-zinc-500 font-mono">
-                      <Calendar className="h-3.5 w-3.5" />
-                      <span>
-                        {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}
-                        {' — '}
-                        {exp.endDate
-                          ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
-                          : 'Present'}
-                      </span>
+            {experiences.length === 0 ? (
+              <div className="text-center py-12 border border-dashed border-zinc-900 rounded-xl">
+                <Briefcase className="h-8 w-8 text-zinc-650 mx-auto mb-4" />
+                <p className="text-xs text-zinc-500 font-mono">No work experience listed yet.</p>
+              </div>
+            ) : (
+              <div className="relative border-l border-zinc-800 ml-4 md:ml-6 space-y-12">
+                {experiences.map((exp, idx) => (
+                  <div key={idx} className="relative pl-8 md:pl-10 group">
+                    {/* Timeline bullet */}
+                    <div className="absolute -left-[9px] top-1 flex h-4 w-4 items-center justify-between rounded-full border border-teal-500 bg-zinc-950 group-hover:scale-125 transition-transform duration-300">
+                      <span className="h-1.5 w-1.5 rounded-full bg-teal-400 mx-auto" />
                     </div>
-                  </div>
 
-                  <div className="flex items-center space-x-1 text-xs font-mono text-zinc-500 mb-4 capitalize">
-                    <Briefcase className="h-3 w-3" />
-                    <span>{exp.type}</span>
-                  </div>
-
-                  <p className="text-sm text-zinc-400 leading-relaxed mb-4">{exp.description}</p>
-                  
-                  {exp.responsibilities && exp.responsibilities.length > 0 && (
-                    <ul className="list-disc list-inside space-y-1.5 text-xs text-zinc-400 pl-2">
-                      {exp.responsibilities.map((resp, rid) => (
-                        <li key={rid} className="leading-relaxed">{resp}</li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {exp.technologiesUsed && exp.technologiesUsed.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {exp.technologiesUsed.map((tech) => (
-                        <span key={tech} className="rounded bg-zinc-900/60 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-800">
-                          {tech}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-white group-hover:text-teal-400 transition-colors">
+                        {exp.role} @ <span className="text-zinc-300 font-medium">{exp.organization}</span>
+                      </h3>
+                      <div className="flex items-center space-x-1.5 text-xs text-zinc-500 font-mono">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>
+                          {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })}
+                          {' — '}
+                          {exp.endDate
+                            ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+                            : 'Present'}
                         </span>
-                      ))}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
+
+                    <div className="flex items-center space-x-1 text-xs font-mono text-zinc-500 mb-4 capitalize">
+                      <Briefcase className="h-3 w-3" />
+                      <span>{exp.type}</span>
+                    </div>
+
+                    <p className="text-sm text-zinc-400 leading-relaxed mb-4">{exp.description}</p>
+                    
+                    {exp.responsibilities && exp.responsibilities.length > 0 && (
+                      <ul className="list-disc list-inside space-y-1.5 text-xs text-zinc-400 pl-2">
+                        {exp.responsibilities.map((resp, rid) => (
+                          <li key={rid} className="leading-relaxed">{resp}</li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {exp.technologiesUsed && exp.technologiesUsed.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {exp.technologiesUsed.map((tech) => (
+                          <span key={tech} className="rounded bg-zinc-900/60 px-2 py-0.5 text-[10px] font-mono text-zinc-400 border border-zinc-800">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

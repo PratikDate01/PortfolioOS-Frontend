@@ -104,8 +104,8 @@ export default function MarketingLandingPage() {
               {[
                 {
                   icon: <Laptop className="h-6 w-6 text-teal-400" />,
-                  title: 'Multi-Theme Rendering Engine',
-                  desc: 'Switch instantly between Portfolio OS, Corporate Executive, Aurora Glassmorphism, and Nordic Frost themes. Tailor your brand to your target audience.'
+                  title: 'Obsidian Teal Portfolio OS',
+                  desc: 'Designed with obsidian teal retro-terminal design aesthetics to wow visitors and recruiters instantly.'
                 },
                 {
                   icon: <Brain className="h-6 w-6 text-purple-400" />,
@@ -210,7 +210,7 @@ export default function MarketingLandingPage() {
                     </li>
                     <li className="flex items-center gap-2.5">
                       <CheckCircle2 className="h-4.5 w-4.5 text-teal-500 flex-shrink-0" />
-                      <span>All 4 Premium Themes (Portfolio OS, Nordic Frost, etc.)</span>
+                      <span>Premium Portfolio OS Theme Layout</span>
                     </li>
                     <li className="flex items-center gap-2.5">
                       <CheckCircle2 className="h-4.5 w-4.5 text-teal-500 flex-shrink-0" />

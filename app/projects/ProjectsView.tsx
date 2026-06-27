@@ -9,111 +9,6 @@ import { Project } from '@/types';
 import { ExternalLink, Search, Terminal, Filter } from 'lucide-react';
 import Link from 'next/link';
 
-// Dynamic fallback generator
-const getFallbackProjects = (username: string = 'developer'): Project[] => [
-  {
-    ownerId: 'fallback',
-    title: 'SpeakWrite',
-    slug: 'speakwrite',
-    summary: 'A full-stack web application designed for text-to-speech conversion with custom options.',
-    description: 'SpeakWrite is a clean, simple utility to convert text into speech. Built with modern web technologies, it features an interactive interface with options to customize speed, pitch, and voice, making digital content more accessible.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&w=800&q=80',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
-    category: 'Frontend Web',
-    tags: ['Accessibility', 'Web Speech API', 'Audio'],
-    links: { github: `https://github.com/${username}/SpeakWrite`, liveDemo: 'https://speakwrite.netlify.app/' },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 154,
-    order: 1
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Mind Map Generator',
-    slug: 'mind-map-generator',
-    summary: 'An interactive visual tool that allows users to dynamically generate, edit, and visualize mind maps.',
-    description: 'Mind Map Generator provides a visual canvas for mapping out thoughts, brainstorming ideas, and structuring information. Users can create nodes, establish relationships, and design interactive diagrams dynamically.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80',
-    techStack: ['HTML', 'CSS', 'JavaScript', 'React.js'],
-    category: 'Frontend Web',
-    tags: ['Visualization', 'SVG', 'Interactive Canvas'],
-    links: { github: `https://github.com/${username}/Mind-Map-Generator`, liveDemo: 'https://pratikdate.netlify.app/' },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 210,
-    order: 2
-  },
-  {
-    ownerId: 'fallback',
-    title: 'AI Code Reviewer System',
-    slug: 'ai-code-reviewer',
-    summary: 'An AI-powered system designed to analyze and review code quality with intelligent suggestions.',
-    description: 'AI Code Reviewer automates pull request code diagnostics. By analyzing syntax structures, it detects performance regressions, typical bugs, and security weaknesses, suggesting exact code corrections for developers.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80',
-    techStack: ['Node.js', 'Express.js', 'React.js', 'Gemini API'],
-    category: 'Artificial Intelligence',
-    tags: ['LLM', 'Static Analysis', 'GitHub Integration'],
-    links: { github: `https://github.com/${username}/ai-code-reviewer` },
-    gallery: [],
-    status: 'published',
-    featured: true,
-    viewCount: 310,
-    order: 3
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Online Freelance Marketplace Platform',
-    slug: 'freelance-marketplace',
-    summary: 'A full-stack web platform connecting freelancers and clients with secure authentication.',
-    description: 'A marketplace that enables freelancers to list their services and clients to hire them. Features user profiles, search filters, secure authentication sessions, and real-time database transactions.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
-    category: 'Full Stack Web',
-    tags: ['E-Commerce', 'User Profiles', 'JWT'],
-    links: { github: `https://github.com/${username}/freelancermarketplace` },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 128,
-    order: 4
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Drive Clone System',
-    slug: 'drive-clone',
-    summary: 'A cloud-based file storage system with secure authentication and file management.',
-    description: 'Drive Clone provides users with a private cloud environment to upload, organize, and download files. It features secure credential storage, upload progress bars, and nested folders.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloud Storage'],
-    category: 'Cloud Storage',
-    tags: ['Cloud', 'Multer', 'File Uploads'],
-    links: { github: `https://github.com/${username}/cloud-drive` },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 165,
-    order: 5
-  },
-  {
-    ownerId: 'fallback',
-    title: 'Lost and Found Portal',
-    slug: 'lost-found-portal',
-    summary: 'A community bulletin board portal to report lost and found items with location tags.',
-    description: 'Lost & Found Portal helps communities recover lost items by letting users publish reports with images, categories, and locations. Other users can view reports and securely contact owners.',
-    coverImageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB'],
-    category: 'Full Stack Web',
-    tags: ['Community', 'Location Services', 'Geospatial Query'],
-    links: { github: `https://github.com/${username}/lost-found-portal` },
-    gallery: [],
-    status: 'published',
-    featured: false,
-    viewCount: 92,
-    order: 6
-  }
-];
 
 export default function ProjectsView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -131,7 +26,7 @@ export default function ProjectsView({ username }: { username?: string }) {
     retry: false
   });
 
-  const projects = serverProjects && serverProjects.length > 0 ? serverProjects : getFallbackProjects(username);
+  const projects = serverProjects || [];
 
   // Extract unique categories
   const categories = ['all', ...Array.from(new Set(projects.map((p) => p.category)))];

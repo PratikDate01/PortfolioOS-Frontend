@@ -129,7 +129,7 @@ export default function DashboardView() {
   const [profileWebsite, setProfileWebsite] = useState('');
   
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'corporate' | 'portfolio-os' | 'aurora-glass' | 'nordic-frost'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<'portfolio-os'>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
@@ -802,20 +802,9 @@ export default function DashboardView() {
                           <h4 className="text-white text-sm font-bold">Theme Setting</h4>
                           <p className="text-xs text-zinc-500 mt-1 mb-3">Select and configure your active portfolio theme.</p>
                         </div>
-                        <select
-                          value={portfolioTheme}
-                          onChange={e => {
-                            const newTheme = e.target.value;
-                            setPortfolioTheme(newTheme as any);
-                            updateThemeMutation.mutate(newTheme);
-                          }}
-                          className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-zinc-200 outline-none focus:border-teal-500 font-mono text-center cursor-pointer"
-                        >
-                          <option value="portfolio-os">Portfolio OS (Obsidian Teal)</option>
-                          <option value="corporate">Executive Corporate (Sleek Professional)</option>
-                          <option value="aurora-glass">Aurora Glassmorphism (Interactive Glow)</option>
-                          <option value="nordic-frost">Nordic Frost (Clean Ice-Blue)</option>
-                        </select>
+                        <div className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs text-teal-400 font-mono text-center">
+                          Portfolio OS (Active)
+                        </div>
                       </div>
                     </div>
                   </div>

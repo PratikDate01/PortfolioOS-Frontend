@@ -9,40 +9,6 @@ import { BlogPost } from '@/types';
 import { BookOpen, Search, Calendar, Clock, ArrowRight, Terminal, Tag } from 'lucide-react';
 import Link from 'next/link';
 
-const fallbackBlogPosts: BlogPost[] = [
-  {
-    ownerId: 'fallback',
-    title: 'Mastering Monorepos with NPM Workspaces',
-    slug: 'mastering-monorepos-with-npm-workspaces',
-    excerpt: 'Learn how to structure and coordinate a full-stack typescript project using workspaces and shared type definition trees.',
-    contentMarkdown: '...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1618401471353-b98aedd07871?auto=format&fit=crop&w=800&q=80',
-    authorId: 'default-author',
-    categories: ['Development', 'TypeScript'],
-    tags: ['Workspaces', 'Monorepo', 'NPM'],
-    status: 'published',
-    readingTimeMinutes: 3,
-    viewCount: 188,
-    likeCount: 42,
-    publishedAt: new Date().toISOString(),
-  },
-  {
-    ownerId: 'fallback',
-    title: 'The Rise of Agentic AI Coding Assistants',
-    slug: 'rise-of-agentic-ai-coding-assistants',
-    excerpt: 'Exploring autonomous developer paradigms, agent workflows, and the future of pair programming.',
-    contentMarkdown: '...',
-    coverImageUrl: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80',
-    authorId: 'default-author',
-    categories: ['AI', 'Future of Work'],
-    tags: ['LLM', 'AI Coding', 'Agentic Systems'],
-    status: 'published',
-    readingTimeMinutes: 4,
-    viewCount: 250,
-    likeCount: 89,
-    publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
 
 export default function BlogView({ username }: { username?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +25,7 @@ export default function BlogView({ username }: { username?: string }) {
     retry: false,
   });
 
-  const posts = serverPosts && serverPosts.length > 0 ? serverPosts : fallbackBlogPosts;
+  const posts = serverPosts || [];
 
   // Extract unique categories
   const categories = ['all', ...Array.from(new Set(posts.flatMap((p) => p.categories || [])))];
