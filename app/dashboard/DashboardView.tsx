@@ -10,8 +10,9 @@ import CloudinaryUploadZone from '@/components/features/CloudinaryUploadZone';
 import { apiFetch } from '@/lib/api-client';
 import { useAuth } from '@/hooks/useAuth';
 import ProfileSection from './components/ProfileSection';
+import AppearanceSection from './components/AppearanceSection';
 import ResumeSection from './components/ResumeSection';
-import { Badge, UserProgressEvent, Project, Experience, Skill, Certification, Portfolio, Resume, CloudinaryAsset } from '@/types';
+import { Badge, UserProgressEvent, Project, Experience, Skill, Certification, Portfolio, Resume, CloudinaryAsset, PortfolioTheme } from '@/types';
 import {
   User as UserIcon, Bookmark as BookmarkIcon, Award, Shield, Github, Linkedin, Twitter, Globe, Trash2, ExternalLink, Zap, Clock, Sparkles, Save, CheckCircle, Loader2, Key, AlertCircle, Eye, EyeOff, Plus, Pencil, X, Briefcase, FileText, ChevronRight, Cpu, Database, Cloud, BookOpen, Layers, Code, Settings, Brain
 } from 'lucide-react';
@@ -34,7 +35,7 @@ interface UserProgressData {
   recentActivity: UserProgressEvent[];
 }
 
-type TabType = 'overview' | 'profile' | 'projects' | 'skills' | 'experience' | 'certifications' | 'resumes' | 'bookmarks' | 'achievements';
+type TabType = 'overview' | 'profile' | 'projects' | 'skills' | 'experience' | 'certifications' | 'resumes' | 'bookmarks' | 'achievements' | 'appearance';
 
 export default function DashboardView() {
   const router = useRouter();
@@ -129,7 +130,7 @@ export default function DashboardView() {
   const [profileWebsite, setProfileWebsite] = useState('');
   
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'portfolio-os'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<PortfolioTheme>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
@@ -745,6 +746,7 @@ export default function DashboardView() {
               {[
                 { tab: 'overview', label: 'Console Overview', icon: <Layers className="h-4 w-4" /> },
                 { tab: 'profile', label: 'Profile', icon: <UserIcon className="h-4 w-4" /> },
+                { tab: 'appearance', label: 'Appearance Settings', icon: <Settings className="h-4 w-4" /> },
                 { tab: 'projects', label: 'Projects Showcase', icon: <Code className="h-4 w-4" /> },
                 { tab: 'skills', label: 'Technical Skills', icon: <Cpu className="h-4 w-4" /> },
                 { tab: 'experience', label: 'Work History', icon: <Briefcase className="h-4 w-4" /> },
@@ -799,12 +801,15 @@ export default function DashboardView() {
                       <div className="border border-zinc-850 bg-zinc-950/50 p-5 rounded-xl text-center flex flex-col items-center justify-between">
                         <div className="w-full">
                           <Settings className="h-8 w-8 text-indigo-400 mx-auto mb-3" />
-                          <h4 className="text-white text-sm font-bold">Theme Setting</h4>
+                          <h4 className="text-white text-sm font-bold">Theme Settings</h4>
                           <p className="text-xs text-zinc-500 mt-1 mb-3">Select and configure your active portfolio theme.</p>
                         </div>
-                        <div className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs text-teal-400 font-mono text-center">
-                          Portfolio OS (Active)
-                        </div>
+                        <button
+                          onClick={() => setActiveTab('appearance')}
+                          className="w-full rounded-lg border border-teal-500/20 bg-teal-950/30 px-3 py-2.5 text-xs text-teal-400 font-mono text-center hover:bg-teal-900/30 transition-colors"
+                        >
+                          Customize Theme ({portfolioSettings?.theme || 'developer-pro'})
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -833,6 +838,18 @@ export default function DashboardView() {
                   user={user}
                   portfolioSettings={portfolioSettings}
                   refetchPortfolio={refetchPortfolio}
+                />
+              )}
+
+              {/* APPEARANCE SETTINGS TAB */}
+              {activeTab === 'appearance' && (
+                <AppearanceSection
+                  portfolioSettings={portfolioSettings}
+                  refetchPortfolio={refetchPortfolio}
+                  projects={projects}
+                  experiences={experiences}
+                  skills={skills}
+                  certifications={certifications}
                 />
               )}
 

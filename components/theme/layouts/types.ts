@@ -1,0 +1,42 @@
+import React from 'react';
+import { Project, Experience, Skill, Certification, Portfolio, BlogPost, Resume, Testimonial } from '@/types';
+
+export interface ThemeLayoutProps {
+  username: string;
+  portfolio: Portfolio;
+  projects: Project[];
+  experiences: Experience[];
+  skills: Skill[];
+  certifications: Certification[];
+  resumes: Resume[];
+  blogPosts: BlogPost[];
+  testimonials: Testimonial[];
+  visitorCount: number | null;
+  sessionId: string | null;
+  selectedProject: Project | null;
+  setSelectedProject: (p: Project | null) => void;
+  activeFilterCategory: string;
+  setActiveFilterCategory: (c: string) => void;
+  contactName: string;
+  setContactName: (s: string) => void;
+  contactEmail: string;
+  setContactEmail: (s: string) => void;
+  contactSubject: string;
+  setContactSubject: (s: string) => void;
+  contactBody: string;
+  setContactBody: (s: string) => void;
+  contactSuccess: boolean;
+  copiedSuccess: boolean;
+  handleContactSubmit: (e: React.FormEvent) => void;
+  handleCopyLink: () => void;
+  handleQuickAction: (actionType: 'interview' | 'resume' | 'opportunity') => void;
+  renderAvatar: (className: string, initialsSizeClass?: string) => React.ReactNode;
+  socialLinks: any;
+  displayYearsOfExp: number;
+  scores: any;
+  filteredProjects: Project[];
+  projectCategories: string[];
+  skillsByCategory: Record<string, Skill[]>;
+  getCategoryIcon: (cat: string) => React.ReactNode;
+  activeResume: Resume;
+}

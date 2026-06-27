@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api-client';
-import { Portfolio, User, CloudinaryAsset } from '@/types';
+import { Portfolio, User, CloudinaryAsset, PortfolioTheme } from '@/types';
 import { Save, Loader2, AlertCircle, Key, CheckCircle } from 'lucide-react';
 import CloudinaryUploadZone from '@/components/features/CloudinaryUploadZone';
 
@@ -23,7 +23,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [profileWebsite, setProfileWebsite] = useState(user.socialLinks?.website || '');
 
   // Portfolio Theme Settings
-  const [portfolioTheme, setPortfolioTheme] = useState<'portfolio-os'>('portfolio-os');
+  const [portfolioTheme, setPortfolioTheme] = useState<PortfolioTheme>('portfolio-os');
   const [portfolioHeadline, setPortfolioHeadline] = useState('');
   const [portfolioVisibility, setPortfolioVisibility] = useState<'public' | 'private' | 'unlisted'>('public');
   const [portfolioCustomDomain, setPortfolioCustomDomain] = useState('');
