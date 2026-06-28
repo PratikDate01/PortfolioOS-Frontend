@@ -59,6 +59,7 @@ export default function TerminalLayout({
 
   const educationExperiences = experiences.filter(exp => exp.type === 'education');
   const jobExperiences = experiences.filter(exp => exp.type === 'job' || exp.type === 'internship');
+  const achievementExperiences = experiences.filter(exp => exp.type === 'achievement');
 
   const renderProgressBar = (percentage: number) => {
     const totalBars = 20;
@@ -70,15 +71,17 @@ export default function TerminalLayout({
   return (
     <div className="min-h-screen flex flex-col bg-black text-green-400 font-mono selection:bg-green-500/30 p-4 md:p-8 space-y-12">
       
-      {/* 1. System Status Banner / CLI Header */}
-      <div className="border border-green-500/20 rounded-md p-3 text-xs bg-zinc-950/30">
-        <p className="opacity-60">// PORTFOLIO OS TERMINAL INTERACTION SERVICE</p>
-        <p className="opacity-60">Last login: {new Date().toUTCString()} on ttys002</p>
-        <p className="text-white mt-1">Type help or navigate sections below. Secure connection verified.</p>
-        <p className="text-green-300 mt-0.5">Session ID: {sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</p>
-        {visitorCount !== null && (
-          <p className="text-yellow-550 mt-1">● Views logged: {visitorCount.toLocaleString()} visualizers</p>
-        )}
+      {/* 1. CLI Header / Top Bar */}
+      <div className="border border-green-500/20 rounded-md p-3 text-xs bg-zinc-950/30 flex flex-col md:flex-row md:items-center justify-between gap-2">
+        <div>
+          <p className="opacity-60">// PORTFOLIO OS TERMINAL INTERACTION SERVICE</p>
+          <p className="text-white mt-1">guest@{username}:~$ cat banner.txt</p>
+        </div>
+        <div className="flex items-center gap-4">
+          {visitorCount !== null && portfolio.showPortfolioViews !== false && (
+            <span className="text-yellow-550 font-bold">● {visitorCount.toLocaleString()} visualizers</span>
+          )}
+        </div>
       </div>
 
       {/* 2. Hero: whoami */}
@@ -108,7 +111,7 @@ export default function TerminalLayout({
             {activeResume && (
               <button 
                 onClick={() => handleQuickAction('resume')}
-                className="bg-green-500 text-black px-4 py-1.5 font-bold hover:bg-green-400 transition-colors animate-pulse"
+                className="bg-green-500 text-black px-4 py-1.5 font-bold hover:bg-green-400 transition-colors"
               >
                 ./download_cv.sh
               </button>
@@ -134,9 +137,9 @@ export default function TerminalLayout({
           <div className="md:col-span-2 text-xs text-green-300/85 leading-relaxed">
             <p>{bio}</p>
             <div className="mt-4 flex gap-4 text-[10px]">
-              {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:underline">GITHUB: {socialLinks.github}</a>}
-              {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:underline">LINKEDIN: {socialLinks.linkedin}</a>}
-              {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:underline">TWITTER: {socialLinks.twitter}</a>}
+              {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:underline font-medium">GITHUB: {socialLinks.github}</a>}
+              {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:underline font-medium">LINKEDIN: {socialLinks.linkedin}</a>}
+              {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:underline font-medium">TWITTER: {socialLinks.twitter}</a>}
             </div>
           </div>
           <div className="md:col-span-1 h-48 border border-green-500/20 bg-black relative overflow-hidden rounded">
@@ -191,54 +194,41 @@ export default function TerminalLayout({
         </div>
       </div>
 
-      {/* 5. Intelligence Dashboard */}
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2 text-sm text-white">
-          <Terminal className="h-4 w-4 text-green-500" />
-          <span>guest@{username}:~$ ./recruiter-intel.sh</span>
-        </div>
-        
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 text-xs">
-          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20">
-            <p className="opacity-50">COMPLETENESS</p>
-            <p className="text-xl font-bold text-white my-1">{scores.portfolioScore} / 100</p>
-            <p className="text-[10px] opacity-75">{renderProgressBar(scores.portfolioScore)}</p>
-          </div>
-
-          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20">
-            <p className="opacity-50">READINESS</p>
-            <p className="text-xl font-bold text-white my-1">{scores.readinessScore}</p>
-            <p className="text-[10px] opacity-75">Verified formatting status.</p>
-          </div>
-
-          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20">
-            <p className="opacity-50">ATS_MATCH</p>
-            <p className="text-xl font-bold text-white my-1">{scores.atsScore}%</p>
-            <p className="text-[10px] opacity-75">{renderProgressBar(scores.atsScore)}</p>
-          </div>
-
-          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20">
-            <p className="opacity-50">GITHUB_SYNC</p>
-            <p className="text-xl font-bold text-white my-1">{scores.githubHealth}</p>
-            <p className="text-[10px] opacity-75">Database sync status active.</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 6. GitHub Integration */}
-      {githubUser && (
+      {/* 5. Technical Skills / Tech Galaxy */}
+      {skills.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
             <Terminal className="h-4 w-4 text-green-500" />
-            <span>guest@{username}:~$ ./github-metrics.sh</span>
+            <span>guest@{username}:~$ cat skills.conf</span>
           </div>
-          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20 text-xs">
-            <GitHubStats username={githubUser} />
+          
+          <div className="grid gap-12 lg:grid-cols-5 items-start text-xs">
+            <div className="lg:col-span-2">
+              <div className="p-4 border border-green-500/20 bg-black rounded shadow-[0_0_15px_rgba(34,197,94,0.05)]">
+                <p className="text-[10px] uppercase text-green-500/50 font-bold mb-3">// 3D Galaxy Visualization</p>
+                <TechGalaxy />
+              </div>
+            </div>
+            <div className="lg:col-span-3 border border-green-500/20 p-6 rounded bg-zinc-950/20 grid gap-6 sm:grid-cols-2">
+              {Object.entries(skillsByCategory).map(([category, items]) => (
+                <div key={category} className="space-y-3">
+                  <p className="text-white border-b border-green-500/20 pb-1 font-bold uppercase">{category}</p>
+                  <div className="space-y-2">
+                    {items.map(skill => (
+                      <div key={skill.name}>
+                        <p>{skill.name}</p>
+                        <p className="text-green-500/80 font-mono mt-0.5">{renderProgressBar(skill.proficiency)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* 7. Projects Showcase */}
+      {/* 6. Projects Showcase */}
       {projects.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -289,41 +279,7 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* 8. Technical Skills / Tech Galaxy */}
-      {skills.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2 text-sm text-white">
-            <Terminal className="h-4 w-4 text-green-500" />
-            <span>guest@{username}:~$ cat skills.conf</span>
-          </div>
-          
-          <div className="grid gap-12 lg:grid-cols-5 items-start text-xs">
-            <div className="lg:col-span-2">
-              <div className="p-4 border border-green-500/20 bg-black rounded shadow-[0_0_15px_rgba(34,197,94,0.05)]">
-                <p className="text-[10px] uppercase text-green-500/50 font-bold mb-3">// 3D Galaxy Visualization</p>
-                <TechGalaxy />
-              </div>
-            </div>
-            <div className="lg:col-span-3 border border-green-500/20 p-6 rounded bg-zinc-950/20 grid gap-6 sm:grid-cols-2">
-              {Object.entries(skillsByCategory).map(([category, items]) => (
-                <div key={category} className="space-y-3">
-                  <p className="text-white border-b border-green-500/20 pb-1 font-bold uppercase">{category}</p>
-                  <div className="space-y-2">
-                    {items.map(skill => (
-                      <div key={skill.name}>
-                        <p>{skill.name}</p>
-                        <p className="text-green-500/80 font-mono mt-0.5">{renderProgressBar(skill.proficiency)}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 9. Work History Timeline */}
+      {/* 7. Work History Timeline */}
       {jobExperiences.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -336,7 +292,7 @@ export default function TerminalLayout({
               <div key={idx} className="relative pl-6">
                 <div className="absolute -left-[5px] top-1 h-2.5 w-2.5 rounded-full bg-green-500 border border-black" />
                 <p className="text-white font-bold">{exp.role} @ <span className="text-green-300">{exp.organization}</span></p>
-                <p className="opacity-50">{new Date(exp.startDate).getFullYear()} - {exp.endDate ? new Date(exp.endDate).getFullYear() : 'Present'}</p>
+                <p className="opacity-50 font-medium">{new Date(exp.startDate).getFullYear()} - {exp.endDate ? new Date(exp.endDate).getFullYear() : 'Present'}</p>
                 <p className="text-green-300/80 mt-1 leading-relaxed">{exp.description}</p>
                 {exp.responsibilities && exp.responsibilities.length > 0 && (
                   <ul className="list-disc list-inside space-y-0.5 pl-2 mt-2 opacity-75">
@@ -349,7 +305,20 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* 10 & 11. Credentials */}
+      {/* GitHub Integration */}
+      {githubUser && (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 text-sm text-white">
+            <Terminal className="h-4 w-4 text-green-500" />
+            <span>guest@{username}:~$ ./github-metrics.sh</span>
+          </div>
+          <div className="border border-green-500/20 p-4 rounded bg-zinc-950/20 text-xs">
+            <GitHubStats username={githubUser} />
+          </div>
+        </div>
+      )}
+
+      {/* Credentials (Education and Certs) */}
       {(educationExperiences.length > 0 || certifications.length > 0) && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -364,7 +333,7 @@ export default function TerminalLayout({
                 {educationExperiences.map((edu, idx) => (
                   <div key={idx}>
                     <p className="font-bold text-white">{edu.role} - <span className="text-green-300">{edu.organization}</span></p>
-                    <p className="opacity-50">{new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}</p>
+                    <p className="opacity-50 font-medium">{new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}</p>
                     <p className="opacity-75">{edu.description}</p>
                   </div>
                 ))}
@@ -391,26 +360,28 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* 11. Testimonials */}
-      {testimonials.length > 0 && (
+      {/* Achievements Section */}
+      {achievementExperiences.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
             <Terminal className="h-4 w-4 text-green-500" />
-            <span>guest@{username}:~$ cat testimonials.log</span>
+            <span>guest@{username}:~$ ./achievements.sh</span>
           </div>
           
-          <div className="space-y-4 text-xs">
-            {testimonials.map((test) => (
-              <div key={test._id} className="border border-green-500/20 p-4 rounded bg-zinc-950/10">
-                <p className="italic text-green-300/90">&ldquo;{test.body}&rdquo;</p>
-                <p className="text-right mt-2 text-white font-bold">- {test.authorName} ({test.authorRole} {test.authorCompany ? `@ ${test.authorCompany}` : ''})</p>
+          <div className="border border-green-500/20 p-5 rounded bg-zinc-950/20 text-xs space-y-3">
+            <p className="text-white border-b border-green-500/20 pb-1">// Achievements</p>
+            {achievementExperiences.map((ach, idx) => (
+              <div key={idx} className="border-b border-green-500/10 pb-2">
+                <p className="font-bold text-white">{ach.role} - <span className="text-green-300">{ach.organization}</span></p>
+                <p className="opacity-50 font-medium">{new Date(ach.startDate).getFullYear()}</p>
+                <p className="opacity-75">{ach.description}</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* 12. Resume Center */}
+      {/* Resume Center */}
       {activeResume && (
         <div className="space-y-4">
           <div className="flex items-center space-x-2 text-sm text-white">
@@ -454,7 +425,26 @@ export default function TerminalLayout({
         </div>
       )}
 
-      {/* 13. Contact Form & Actions */}
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2 text-sm text-white">
+            <Terminal className="h-4 w-4 text-green-500" />
+            <span>guest@{username}:~$ cat testimonials.log</span>
+          </div>
+          
+          <div className="space-y-4 text-xs">
+            {testimonials.map((test) => (
+              <div key={test._id} className="border border-green-500/20 p-4 rounded bg-zinc-950/10">
+                <p className="italic text-green-300/90">&ldquo;{test.body}&rdquo;</p>
+                <p className="text-right mt-2 text-white font-bold font-mono">- {test.authorName} ({test.authorRole} {test.authorCompany ? `@ ${test.authorCompany}` : ''})</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Contact Form & Actions */}
       <div id="contact" className="space-y-4">
         <div className="flex items-center space-x-2 text-sm text-white">
           <Terminal className="h-4 w-4 text-green-500" />
@@ -505,6 +495,16 @@ export default function TerminalLayout({
               {contactSuccess && <p className="text-center text-emerald-450 mt-2">✓ Message queued successfully.</p>}
             </form>
           </div>
+        </div>
+      </div>
+
+      {/* Themed Footer */}
+      <div className="border-t border-green-500/20 pt-8 text-center text-xs text-green-500/60">
+        <p>© {new Date().getFullYear()} {ownerName}. All rights reserved.</p>
+        <div className="flex justify-center gap-6 mt-2">
+          {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:underline font-medium">GitHub</a>}
+          {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:underline font-medium">LinkedIn</a>}
+          {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:underline font-medium">Twitter</a>}
         </div>
       </div>
 

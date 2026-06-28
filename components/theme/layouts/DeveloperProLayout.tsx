@@ -92,6 +92,7 @@ export default function DeveloperProLayout({
 
   const educationExperiences = experiences.filter(exp => exp.type === 'education');
   const jobExperiences = experiences.filter(exp => exp.type === 'job' || exp.type === 'internship');
+  const achievementExperiences = experiences.filter(exp => exp.type === 'achievement');
 
   return (
     <div className="min-h-screen flex flex-col transition-colors duration-500 relative overflow-x-hidden bg-[#0a0b0d] text-zinc-300 font-sans selection:bg-teal-500/25">
@@ -120,11 +121,10 @@ export default function DeveloperProLayout({
               >
                 {username.toUpperCase()}
               </span>
-              <span className="hidden md:inline text-xs font-mono opacity-60">/ developer-pro</span>
             </div>
             
             <div className="flex items-center gap-4">
-              {visitorCount !== null && (
+              {visitorCount !== null && portfolio.showPortfolioViews !== false && (
                 <div 
                   className="flex items-center space-x-1.5 rounded-full border px-3 py-1 text-xs font-mono"
                   style={{ 
@@ -152,22 +152,6 @@ export default function DeveloperProLayout({
 
       <main className="flex-grow z-10">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-            
-            {/* System Status Banner */}
-            <motion.div variants={fadeInVariants} className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-4 text-xs space-y-2 shadow-md backdrop-blur-md">
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: themeAccent }} />
-                  <span className="font-semibold text-zinc-300 uppercase tracking-wider text-[10px] font-mono">Profile Verified</span>
-                </div>
-                <span className="text-[10px] text-zinc-600 font-mono">WORKSPACE SECURED</span>
-              </div>
-              <div className="grid gap-2 sm:grid-cols-3 text-zinc-500 font-mono">
-                <p>Status: <span className="font-bold" style={{ color: themeAccent }}>Active</span></p>
-                <p>Platform: <span style={{ color: themeAccent }}>Developer Pro</span></p>
-                <p>Session ID: <span className="opacity-90" style={{ color: themeAccent }}>{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</span></p>
-              </div>
-            </motion.div>
 
             {/* Widescreen Banner Cover & Profile Header */}
             <motion.div variants={fadeInVariants} className="relative rounded-2xl overflow-hidden border border-zinc-900 bg-zinc-950/20 shadow-xl">
@@ -180,7 +164,7 @@ export default function DeveloperProLayout({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0b0d] via-transparent to-transparent" />
               </div>
               
-              <div className="px-6 pb-6 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
+              <div className={`px-6 pb-6 relative flex flex-col md:flex-row md:items-end justify-between gap-6 ${portfolio.showProfilePhoto !== false ? '-mt-16 md:-mt-20' : 'mt-6'}`}>
                 <div className="flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left z-10">
                   {portfolio.showProfilePhoto !== false && (
                     <div className="relative w-28 h-28 md:w-32 md:h-32 rounded-2xl overflow-hidden border-4 border-[#0a0b0d] bg-zinc-900 shadow-2xl flex-shrink-0">
@@ -235,7 +219,7 @@ export default function DeveloperProLayout({
               </div>
             </motion.div>
 
-            {/* Profile Bio Section */}
+            {/* Profile Bio Section (About) */}
             <motion.section variants={fadeInVariants} className="relative pt-4">
               <div className="border border-zinc-900/60 bg-zinc-900/10 rounded-xl p-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-3 mb-4">
@@ -277,6 +261,7 @@ export default function DeveloperProLayout({
               </div>
             </motion.section>
 
+            {/* Candidate Snapshot */}
             <motion.section variants={fadeInVariants} className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
                 <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
@@ -300,25 +285,6 @@ export default function DeveloperProLayout({
                     <div className="p-3 bg-zinc-900/20 rounded-lg border border-zinc-850 text-center">
                       <span className="block text-2xl font-extrabold text-white">{certifications.length}</span>
                       <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Certs</span>
-                    </div>
-                  </div>
-                  <div className="mt-5 grid grid-cols-2 gap-4 pt-4 border-t border-zinc-900 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="text-zinc-500 font-semibold">GitHub Status:</span>
-                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${
-                        githubUser ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-zinc-900 text-zinc-650 border border-zinc-850'
-                      }`}>
-                        {githubUser ? 'Connected' : 'Not Connected'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-zinc-500 font-semibold">Availability:</span>
-                      <span 
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-[10px] font-bold truncate max-w-full"
-                        style={{ color: themeAccent, borderColor: `${themeAccent}20`, backgroundColor: `${themeAccent}08` }}
-                      >
-                        {availabilityStatus}
-                      </span>
                     </div>
                   </div>
                 </Tilt3DCard>
@@ -349,84 +315,54 @@ export default function DeveloperProLayout({
               </div>
             </motion.section>
 
-            {/* Recruiter Intelligence Dashboard */}
-            <motion.section variants={fadeInVariants} className="space-y-6">
-              <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
-                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Recruiter Intelligence Dashboard</span>
-              </div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-5 flex flex-col justify-between h-full">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Portfolio Score</span>
-                    <CheckCircle2 className="h-4 w-4" style={{ color: themeAccent }} />
-                  </div>
-                  <div className="flex items-baseline gap-1.5 mb-2">
-                    <span className="text-3xl font-extrabold text-white">{scores.portfolioScore}</span>
-                    <span className="text-xs text-zinc-500">/ 100</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-zinc-950 border border-zinc-900 rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-teal-500 to-emerald-450" style={{ width: `${scores.portfolioScore}%` }} />
-                  </div>
-                  <p className="text-[9px] text-zinc-500">Profile completeness index score.</p>
-                </Tilt3DCard>
-
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-5 flex flex-col justify-between h-full">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">Recruiter Readiness</span>
-                    <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-                  </div>
-                  <div className="mb-4">
-                    <span 
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
-                      style={{ color: themeAccent, borderColor: `${themeAccent}30`, backgroundColor: `${themeAccent}08` }}
-                    >
-                      {scores.readinessScore}
-                    </span>
-                  </div>
-                  <p className="text-[9px] text-zinc-500">Formatting and navigation evaluation.</p>
-                </Tilt3DCard>
-
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-5 flex flex-col justify-between h-full">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">ATS Match Capability</span>
-                    <FileText className="h-4 w-4" style={{ color: themeAccent }} />
-                  </div>
-                  <div className="flex items-baseline gap-1.5 mb-2">
-                    <span className="text-3xl font-extrabold text-white">{scores.atsScore}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-zinc-950 border border-zinc-900 rounded-full overflow-hidden mb-2">
-                    <div className="h-full bg-gradient-to-r from-teal-500 to-indigo-500" style={{ width: `${scores.atsScore}%` }} />
-                  </div>
-                  <p className="text-[9px] text-zinc-500">Resume parsed match index capability.</p>
-                </Tilt3DCard>
-
-                <Tilt3DCard glowColor="teal" className="rounded-xl border border-zinc-900 bg-zinc-900/10 p-5 flex flex-col justify-between h-full">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[9px] uppercase tracking-wider text-zinc-400 font-bold">GitHub Sync Health</span>
-                    <Github className="h-4 w-4 text-zinc-405" />
-                  </div>
-                  <div className="mb-4">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-zinc-900 text-teal-400 border border-zinc-800">
-                      {scores.githubHealth}
-                    </span>
-                  </div>
-                  <p className="text-[9px] text-zinc-500">Live code distribution API health status.</p>
-                </Tilt3DCard>
-              </div>
-            </motion.section>
-
-            {githubUser && (
+            {/* Technical Skills breakdown (Skills) */}
+            {skills.length > 0 && (
               <AnimatedSection className="space-y-6">
-                <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
-                  <Github className="h-4 w-4" style={{ color: themeAccent }} />
-                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">GitHub Integration Metrics</span>
+                <div className="flex items-center space-x-2 border-b border-zinc-855 pb-2">
+                  <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
+                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Technical Skills Breakdown</span>
                 </div>
-                <GitHubStats username={githubUser} />
+                <div className="grid gap-12 lg:grid-cols-5 items-start">
+                  <div className="lg:col-span-2">
+                    <div className="p-4 border border-zinc-900 bg-zinc-950/20 rounded-xl">
+                      <p className="text-[10px] uppercase text-zinc-650 font-bold mb-3">// 3D Galaxy Visualization</p>
+                      <TechGalaxy />
+                    </div>
+                  </div>
+                  <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
+                    {Object.entries(skillsByCategory).map(([category, items]) => (
+                      <div key={category} className="rounded-xl border border-zinc-905 bg-zinc-950/15 p-5">
+                        <div className="flex items-center space-x-2 border-b border-zinc-900 pb-3 mb-4">
+                          {getCategoryIcon(category)}
+                          <h3 className="text-xs font-bold capitalize text-white">{category}</h3>
+                        </div>
+                        <div className="space-y-4">
+                          {items.map((skill) => (
+                            <div key={skill.name}>
+                              <div className="flex items-center justify-between text-[11px] text-zinc-400 mb-1">
+                                <span>{skill.name}</span>
+                                <span style={{ color: themeAccent }}>{skill.proficiency}%</span>
+                              </div>
+                              <div className="h-1.5 w-full rounded-full bg-zinc-955 border border-zinc-900 overflow-hidden">
+                                <div 
+                                  className="h-full rounded-full" 
+                                  style={{ 
+                                    width: `${skill.proficiency}%`,
+                                    background: `linear-gradient(to right, ${themeAccent}, #10b981)`
+                                  }} 
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </AnimatedSection>
             )}
 
-            {/* Featured Projects Showcase */}
+            {/* Featured Projects Showcase (Projects) */}
             {projects.length > 0 && (
               <AnimatedSection id="projects" className="space-y-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
@@ -454,14 +390,14 @@ export default function DeveloperProLayout({
                 </div>
 
                 {filteredProjects.length === 0 ? (
-                  <div className="text-center py-12 border border-zinc-900 rounded-xl bg-zinc-950/20">
+                  <div className="text-center py-12 border border-zinc-900 rounded-xl bg-zinc-955/20">
                     <p className="text-sm text-zinc-550">No matching projects found.</p>
                   </div>
                 ) : (
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {filteredProjects.map((project) => (
                       <Tilt3DCard key={project._id} glowColor="teal" className="rounded-xl overflow-hidden h-full flex">
-                        <article className="flex-1 flex flex-col overflow-hidden border border-zinc-900 bg-zinc-950/20 hover:border-zinc-800 transition-all duration-300 group relative">
+                        <article className="flex-1 flex flex-col overflow-hidden border border-zinc-900 bg-zinc-955/20 hover:border-zinc-800 transition-all duration-300 group relative">
                           <div className="aspect-video w-full overflow-hidden bg-zinc-950 relative">
                             <img src={project.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={project.title} className="h-full w-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" />
                             <div 
@@ -502,54 +438,7 @@ export default function DeveloperProLayout({
               </AnimatedSection>
             )}
 
-            {/* Technical Skills breakdown */}
-            {skills.length > 0 && (
-              <AnimatedSection className="space-y-6">
-                <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
-                  <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Technical Skills Breakdown</span>
-                </div>
-                <div className="grid gap-12 lg:grid-cols-5 items-start">
-                  <div className="lg:col-span-2">
-                    <div className="p-4 border border-zinc-900 bg-zinc-950/20 rounded-xl">
-                      <p className="text-[10px] uppercase text-zinc-600 font-bold mb-3">// 3D Galaxy Visualization</p>
-                      <TechGalaxy />
-                    </div>
-                  </div>
-                  <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
-                    {Object.entries(skillsByCategory).map(([category, items]) => (
-                      <div key={category} className="rounded-xl border border-zinc-905 bg-zinc-950/15 p-5">
-                        <div className="flex items-center space-x-2 border-b border-zinc-900 pb-3 mb-4">
-                          {getCategoryIcon(category)}
-                          <h3 className="text-xs font-bold capitalize text-white">{category}</h3>
-                        </div>
-                        <div className="space-y-4">
-                          {items.map((skill) => (
-                            <div key={skill.name}>
-                              <div className="flex items-center justify-between text-[11px] text-zinc-400 mb-1">
-                                <span>{skill.name}</span>
-                                <span style={{ color: themeAccent }}>{skill.proficiency}%</span>
-                              </div>
-                              <div className="h-1.5 w-full rounded-full bg-zinc-950 border border-zinc-900 overflow-hidden">
-                                <div 
-                                  className="h-full rounded-full" 
-                                  style={{ 
-                                    width: `${skill.proficiency}%`,
-                                    background: `linear-gradient(to right, ${themeAccent}, #10b981)`
-                                  }} 
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
-            )}
-
-            {/* Experience Timeline */}
+            {/* Experience Timeline (Experience) */}
             {jobExperiences.length > 0 && (
               <AnimatedSection className="space-y-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
@@ -602,7 +491,18 @@ export default function DeveloperProLayout({
               </AnimatedSection>
             )}
 
-            {/* Education and credentials */}
+            {/* GitHub Stats (GitHub Intelligence) */}
+            {githubUser && (
+              <AnimatedSection className="space-y-6">
+                <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
+                  <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">GitHub Integration Metrics</span>
+                </div>
+                <GitHubStats username={githubUser} />
+              </AnimatedSection>
+            )}
+
+            {/* Education and credentials (Certifications) */}
             {(educationExperiences.length > 0 || certifications.length > 0) && (
               <AnimatedSection className="space-y-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
@@ -661,36 +561,34 @@ export default function DeveloperProLayout({
               </AnimatedSection>
             )}
 
-            {/* Testimonials */}
-            {testimonials.length > 0 && (
+            {/* Achievements Section */}
+            {achievementExperiences.length > 0 && (
               <AnimatedSection className="space-y-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
-                  <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Recommendations & Endorsements</span>
+                  <Award className="h-4 w-4" style={{ color: themeAccent }} />
+                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Achievements</span>
                 </div>
-                <div className="grid gap-6 md:grid-cols-2">
-                  {testimonials.map((testimonial) => (
-                    <div key={testimonial._id} className="rounded-xl border border-zinc-900 bg-zinc-950/20 p-6 flex flex-col justify-between">
-                      <p className="text-xs text-zinc-350 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
-                      <div className="mt-6 flex items-center gap-3">
-                        <div 
-                          className="h-8 w-8 rounded border flex items-center justify-center text-xs font-bold"
-                          style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
-                        >
-                          {testimonial.authorName.charAt(0)}
-                        </div>
+                <div className="grid gap-6 sm:grid-cols-2">
+                  {achievementExperiences.map((ach, idx) => (
+                    <div key={idx} className="rounded-xl border border-zinc-905 bg-zinc-950/15 p-5 relative overflow-hidden">
+                      <div className="flex justify-between items-start gap-4 mb-2">
                         <div>
-                          <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
-                          <p className="text-[9px] opacity-80" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                          <h4 className="text-xs font-bold text-white">{ach.role}</h4>
+                          <p className="text-[10px] mt-0.5" style={{ color: themeAccent }}>{ach.organization}</p>
                         </div>
+                        <span className="text-[10px] text-zinc-550 flex items-center gap-1 shrink-0 font-mono">
+                          <Calendar className="h-3.5 w-3.5" />
+                          {new Date(ach.startDate).getFullYear()}
+                        </span>
                       </div>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">{ach.description}</p>
                     </div>
                   ))}
                 </div>
               </AnimatedSection>
             )}
 
-            {/* Resume Center */}
+            {/* Resume Center (Resume) */}
             {activeResume && (
               <AnimatedSection className="space-y-6">
                 <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
@@ -728,7 +626,7 @@ export default function DeveloperProLayout({
                   </div>
                   
                   <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-zinc-900 bg-zinc-950/60 p-4 flex flex-col justify-between hover:border-zinc-800 transition-colors">
-                    <div className="border-b border-zinc-900 pb-3 flex items-center justify-between text-[9px] text-zinc-600 uppercase tracking-wider font-bold">
+                    <div className="border-b border-zinc-900 pb-3 flex items-center justify-between text-[9px] text-zinc-655 uppercase tracking-wider font-bold">
                       <span>Document Preview</span>
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                     </div>
@@ -742,9 +640,38 @@ export default function DeveloperProLayout({
               </AnimatedSection>
             )}
 
+            {/* Testimonials */}
+            {testimonials.length > 0 && (
+              <AnimatedSection className="space-y-6">
+                <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
+                  <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
+                  <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Recommendations & Endorsements</span>
+                </div>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {testimonials.map((testimonial) => (
+                    <div key={testimonial._id} className="rounded-xl border border-zinc-900 bg-zinc-955/20 p-6 flex flex-col justify-between">
+                      <p className="text-xs text-zinc-350 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
+                      <div className="mt-6 flex items-center gap-3">
+                        <div 
+                          className="h-8 w-8 rounded border flex items-center justify-center text-xs font-bold"
+                          style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
+                        >
+                          {testimonial.authorName.charAt(0)}
+                        </div>
+                        <div>
+                          <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
+                          <p className="text-[9px] opacity-80" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AnimatedSection>
+            )}
+
             {/* Contact Coordinates & Form */}
             <AnimatedSection id="contact" className="space-y-6">
-              <div className="flex items-center space-x-2 border-b border-zinc-850 pb-2">
+              <div className="flex items-center space-x-2 border-b border-zinc-855 pb-2">
                 <Mail className="h-4 w-4" style={{ color: themeAccent }} />
                 <span className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">Get In Touch</span>
               </div>
@@ -780,20 +707,20 @@ export default function DeveloperProLayout({
                         <div className="grid gap-4 sm:grid-cols-2">
                           <div>
                             <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
-                            <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                            <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                           </div>
                           <div>
                             <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Email</label>
-                            <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                            <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                           </div>
                         </div>
                         <div>
                           <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Subject</label>
-                          <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                          <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                         </div>
                         <div>
                           <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Message</label>
-                          <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
+                          <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-zinc-955 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
                         </div>
                         <button 
                           type="submit" 
@@ -813,20 +740,20 @@ export default function DeveloperProLayout({
                       <div className="grid gap-4 sm:grid-cols-2">
                         <div>
                           <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Name</label>
-                          <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                          <input id="contact-name" type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Manager" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                         </div>
                         <div>
                           <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Your Email</label>
-                          <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                          <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="name@company.com" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                         </div>
                       </div>
                       <div>
                         <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Subject</label>
-                        <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
+                        <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Inquiry or Job Opportunity" className="w-full bg-zinc-950 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors" />
                       </div>
                       <div>
                         <label className="block text-[9px] uppercase tracking-wider text-zinc-550 mb-1">Message</label>
-                        <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-zinc-950 border border-zinc-850 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
+                        <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Scope description or role requirements..." className="w-full bg-zinc-955 border border-zinc-855 rounded-lg p-2.5 text-xs text-white outline-none focus:border-teal-500 transition-colors resize-none" />
                       </div>
                       <button 
                         type="submit" 
@@ -842,7 +769,20 @@ export default function DeveloperProLayout({
                 )}
               </div>
             </AnimatedSection>
-          </motion.div>
+
+            {/* Themed Footer */}
+            <footer className="mt-12 border-t border-zinc-900 bg-zinc-950/20 py-8 text-center text-xs text-zinc-505 font-mono">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <p>© {new Date().getFullYear()} {ownerName}. All rights reserved.</p>
+                <div className="flex gap-4">
+                  {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:text-teal-400">GitHub</a>}
+                  {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:text-teal-400">LinkedIn</a>}
+                  {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:text-teal-400">Twitter</a>}
+                </div>
+              </div>
+            </footer>
+
+        </motion.div>
       </main>
     </div>
   );

@@ -62,6 +62,7 @@ export default function ExecutiveLayout({
 
   const educationExperiences = experiences.filter(exp => exp.type === 'education');
   const jobExperiences = experiences.filter(exp => exp.type === 'job' || exp.type === 'internship');
+  const achievementExperiences = experiences.filter(exp => exp.type === 'achievement');
 
   const animationEnabled = portfolio.animationLevel !== 'none';
   const animationDuration = portfolio.animationLevel === 'low' ? 0.3 : 0.6;
@@ -113,11 +114,10 @@ export default function ExecutiveLayout({
               >
                 {username}
               </span>
-              <span className="hidden md:inline text-xs font-mono text-slate-400">/ Executive Profile</span>
             </div>
             
             <div className="flex items-center gap-4">
-              {visitorCount !== null && (
+              {visitorCount !== null && portfolio.showPortfolioViews !== false && (
                 <div className="flex items-center space-x-1 px-3 py-1 bg-slate-100 rounded-full text-xs text-slate-650 border border-slate-200">
                   <Eye className="h-3.5 w-3.5" style={{ color: themeAccent }} />
                   <span>{visitorCount.toLocaleString()} views</span>
@@ -140,23 +140,7 @@ export default function ExecutiveLayout({
       <main className="flex-grow max-w-6xl mx-auto px-6 lg:px-8 py-12">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-16">
           
-          {/* 1. System Status Banner */}
-          <AnimatedSection className="rounded-xl border border-slate-200 bg-white p-4 text-xs space-y-2 shadow-sm">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: themeAccent }} />
-                <span className="font-semibold text-slate-700 uppercase tracking-wider text-[10px] font-mono">Profile Verified</span>
-              </div>
-              <span className="text-[10px] text-slate-400 font-mono">WORKSPACE SECURED</span>
-            </div>
-            <div className="grid gap-2 sm:grid-cols-3 text-slate-500 font-mono">
-              <p>Status: <span className="font-bold" style={{ color: themeAccent }}>Active</span></p>
-              <p>Platform: <span style={{ color: themeAccent }}>Executive Theme</span></p>
-              <p>Session ID: <span className="opacity-90" style={{ color: themeAccent }}>{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</span></p>
-            </div>
-          </AnimatedSection>
-
-          {/* 2. Profile Card Header */}
+          {/* 1. Profile Card Header */}
           <AnimatedSection className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
             <div className="h-40 md:h-52 w-full relative bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 border-b border-slate-200">
               {coverImageUrl && (
@@ -164,7 +148,7 @@ export default function ExecutiveLayout({
               )}
             </div>
             
-            <div className="px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
+            <div className={`px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 ${portfolio.showProfilePhoto !== false ? '-mt-16 md:-mt-20' : 'mt-6'}`}>
               <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
                 {portfolio.showProfilePhoto !== false && (
                   <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-xl overflow-hidden border-4 border-white bg-slate-100 shadow-md">
@@ -211,7 +195,7 @@ export default function ExecutiveLayout({
             </div>
           </AnimatedSection>
 
-          {/* 3. About Executive Summary */}
+          {/* 2. About Executive Summary */}
           <AnimatedSection className="bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
             <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-6">
               <UserIcon className="h-4 w-4 text-slate-500" style={{ color: themeAccent }} />
@@ -246,7 +230,7 @@ export default function ExecutiveLayout({
             </div>
           </AnimatedSection>
 
-          {/* 4. Candidate Snapshot */}
+          {/* Candidate Snapshot */}
           <AnimatedSection className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
               <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
@@ -304,74 +288,48 @@ export default function ExecutiveLayout({
             </div>
           </AnimatedSection>
 
-          {/* 5. Performance Metrics Dashboard */}
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-              <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Executive Metrics Index</span>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Portfolio Index</span>
-                <div className="flex items-baseline gap-1.5 my-3">
-                  <span className="text-3xl font-extrabold text-slate-900">{scores.portfolioScore}</span>
-                  <span className="text-xs text-slate-450">/ 100</span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
-                  <div className="h-full" style={{ width: `${scores.portfolioScore}%`, backgroundColor: themeAccent }} />
-                </div>
-                <p className="text-[9px] text-slate-400">Profile completeness index.</p>
-              </div>
-
-              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Years Experience</span>
-                <div className="my-3">
-                  <span className="text-3xl font-extrabold text-slate-900">{displayYearsOfExp}</span>
-                  <span className="text-xs text-slate-450 ml-1">Years</span>
-                </div>
-                <p className="text-[9px] text-slate-400 mt-2">Verified professional history timeline.</p>
-              </div>
-
-              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">ATS Alignment</span>
-                <div className="flex items-baseline gap-1.5 my-3">
-                  <span className="text-3xl font-extrabold text-slate-900">{scores.atsScore}%</span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden mb-1">
-                  <div className="h-full" style={{ width: `${scores.atsScore}%`, backgroundColor: themeAccent }} />
-                </div>
-                <p className="text-[9px] text-slate-400">CV parse match rating.</p>
-              </div>
-
-              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Recruiter Readiness</span>
-                <div className="my-3">
-                  <span 
-                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border"
-                    style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}08` }}
-                  >
-                    {scores.readinessScore}
-                  </span>
-                </div>
-                <p className="text-[9px] text-slate-400 mt-2">Evaluation metric status.</p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          {/* 6. GitHub Stats */}
-          {githubUser && (
+          {/* 3. Technical Skills */}
+          {skills.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-                <Github className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">GitHub Integration Metrics</span>
+                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Expertise Index</span>
               </div>
-              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-slate-800">
-                <GitHubStats username={githubUser} />
+              <div className="grid gap-12 lg:grid-cols-5 items-start">
+                <div className="lg:col-span-2">
+                  <div className="p-4 border border-slate-200 bg-white rounded-xl shadow-sm">
+                    <p className="text-[10px] uppercase text-slate-400 font-bold mb-3">// 3D Galaxy Visualization</p>
+                    <TechGalaxy />
+                  </div>
+                </div>
+                <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
+                  {Object.entries(skillsByCategory).map(([category, items]) => (
+                    <div key={category} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
+                      <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-4">
+                        {getCategoryIcon(category)}
+                        <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider capitalize">{category}</h3>
+                      </div>
+                      <div className="space-y-4">
+                        {items.map((skill) => (
+                          <div key={skill.name}>
+                            <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
+                              <span>{skill.name}</span>
+                              <span className="font-semibold text-slate-800">{skill.proficiency}%</span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
+                              <div className="h-full rounded-full" style={{ width: `${skill.proficiency}%`, backgroundColor: themeAccent }} />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AnimatedSection>
           )}
 
-          {/* 7. Featured Projects Showcase */}
+          {/* 4. Featured Projects Showcase */}
           {projects.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
@@ -419,7 +377,7 @@ export default function ExecutiveLayout({
                       <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2">
                         <button 
                           onClick={() => setSelectedProject(project)} 
-                          className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 py-2 text-xs font-semibold text-slate-705 transition-all shadow-sm"
+                          className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-55 py-2 text-xs font-semibold text-slate-705 transition-all shadow-sm"
                         >
                           <span>Review Case Study</span>
                         </button>
@@ -431,48 +389,7 @@ export default function ExecutiveLayout({
             </AnimatedSection>
           )}
 
-          {/* 8. Technical Skills */}
-          {skills.length > 0 && (
-            <AnimatedSection className="space-y-6">
-              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Expertise Index</span>
-              </div>
-              <div className="grid gap-12 lg:grid-cols-5 items-start">
-                <div className="lg:col-span-2">
-                  <div className="p-4 border border-slate-200 bg-white rounded-xl shadow-sm">
-                    <p className="text-[10px] uppercase text-slate-400 font-bold mb-3">// 3D Galaxy Visualization</p>
-                    <TechGalaxy />
-                  </div>
-                </div>
-                <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
-                  {Object.entries(skillsByCategory).map(([category, items]) => (
-                    <div key={category} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
-                      <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-4">
-                        {getCategoryIcon(category)}
-                        <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider capitalize">{category}</h3>
-                      </div>
-                      <div className="space-y-4">
-                        {items.map((skill) => (
-                          <div key={skill.name}>
-                            <div className="flex items-center justify-between text-xs text-slate-600 mb-1">
-                              <span>{skill.name}</span>
-                              <span className="font-semibold text-slate-800">{skill.proficiency}%</span>
-                            </div>
-                            <div className="h-1.5 w-full rounded-full bg-slate-100 overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${skill.proficiency}%`, backgroundColor: themeAccent }} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </AnimatedSection>
-          )}
-
-          {/* 9. Experience Timeline */}
+          {/* 5. Experience Timeline */}
           {jobExperiences.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
@@ -492,13 +409,13 @@ export default function ExecutiveLayout({
                       <h3 className="text-sm font-bold text-slate-900">
                         {exp.role} @ <span style={{ color: themeAccent }}>{exp.organization}</span>
                       </h3>
-                      <span className="text-xs text-slate-400 flex items-center gap-1.5 font-mono">
+                      <span className="text-xs text-slate-400 flex items-center gap-1.5 font-mono font-medium">
                         <Calendar className="h-3.5 w-3.5 text-slate-350" />
                         {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                       </span>
                     </div>
                     <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-2">{exp.type}</p>
-                    <p className="text-xs text-slate-600 leading-relaxed mb-3">{exp.description}</p>
+                    <p className="text-xs text-slate-650 leading-relaxed mb-3">{exp.description}</p>
                     {exp.responsibilities && exp.responsibilities.length > 0 && (
                       <ul className="list-disc list-inside text-xs text-slate-505 space-y-1 pl-2 mb-3">
                         {exp.responsibilities.map((r, ri) => (
@@ -519,7 +436,20 @@ export default function ExecutiveLayout({
             </AnimatedSection>
           )}
 
-          {/* 10. Education and Credentials */}
+          {/* Live GitHub Intelligence */}
+          {githubUser && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">GitHub Integration Metrics</span>
+              </div>
+              <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-slate-800">
+                <GitHubStats username={githubUser} />
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* Education and Credentials */}
           {(educationExperiences.length > 0 || certifications.length > 0) && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
@@ -563,7 +493,7 @@ export default function ExecutiveLayout({
                               href={cert.credentialUrl} 
                               target="_blank" 
                               rel="noreferrer" 
-                              className="flex-shrink-0 text-[10px] border px-2 py-1 rounded bg-slate-50 font-medium"
+                              className="flex-shrink-0 text-[10px] border px-2 py-1 rounded bg-slate-55 font-medium"
                               style={{ color: themeAccent, borderColor: `${themeAccent}25` }}
                             >
                               Verify
@@ -578,36 +508,34 @@ export default function ExecutiveLayout({
             </AnimatedSection>
           )}
 
-          {/* 11. Recommendations */}
-          {testimonials.length > 0 && (
+          {/* Achievements Section */}
+          {achievementExperiences.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
-                <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Recommendations</span>
+                <Award className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-805 uppercase tracking-wider">Achievements</span>
               </div>
-              <div className="grid gap-6 md:grid-cols-2">
-                {testimonials.map((testimonial) => (
-                  <div key={testimonial._id} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-                    <p className="text-xs text-slate-650 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div 
-                        className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold"
-                        style={{ color: themeAccent, backgroundColor: `${themeAccent}10` }}
-                      >
-                        {testimonial.authorName.charAt(0)}
-                      </div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {achievementExperiences.map((ach, idx) => (
+                  <div key={idx} className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm relative overflow-hidden">
+                    <div className="flex justify-between items-start gap-4 mb-2">
                       <div>
-                        <h4 className="text-[10px] font-bold text-slate-900">{testimonial.authorName}</h4>
-                        <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                        <h4 className="text-xs font-bold text-slate-900">{ach.role}</h4>
+                        <p className="text-[10px] font-medium" style={{ color: themeAccent }}>{ach.organization}</p>
                       </div>
+                      <span className="text-[10px] text-slate-400 flex items-center gap-1 shrink-0 font-mono">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {new Date(ach.startDate).getFullYear()}
+                      </span>
                     </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">{ach.description}</p>
                   </div>
                 ))}
               </div>
             </AnimatedSection>
           )}
 
-          {/* 12. Resume Center */}
+          {/* Resume Center */}
           {activeResume && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
@@ -640,7 +568,7 @@ export default function ExecutiveLayout({
                   </div>
                 </div>
                 
-                <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-slate-200 bg-slate-50 p-4 flex flex-col justify-between hover:border-slate-350 transition-colors">
+                <div className="w-full max-w-sm aspect-[4/3] rounded-xl border border-slate-200 bg-slate-55 p-4 flex flex-col justify-between hover:border-slate-350 transition-colors">
                   <div className="border-b border-slate-200 pb-3 flex items-center justify-between text-[9px] text-slate-450 uppercase tracking-wider font-bold">
                     <span>Document View</span>
                     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -655,7 +583,36 @@ export default function ExecutiveLayout({
             </AnimatedSection>
           )}
 
-          {/* 13. Contact form section */}
+          {/* Recommendations */}
+          {testimonials.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
+                <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-slate-800 uppercase tracking-wider">Recommendations</span>
+              </div>
+              <div className="grid gap-6 md:grid-cols-2">
+                {testimonials.map((testimonial) => (
+                  <div key={testimonial._id} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm flex flex-col justify-between">
+                    <p className="text-xs text-slate-655 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
+                    <div className="mt-6 flex items-center gap-3">
+                      <div 
+                        className="h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{ color: themeAccent, backgroundColor: `${themeAccent}10` }}
+                      >
+                        {testimonial.authorName.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="text-[10px] font-bold text-slate-900">{testimonial.authorName}</h4>
+                        <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* Contact form section */}
           <AnimatedSection id="contact" className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-slate-200 pb-2">
               <Mail className="h-4 w-4" style={{ color: themeAccent }} />
@@ -680,7 +637,7 @@ export default function ExecutiveLayout({
                     <button type="button" onClick={() => handleQuickAction('interview')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
                       <span>Schedule Interview</span> <Calendar className="h-3.5 w-3.5" />
                     </button>
-                    <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
+                    <button type="button" onClick={() => handleQuickAction('resume')} className="w-full flex items-center justify-between gap-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-205 px-3 py-2 text-left text-xs font-semibold transition-all" style={{ color: themeAccent }}>
                       <span>Request Resume</span> <FileText className="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -692,20 +649,20 @@ export default function ExecutiveLayout({
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Name</label>
-                      <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Partner" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                      <input type="text" required value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="e.g. Hiring Partner" className="w-full bg-slate-55 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
                     </div>
                     <div>
                       <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Your Email</label>
-                      <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="partner@firm.com" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                      <input type="email" required value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="partner@firm.com" className="w-full bg-slate-55 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Subject</label>
-                    <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
+                    <input type="text" value={contactSubject} onChange={(e) => setContactSubject(e.target.value)} placeholder="Opportunity Details" className="w-full bg-slate-55 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors" />
                   </div>
                   <div>
                     <label className="block text-[9px] uppercase tracking-wider text-slate-400 mb-1">Message</label>
-                    <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type requirements details..." className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors resize-none" />
+                    <textarea required rows={4} value={contactBody} onChange={(e) => setContactBody(e.target.value)} placeholder="Type requirements details..." className="w-full bg-slate-55 border border-slate-200 rounded-lg p-2.5 text-xs text-slate-800 outline-none focus:border-blue-500 transition-colors resize-none" />
                   </div>
                   <button 
                     type="submit" 
@@ -719,6 +676,18 @@ export default function ExecutiveLayout({
               </div>
             </div>
           </AnimatedSection>
+
+          {/* Themed Footer */}
+          <footer className="mt-12 border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500 font-sans">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p>© {new Date().getFullYear()} {ownerName}. All rights reserved.</p>
+              <div className="flex gap-4">
+                {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:text-slate-900">GitHub</a>}
+                {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:text-slate-900">LinkedIn</a>}
+                {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:text-slate-900">Twitter</a>}
+              </div>
+            </div>
+          </footer>
 
         </motion.div>
       </main>

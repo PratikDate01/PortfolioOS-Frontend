@@ -30,6 +30,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [profileImageState, setProfileImageState] = useState<CloudinaryAsset | null>(null);
   const [showProfilePhoto, setShowProfilePhoto] = useState(true);
+  const [showPortfolioViews, setShowPortfolioViews] = useState(true);
 
   // Password States
   const [newPassword, setNewPassword] = useState('');
@@ -58,6 +59,7 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
       setPortfolioVisibility(portfolioSettings.visibility || 'public');
       setPortfolioCustomDomain(portfolioSettings.customDomain || '');
       setShowProfilePhoto(portfolioSettings.showProfilePhoto !== false);
+      setShowPortfolioViews(portfolioSettings.showPortfolioViews !== false);
     }
   }, [portfolioSettings]);
 
@@ -130,7 +132,8 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
         customDomain: portfolioCustomDomain,
         githubUsername: profileGithub,
         profileImage: profileImageState,
-        showProfilePhoto: showProfilePhoto
+        showProfilePhoto: showProfilePhoto,
+        showPortfolioViews: showPortfolioViews
       }
     });
   };
@@ -183,6 +186,18 @@ export default function ProfileSection({ user, portfolioSettings, refetchPortfol
                 className="rounded border-zinc-800 bg-zinc-950 text-teal-500 focus:ring-teal-500"
               />
               <span>Show Profile Photo on Public Portfolio</span>
+            </label>
+          </div>
+
+          <div className="flex items-center pt-5">
+            <label className="flex items-center gap-2 text-xs font-mono text-zinc-300 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showPortfolioViews}
+                onChange={e => setShowPortfolioViews(e.target.checked)}
+                className="rounded border-zinc-800 bg-zinc-950 text-teal-500 focus:ring-teal-500"
+              />
+              <span>Show Portfolio Views Count Badge</span>
             </label>
           </div>
 

@@ -62,6 +62,7 @@ export default function CreativeLayout({
 
   const educationExperiences = experiences.filter(exp => exp.type === 'education');
   const jobExperiences = experiences.filter(exp => exp.type === 'job' || exp.type === 'internship');
+  const achievementExperiences = experiences.filter(exp => exp.type === 'achievement');
 
   const animationEnabled = portfolio.animationLevel !== 'none';
   const staggerDelay = portfolio.animationLevel === 'low' ? 0.08 : 0.15;
@@ -119,11 +120,10 @@ export default function CreativeLayout({
               >
                 {username.toUpperCase()}
               </span>
-              <span className="hidden md:inline text-xs font-semibold opacity-60">/ creative.space</span>
             </div>
             
             <div className="flex items-center gap-4">
-              {visitorCount !== null && (
+              {visitorCount !== null && portfolio.showPortfolioViews !== false && (
                 <div 
                   className="flex items-center space-x-1.5 rounded-full border px-3.5 py-1 text-xs bg-white/5"
                   style={{ borderColor: `${themeAccent}15` }}
@@ -147,24 +147,8 @@ export default function CreativeLayout({
 
       <main className="flex-grow z-10">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
-          
-          {/* 1. System Status Banner */}
-          <AnimatedSection className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-xs space-y-2 shadow-xl backdrop-blur-md">
-            <div className="flex items-center justify-between border-b border-white/5 pb-2">
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full animate-pulse" style={{ backgroundColor: themeAccent }} />
-                <span className="font-semibold text-purple-105 uppercase tracking-wider text-[10px] font-mono">Profile Verified</span>
-              </div>
-              <span className="text-[10px] text-purple-400/50 font-mono">WORKSPACE SECURED</span>
-            </div>
-            <div className="grid gap-2 sm:grid-cols-3 text-purple-300/60 font-mono">
-              <p>Status: <span className="font-bold" style={{ color: themeAccent }}>Active</span></p>
-              <p>Platform: <span style={{ color: themeAccent }}>Creative Theme</span></p>
-              <p>Session ID: <span className="opacity-90" style={{ color: themeAccent }}>{sessionId ? sessionId.substring(0, 8).toUpperCase() : 'GUEST-ACCESS'}</span></p>
-            </div>
-          </AnimatedSection>
 
-          {/* 2. Creative Hero Display Banner */}
+          {/* 1. Creative Hero Display Banner */}
           <AnimatedSection className="relative rounded-3xl overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl backdrop-blur-md">
             <div className="h-52 md:h-72 w-full relative bg-gradient-to-r from-[#1b033a] via-[#050212] to-[#3a0333] border-b border-white/5">
               {coverImageUrl && (
@@ -173,7 +157,7 @@ export default function CreativeLayout({
               <div className="absolute inset-0 bg-gradient-to-t from-[#0c051e] via-transparent to-transparent" />
             </div>
             
-            <div className="px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 -mt-16 md:-mt-20">
+            <div className={`px-8 pb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-6 ${portfolio.showProfilePhoto !== false ? '-mt-16 md:-mt-20' : 'mt-6'}`}>
               <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left z-10">
                 {portfolio.showProfilePhoto !== false && (
                   <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-3xl overflow-hidden border-4 border-[#0c051e] bg-purple-950 shadow-2xl">
@@ -224,7 +208,7 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* 3. Interactive About Panel */}
+          {/* 2. Interactive About Panel */}
           <AnimatedSection className="border border-white/10 bg-white/[0.02] rounded-3xl p-8 shadow-2xl backdrop-blur-md">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-3 mb-6">
               <UserIcon className="h-4 w-4" style={{ color: themeAccent }} />
@@ -259,7 +243,7 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* 4. Snapshot Grid */}
+          {/* Snapshot Grid */}
           <AnimatedSection className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
               <Briefcase className="h-4 w-4" style={{ color: themeAccent }} />
@@ -317,87 +301,54 @@ export default function CreativeLayout({
             </div>
           </AnimatedSection>
 
-          {/* 5. Interactive Intelligence Dashboard */}
-          <AnimatedSection className="space-y-6">
-            <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
-              <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-              <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">Candidate Intelligence Metrics</span>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[9px] uppercase tracking-wider text-purple-300/60 font-bold">Completeness Index</span>
-                  <CheckCircle2 className="h-4 w-4" style={{ color: themeAccent }} />
-                </div>
-                <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-3xl font-black text-white">{scores.portfolioScore}</span>
-                  <span className="text-xs text-purple-400/50">/ 100</span>
-                </div>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden mb-2">
-                  <div className="h-full bg-gradient-to-r from-purple-500 to-pink-400" style={{ width: `${scores.portfolioScore}%` }} />
-                </div>
-                <p className="text-[9px] text-purple-400/40">Visual builder score completeness.</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[9px] uppercase tracking-wider text-purple-300/60 font-bold">Readiness Index</span>
-                  <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-                </div>
-                <div className="mb-4">
-                  <span 
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold border"
-                    style={{ color: themeAccent, borderColor: `${themeAccent}30`, backgroundColor: `${themeAccent}12` }}
-                  >
-                    {scores.readinessScore}
-                  </span>
-                </div>
-                <p className="text-[9px] text-purple-400/40">Formatting score check.</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[9px] uppercase tracking-wider text-purple-300/60 font-bold">ATS Parse Match</span>
-                  <FileText className="h-4 w-4" style={{ color: themeAccent }} />
-                </div>
-                <div className="flex items-baseline gap-1.5 mb-2">
-                  <span className="text-3xl font-black text-white">{scores.atsScore}%</span>
-                </div>
-                <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden mb-2">
-                  <div className="h-full bg-gradient-to-r from-pink-500 to-indigo-400" style={{ width: `${scores.atsScore}%` }} />
-                </div>
-                <p className="text-[9px] text-purple-400/40">Resume ATS check score.</p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[9px] uppercase tracking-wider text-purple-300/60 font-bold">GitHub Sync State</span>
-                  <Github className="h-4 w-4" style={{ color: themeAccent }} />
-                </div>
-                <div className="mb-4">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-white/5 text-purple-100 border border-white/10">
-                    {scores.githubHealth}
-                  </span>
-                </div>
-                <p className="text-[9px] text-purple-400/40">Repository sync checker active.</p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          {/* 6. GitHub Integration Stats */}
-          {githubUser && (
+          {/* 3. Technical Skills breakdown */}
+          {skills.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
-                <Github className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">GitHub Integration Metrics</span>
+                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">Expertise Spheres</span>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md">
-                <GitHubStats username={githubUser} />
+              <div className="grid gap-12 lg:grid-cols-5 items-start">
+                <div className="lg:col-span-2">
+                  <div className="p-4 border border-white/10 bg-[#050212]/30 rounded-2xl backdrop-blur-md shadow-2xl">
+                    <p className="text-[10px] uppercase text-purple-400/40 font-bold mb-3">// Interactive Tech Spheres</p>
+                    <TechGalaxy />
+                  </div>
+                </div>
+                <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
+                  {Object.entries(skillsByCategory).map(([category, items]) => (
+                    <div key={category} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 shadow-xl backdrop-blur-md">
+                      <div className="flex items-center space-x-2 border-b border-white/5 pb-3 mb-4">
+                        {getCategoryIcon(category)}
+                        <h3 className="text-xs font-bold text-white capitalize">{category}</h3>
+                      </div>
+                      <div className="space-y-4">
+                        {items.map((skill) => (
+                          <div key={skill.name}>
+                            <div className="flex items-center justify-between text-[11px] text-purple-300 mb-1">
+                              <span>{skill.name}</span>
+                              <span style={{ color: themeAccent }}>{skill.proficiency}%</span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-black/60 border border-white/5 overflow-hidden">
+                              <div 
+                                className="h-full rounded-full" 
+                                style={{ 
+                                  width: `${skill.proficiency}%`,
+                                  background: `linear-gradient(to right, ${themeAccent}, #ec4899)`
+                                }} 
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </AnimatedSection>
           )}
 
-          {/* 7. Featured Projects Gallery */}
+          {/* 4. Featured Projects Gallery */}
           {projects.length > 0 && (
             <AnimatedSection id="projects" className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -456,54 +407,7 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* 8. Technical Skills breakdown */}
-          {skills.length > 0 && (
-            <AnimatedSection className="space-y-6">
-              <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
-                <Cpu className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">Expertise Spheres</span>
-              </div>
-              <div className="grid gap-12 lg:grid-cols-5 items-start">
-                <div className="lg:col-span-2">
-                  <div className="p-4 border border-white/10 bg-[#050212]/30 rounded-2xl backdrop-blur-md shadow-2xl">
-                    <p className="text-[10px] uppercase text-purple-400/40 font-bold mb-3">// Interactive Tech Spheres</p>
-                    <TechGalaxy />
-                  </div>
-                </div>
-                <div className={`lg:col-span-3 grid gap-6 ${Object.keys(skillsByCategory).length === 1 ? 'grid-cols-1' : 'sm:grid-cols-2'}`}>
-                  {Object.entries(skillsByCategory).map(([category, items]) => (
-                    <div key={category} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 shadow-xl backdrop-blur-md">
-                      <div className="flex items-center space-x-2 border-b border-white/5 pb-3 mb-4">
-                        {getCategoryIcon(category)}
-                        <h3 className="text-xs font-bold text-white capitalize">{category}</h3>
-                      </div>
-                      <div className="space-y-4">
-                        {items.map((skill) => (
-                          <div key={skill.name}>
-                            <div className="flex items-center justify-between text-[11px] text-purple-300 mb-1">
-                              <span>{skill.name}</span>
-                              <span style={{ color: themeAccent }}>{skill.proficiency}%</span>
-                            </div>
-                            <div className="h-1.5 w-full rounded-full bg-black/60 border border-white/5 overflow-hidden">
-                              <div 
-                                className="h-full rounded-full" 
-                                style={{ 
-                                  width: `${skill.proficiency}%`,
-                                  background: `linear-gradient(to right, ${themeAccent}, #ec4899)`
-                                }} 
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </AnimatedSection>
-          )}
-
-          {/* 9. Work History */}
+          {/* 5. Work History */}
           {jobExperiences.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -523,7 +427,7 @@ export default function CreativeLayout({
                       <h3 className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
                         {exp.role} @ <span style={{ color: themeAccent }}>{exp.organization}</span>
                       </h3>
-                      <span className="text-xs text-purple-400/50 flex items-center gap-1.5">
+                      <span className="text-xs text-purple-400/50 flex items-center gap-1.5 font-medium">
                         <Calendar className="h-3.5 w-3.5" />
                         {new Date(exp.startDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })} — {exp.endDate ? new Date(exp.endDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : 'Present'}
                       </span>
@@ -543,7 +447,20 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* 10. Education and credentials */}
+          {/* GitHub Integration Stats */}
+          {githubUser && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
+                <Github className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-150 uppercase tracking-wider">GitHub Integration Metrics</span>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 shadow-xl backdrop-blur-md">
+                <GitHubStats username={githubUser} />
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* Education and credentials */}
           {(educationExperiences.length > 0 || certifications.length > 0) && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -561,7 +478,7 @@ export default function CreativeLayout({
                             <h4 className="text-xs font-bold text-white">{edu.role}</h4>
                             <p className="text-[10px] mt-0.5" style={{ color: themeAccent }}>{edu.organization}</p>
                           </div>
-                          <span className="text-[10px] text-purple-400/50 flex items-center gap-1 shrink-0">
+                          <span className="text-[10px] text-purple-400/50 flex items-center gap-1 shrink-0 font-mono font-medium">
                             <Calendar className="h-3.5 w-3.5" />
                             {new Date(edu.startDate).getFullYear()} - {edu.endDate ? new Date(edu.endDate).getFullYear() : 'Present'}
                           </span>
@@ -602,36 +519,34 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* 11. Testimonials */}
-          {testimonials.length > 0 && (
+          {/* Achievements Section */}
+          {achievementExperiences.length > 0 && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
-                <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
-                <span className="text-xs font-semibold text-purple-100 uppercase tracking-wider">Recommendations</span>
+                <Award className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-100 uppercase tracking-wider">Achievements</span>
               </div>
-              <div className="grid gap-6 md:grid-cols-2">
-                {testimonials.map((testimonial) => (
-                  <div key={testimonial._id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-between shadow-xl backdrop-blur-md">
-                    <p className="text-xs text-purple-200 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
-                    <div className="mt-6 flex items-center gap-3">
-                      <div 
-                        className="h-8 w-8 rounded-full border flex items-center justify-center text-xs font-bold"
-                        style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}12` }}
-                      >
-                        {testimonial.authorName.charAt(0)}
-                      </div>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {achievementExperiences.map((ach, idx) => (
+                  <div key={idx} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 relative overflow-hidden shadow-xl backdrop-blur-md">
+                    <div className="flex justify-between items-start gap-4 mb-2">
                       <div>
-                        <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
-                        <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                        <h4 className="text-xs font-bold text-white">{ach.role}</h4>
+                        <p className="text-[10px] mt-0.5" style={{ color: themeAccent }}>{ach.organization}</p>
                       </div>
+                      <span className="text-[10px] text-purple-400/50 flex items-center gap-1 shrink-0 font-mono">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {new Date(ach.startDate).getFullYear()}
+                      </span>
                     </div>
+                    <p className="text-[11px] text-purple-300/80 leading-relaxed">{ach.description}</p>
                   </div>
                 ))}
               </div>
             </AnimatedSection>
           )}
 
-          {/* 12. Resume Center */}
+          {/* Resume Center */}
           {activeResume && (
             <AnimatedSection className="space-y-6">
               <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
@@ -679,7 +594,36 @@ export default function CreativeLayout({
             </AnimatedSection>
           )}
 
-          {/* 13. Contact form section */}
+          {/* Testimonials */}
+          {testimonials.length > 0 && (
+            <AnimatedSection className="space-y-6">
+              <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
+                <Sparkles className="h-4 w-4" style={{ color: themeAccent }} />
+                <span className="text-xs font-semibold text-purple-100 uppercase tracking-wider">Recommendations</span>
+              </div>
+              <div className="grid gap-6 md:grid-cols-2">
+                {testimonials.map((testimonial) => (
+                  <div key={testimonial._id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 flex flex-col justify-between shadow-xl backdrop-blur-md">
+                    <p className="text-xs text-purple-200 italic leading-relaxed">&ldquo;{testimonial.body}&rdquo;</p>
+                    <div className="mt-6 flex items-center gap-3">
+                      <div 
+                        className="h-8 w-8 rounded-full border flex items-center justify-center text-xs font-bold"
+                        style={{ color: themeAccent, borderColor: `${themeAccent}25`, backgroundColor: `${themeAccent}12` }}
+                      >
+                        {testimonial.authorName.charAt(0)}
+                      </div>
+                      <div>
+                        <h4 className="text-[10px] font-bold text-white">{testimonial.authorName}</h4>
+                        <p className="text-[9px]" style={{ color: themeAccent }}>{testimonial.authorRole} {testimonial.authorCompany ? `@ ${testimonial.authorCompany}` : ''}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AnimatedSection>
+          )}
+
+          {/* Contact form section */}
           <AnimatedSection id="contact" className="space-y-6">
             <div className="flex items-center space-x-2 border-b border-white/5 pb-2">
               <Mail className="h-4 w-4" style={{ color: themeAccent }} />
@@ -742,6 +686,19 @@ export default function CreativeLayout({
               </div>
             </div>
           </AnimatedSection>
+
+          {/* Themed Footer */}
+          <footer className="mt-12 border-t border-white/10 bg-white/[0.01] py-8 text-center text-xs text-purple-400/60 font-sans">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p>© {new Date().getFullYear()} {ownerName}. All rights reserved.</p>
+              <div className="flex gap-4">
+                {socialLinks.github && <a href={socialLinks.github} target="_blank" rel="noreferrer" className="hover:text-white">GitHub</a>}
+                {socialLinks.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noreferrer" className="hover:text-white">LinkedIn</a>}
+                {socialLinks.twitter && <a href={socialLinks.twitter} target="_blank" rel="noreferrer" className="hover:text-white">Twitter</a>}
+              </div>
+            </div>
+          </footer>
+
         </motion.div>
       </main>
 
