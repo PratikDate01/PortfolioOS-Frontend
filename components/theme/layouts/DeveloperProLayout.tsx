@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Eye, Cpu, Database, Cloud, Brain, CheckCircle2, Award, FileText, Code, ChevronRight, Link,
-  Mail, Github, Linkedin, Twitter, Globe, MapPin, ExternalLink, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon
+  Mail, Github, Linkedin, Twitter, Globe, MapPin, ExternalLink, BookOpen, Briefcase, Sparkles, Calendar, User as UserIcon, X
 } from 'lucide-react';
 import { ThemeLayoutProps } from './types';
 import TechGalaxy from '@/components/sections/TechGalaxy';
@@ -784,6 +784,74 @@ export default function DeveloperProLayout({
 
         </motion.div>
       </main>
+
+      {/* Case Study Detail Modal */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-zinc-950 border border-zinc-900 rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto shadow-2xl relative text-zinc-300 font-mono">
+            
+            <div className="relative aspect-video w-full bg-zinc-900 border-b border-zinc-900">
+              <img src={selectedProject.coverImageUrl || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'} alt={selectedProject.title} className="h-full w-full object-cover opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+              <button onClick={() => setSelectedProject(null)} className="absolute top-4 right-4 rounded-full bg-zinc-900/80 p-2 text-zinc-400 hover:text-white transition-colors border border-zinc-800 shadow">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="p-6 md:p-8 space-y-6">
+              <div>
+                <span className="text-xs font-bold border rounded px-2.5 py-0.5" style={{ color: themeAccent, borderColor: `${themeAccent}30`, backgroundColor: `${themeAccent}08` }}>{selectedProject.category}</span>
+                <h2 className="text-2xl font-bold text-white mt-2 font-sans">{selectedProject.title}</h2>
+                <p className="text-xs text-zinc-500 mt-2 font-mono flex items-center gap-1">
+                  <Eye className="h-4 w-4" />
+                  <span>{selectedProject.viewCount || 0} times analyzed</span>
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Summary</h4>
+                <p className="text-zinc-400 text-xs leading-relaxed">{selectedProject.summary}</p>
+              </div>
+
+              {selectedProject.description && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Detailed Description</h4>
+                  <div className="text-zinc-400 text-xs leading-relaxed whitespace-pre-line bg-zinc-900/20 p-4 rounded-xl border border-zinc-900">{selectedProject.description}</div>
+                </div>
+              )}
+
+              <div className="space-y-3">
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Tech Stack Used</h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedProject.techStack.map(tech => (
+                    <span key={tech} className="rounded bg-zinc-900 px-3 py-1 text-xs text-zinc-400 border border-zinc-850">{tech}</span>
+                  ))}
+                </div>
+              </div>
+
+              {selectedProject.links && (Object.values(selectedProject.links).some(Boolean)) && (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">// Deployment Coordinates</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedProject.links.github && (
+                      <a href={selectedProject.links.github} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Github className="h-4 w-4" />
+                        <span>Source Code</span>
+                      </a>
+                    )}
+                    {selectedProject.links.liveDemo && (
+                      <a href={selectedProject.links.liveDemo} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs font-semibold hover:underline" style={{ color: themeAccent }}>
+                        <Globe className="h-4 w-4" />
+                        <span>Production URL</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
